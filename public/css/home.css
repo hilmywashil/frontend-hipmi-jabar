@@ -1,247 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-    color: #333;
-}
-
-/* ================== GLOBAL ACCENT ================== */
-.yellow-accent {
-    width: 100px;
-    height: 10px;
-    background: #FFD400;
-    border-radius: 999px;
-    margin: 0 auto 35px;
-}
-
-.green-accent {
-    width: 100px;
-    height: 10px;
-    background: #FFD400;
-    border-radius: 999px;
-    margin: 0 auto 12px;
-}
-
-/* ================== END GLOBAL ACCENT ================== */
-
-/* ================== GLOBAL BUTTONS ================== */
-.btn {
-    display: inline-block;
-    padding: 12px 30px;
-    background: yellow;
-    border: yellow 1px solid;
-    color: #000000;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: transform 0.3s;
-}
-
-.btn-transparent {
-    display: inline-block;
-    padding: 12px 30px;
-    background: transparent;
-    color: #ffffff;
-    text-decoration: none;
-    border: #ffffff 1px solid;
-    border-radius: 5px;
-    transition: transform 0.3s;
-}
-
-.btn:hover {
-    transform: scale(1.05);
-}
-
-.btn-transparent:hover {
-    transform: scale(1.05);
-}
-
-.buttons {
-    display: flex;
-    gap: 20px;
-}
-
-.hero-buttons {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-top: 30px;
-}
-
-.social-icons {
-    font-size: 30px;
-    color: #04293B;
-    text-decoration: none;
-    transition: 0.3s;
-
-    width: 55px;
-    height: 55px;
-    background: #ffffff;
-    border-radius: 50%;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.social-icons:hover {
-    color: #FFD400;
-    transform: scale(1.1);
-}
-
-@media (max-width: 768px) {
-    .btn {
-        padding: 8px 16px;
-        font-size: 12px;
-    }
-
-    .btn-transparent {
-        padding: 8px 16px;
-        font-size: 12px;
-    }
-
-    .buttons {
-        gap: 10px;
-    }
-
-    .hero-buttons {
-        gap: 10px;
-        margin-top: 15px;
-    }
-
-    .social-icons {
-        font-size: 16px;
-        width: 40px;
-        height: 40px;
-    }
-}
-
-/* ================== END BUTTONS ================== */
-
-/* ================== HEADER ================== */
-header {
-    width: 100%;
-    background-color: #04293B;
-    color: white;
-    padding: 15px 50px;
-    position: sticky;
-    top: 0;
-    z-index: 999;
-}
-
-nav {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.menu {
-    display: flex;
-    gap: 25px;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: white;
-    font-size: 15px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.logo1 {
-    width: 100px;
-}
-
-.logo2 {
-    width: 150px;
-}
-
-.menu-toggle {
-    display: none;
-    font-size: 28px;
-    cursor: pointer;
-    color: white;
-}
-
-.buttons-mobile {
-    display: none;
-}
-
-@media (max-width: 768px) {
-
-    header {
-        padding: 15px 20px;
-    }
-
-    nav {
-        padding: 0;
-    }
-
-    .logo1 {
-        width: 80px;
-    }
-
-    .logo2 {
-        width: 120px;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-
-    .menu {
-        position: absolute;
-        top: 100px;
-        right: 20px;
-        background-color: #04293B;
-        display: none;
-        flex-direction: column;
-        gap: 15px;
-        width: 180px;
-        padding: 20px;
-        border-radius: 8px;
-    }
-
-    .menu.show {
-        display: flex;
-    }
-
-    .nav-link {
-        font-size: 14px;
-        margin: 0;
-    }
-
-    .buttons {
-        display: none;
-    }
-
-    .buttons-mobile {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        width: 100%;
-    }
-}
-
-/* ================== END HEADER ================== */
-
 /* ================== HERO SECTION ================== */
+
 .hero {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../images/hero-bg.jpeg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/hero-bg.jpeg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -280,12 +40,20 @@ nav {
 
 .hero p {
     font-size: 20px;
+    margin-bottom: 15px;
 }
 
 .hero h3 {
     font-size: 30px;
     font-style: italic;
     margin-bottom: 50px;
+}
+
+.hero-buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
 }
 
 @media (max-width: 768px) {
@@ -312,17 +80,24 @@ nav {
 
     .hero p {
         font-size: 16px;
+        margin-bottom: 0px;
     }
 
     .hero h3 {
         font-size: 20px;
         margin-bottom: 30px;
     }
+
+    .hero-buttons {
+        gap: 10px;
+        margin-top: 15px;
+    }
 }
 
 /* ================== END HERO SECTION ================== */
 
-/* ================== MAIN INFO ================== */
+/* ================== MAIN INFO SECTION ================== */
+
 .main-info {
     background-color: #04293B;
     padding: 100px;
@@ -397,9 +172,10 @@ nav {
     }
 }
 
-/* ================== END MAIN INFO ================== */
+/* ================== END INFO SECTION ================== */
 
-/* ================== VISI ================== */
+/* ================== VISI SECTION ================== */
+
 .visi {
     display: flex;
     gap: 50px;
@@ -476,9 +252,10 @@ nav {
     }
 }
 
-/* ================== END VISI ================== */
+/* ================== END VISI SECTION ================== */
 
-/* ================== MISI ================== */
+/* ================== MISI SECTION ================== */
+
 .misi {
     padding: 100px 0px 0px 0px;
     display: flex;
@@ -597,19 +374,20 @@ nav {
     }
 }
 
-/* ================== END MISI ================== */
+/* ================== END MISI SECTION ================== */
 
-/* ================== PENGUMUMAN ================== */
-
-/* ================== END PENGUMUMAN ================== */
-
-/* ================== FOOTER ================== */
-footer {
-    background: #333;
-    color: white;
+/* ================== PENGUMUMAN SECTION ================== */
+.pengumuman {
+    display: flex;
+    flex-direction: column;
+    padding: 100px;
+    background-color: #f9f9f9;
     text-align: center;
-    padding: 32px;
-    margin-top: 48px;
 }
 
-/* ================== END FOOTER ================== */
+.pengumuman>h2 {
+    font-size: 40px;
+    color: #04293B;
+    margin-bottom: 50px;
+    text-align: center;
+}

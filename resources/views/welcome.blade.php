@@ -66,7 +66,7 @@
                 <p>1. Pelatihan Bisnis Berkala <br>2. Kolaborasi dengan lembaga pelatihan kredibel</p>
             </div>
             <div class="misi-image">
-                <img src="{{ asset('images/missions/mission-1.png') }}" alt="Misi Image 1">
+                <img src="{{ asset('images/missions/mission-1.png') }}" alt="Misi Image">
             </div>
         </div>
         <div class="misi-content-reverse">
@@ -75,7 +75,7 @@
                 <p>Memperkuat program kaderisasi berkelanjutan dan berkualitas</p>
             </div>
             <div class="misi-image">
-                <img src="{{ asset('images/missions/mission-2.png') }}" alt="Misi Image 1">
+                <img src="{{ asset('images/missions/mission-2.png') }}" alt="Misi Image">
             </div>
         </div>
         <div class="misi-content">
@@ -84,7 +84,7 @@
                 <p>Penerapan sistem manajemen organisasi sesuai standar</p>
             </div>
             <div class="misi-image">
-                <img src="{{ asset('images/missions/mission-3.png') }}" alt="Misi Image 1">
+                <img src="{{ asset('images/missions/mission-3.png') }}" alt="Misi Image">
             </div>
         </div>
         <div class="misi-content-reverse">
@@ -93,7 +93,7 @@
                 <p>1. Mendorong kemandirian keuangan BPC <br>2. Kolaborasi antar BPC dalam kegiatan ekonomi bersama</p>
             </div>
             <div class="misi-image">
-                <img src="{{ asset('images/missions/mission-4.png') }}" alt="Misi Image 1">
+                <img src="{{ asset('images/missions/mission-4.png') }}" alt="Misi Image">
             </div>
         </div>
         <div class="misi-content">
@@ -102,9 +102,12 @@
                 <p>Membangun jaringan kolaborasi HIPMI, BUMN, SWASTA dan Pemerintah daerah</p>
             </div>
             <div class="misi-image">
-                <img src="{{ asset('images/missions/mission-5.png') }}" alt="Misi Image 1">
+                <img src="{{ asset('images/missions/mission-5.png') }}" alt="Misi Image">
             </div>
         </div>
-
+    </section>
+    <section class="pengumuman">
+        <div class="green-accent"></div>
+        <h2>Pengumuman</h2>
     </section>
 @endsection
