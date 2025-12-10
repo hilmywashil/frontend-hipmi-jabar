@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome - Frontend Hipmi Jabar')
+@section('title', 'HIPMI Jawa Barat')
 
 @section('content')
 

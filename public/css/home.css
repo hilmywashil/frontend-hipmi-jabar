@@ -391,3 +391,14 @@
     margin-bottom: 50px;
     text-align: center;
 }
+
+@media (max-width: 768px) {
+    .pengumuman {
+        padding: 50px;
+        justify-content: center;
+    }
+
+    .pengumuman>h2 {
+        font-size: 30px;    
+    }
+}

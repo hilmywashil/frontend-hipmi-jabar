@@ -30,3 +30,10 @@ document.addEventListener('click', (e) => {
     }
 });
 /* ================== END HAMBURGER (JADI LAPAR EUY) ================== */
+
+/* ================== TOGGLE PW ================== */
+function togglePassword() {
+    const input = document.getElementById("password");
+    input.type = input.type === "password" ? "text" : "password";
+}
+/* ================== END TOGGLE PW ================== */
