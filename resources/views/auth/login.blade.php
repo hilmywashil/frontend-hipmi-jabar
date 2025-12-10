@@ -8,7 +8,8 @@
       <div class="login-left">
         <div class="brand">
           <img href="{{ route('home') }}" class="brand__logo" src="{{ asset('images/hipmi-logo.png') }}" alt="Logo HIMPI">
-          <img href="{{ route('home') }}" class="brand__badge" src="{{ asset('images/maju-babarengan.png') }}" alt="Maju Barengan">
+          <img href="{{ route('home') }}" class="brand__badge" src="{{ asset('images/maju-babarengan.png') }}"
+            alt="Maju Barengan">
         </div>
 
         <h1 class="login-title">Login</h1>
@@ -33,8 +34,10 @@
               </button>
             </div>
           </label>
-
-          <button class="login-btn" type="submit">Masuk</button>
+          <div>
+            <button class="login-btn" type="submit">Masuk</button>
+            <a href="{{ route('home') }}" class="forgot-password">Lupa Kata Sandi?</a>
+          </div>
         </form>
       </div>
 

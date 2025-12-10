@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="menu-toggle" id="menu-toggle">
-                    ☰
+                    <i class="fa fa-bars"></i>
                 </div>
 
                 <div class="menu" id="menu">
