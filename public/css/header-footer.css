@@ -209,12 +209,13 @@ footer {
 }
 
 @media (max-width: 768px) {
+
     .footer-content {
         flex-direction: column;
     }
 
     .footer-item {
-        padding: 50px 20px;
+        padding: 50px   ;
         text-align: left;
     }
 

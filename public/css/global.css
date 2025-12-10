@@ -112,3 +112,36 @@ body {
 }
 
 /* ================== END BUTTONS ================== */
+
+/* ================== GLOBAL CONTAINERS ================== */
+.page-banner {
+    color: #04293B;
+    padding: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.page-banner h1 {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.page-banner p {
+    font-size: 20px;
+}
+
+@media (max-width: 768px) {
+    .page-banner {
+        padding: 100px 50px 50px 50px;
+        text-align: center;
+    }
+
+    .page-banner h1 {
+        font-size: 30px;
+    }
+
+    .page-banner p {
+        font-size: 16px;
+    }
+}
