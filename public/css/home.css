@@ -327,7 +327,7 @@
     }
 
     .misi>h2 {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .misi-content {
@@ -664,7 +664,7 @@
     }
 
     .events>h2 {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .events-content {
@@ -757,11 +757,14 @@
     transition: transform 0.3s;
 }
 
-
 @media (max-width: 768px) {
     .ekatalog-home {
         padding: 50px 30px;
         justify-content: center;
+    }
+
+    .ekatalog-home>h2 {
+        font-size: 25px;
     }
 
     .e-katalog-content-home {
@@ -957,7 +960,7 @@
     }
 
     .berita-home>h2 {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .berita-home-content {
@@ -1020,41 +1023,71 @@
 .buku-informasi-home-content {
     display: flex;
     flex-direction: column;
-    gap: 30px;
     justify-content: center;
 }
 
-.card-anggota {
-    background: #fff;
-    border-radius: 12px;
-    padding: 25px;
+.anggota-carousel a {
+    color: #04293B;
+    text-decoration: none;
+}
+
+.buku-card {
+    padding: 50px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
 }
 
-.card-img {
-    width: 80px;
-    margin-bottom: 15px;
+.buku-card:hover {
+    cursor: pointer;
 }
 
-.nama {
+.buku-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+}
+
+.buku-card h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.buku-card p {
     font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 5px;
 }
 
-.jabatan {
-    font-size: 13px;
-    color: #666;
-    margin: 0;
+.buku-card .container {
+    padding: 0 10px;
 }
 
-.owl-dots .owl-dot span {
-    width: 10px;
-    height: 10px;
-    background: #C7C7C7 !important;
-}
+@media (max-width: 768px) {
+    .buku-informasi-home {
+        padding: 50px;
+        justify-content: center;
+    }
 
-.owl-dots .owl-dot.active span {
-    background: #173B56 !important;
+    .buku-informasi-home>h2 {
+        font-size: 25px;
+    }
+
+    .buku-card {
+        padding: 20px;
+    }
+
+    .buku-card img {
+        height: 100px;
+    }
+
+    .buku-card h4 {
+        font-size: 15px;
+    }
+
+    .buku-card p {
+        font-size: 14px;
+    }
+
 }

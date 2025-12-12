@@ -33,9 +33,7 @@
     <script>
         $(document).ready(function () {
             $('.anggota-carousel').owlCarousel({
-                loop: true,
                 margin: 20,
-                nav: false,
                 dots: true,
                 autoplay: false,
                 autoplayTimeout: 3000,
