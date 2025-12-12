@@ -28,6 +28,8 @@
 
     @include('layouts.components.footer-after')
 
+    <button id="btnTop"><i class="fa fa-arrow-up"></i></button>
+
     <script src="{{ asset('js/script.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -47,6 +49,25 @@
             });
         });
     </script>
+    <script>
+        const btnTop = document.getElementById("btnTop");
+
+        window.addEventListener("scroll", () => {
+            if (window.pageYOffset > 200) {
+                btnTop.style.display = "block";
+            } else {
+                btnTop.style.display = "none";
+            }
+        });
+
+        btnTop.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    </script>
+
 </body>
 
 </html>
