@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - HIPMI Jawa Barat</title>
+    <title>Info Admin - HIPMI Jawa Barat</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -19,6 +19,7 @@
             min-height: 100vh;
         }
 
+        /* Reuse all sidebar styles from dashboard */
         .sidebar {
             width: 280px;
             background: #0a2540;
@@ -27,7 +28,6 @@
             position: fixed;
             height: 100vh;
             z-index: 100;
-            transition: transform 0.3s ease;
         }
 
         .sidebar-header {
@@ -49,7 +49,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
         }
 
         .brand-text {
@@ -98,7 +97,6 @@
             border-left: 3px solid transparent;
             font-size: 0.9375rem;
             cursor: pointer;
-            position: relative;
         }
 
         .menu-item:hover {
@@ -120,10 +118,8 @@
             stroke: currentColor;
             fill: none;
             stroke-width: 2;
-            flex-shrink: 0;
         }
 
-        /* Dropdown Styles */
         .menu-dropdown {
             position: relative;
         }
@@ -211,7 +207,6 @@
             color: #0a2540;
             font-weight: 700;
             font-size: 1.125rem;
-            flex-shrink: 0;
         }
 
         .user-details {
@@ -223,9 +218,6 @@
             font-size: 0.875rem;
             font-weight: 600;
             color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .user-role {
@@ -239,7 +231,6 @@
             margin-left: 280px;
             display: flex;
             flex-direction: column;
-            transition: margin-left 0.3s ease;
         }
 
         .topbar {
@@ -316,32 +307,181 @@
             flex: 1;
         }
 
-        .welcome-card {
-            background: #0a2540;
-            padding: 2.5rem;
+        .page-header {
+            background: white;
+            padding: 2rem;
             border-radius: 12px;
-            color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .welcome-card h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+        .page-title {
+            font-size: 1.75rem;
             font-weight: 700;
+            color: #0a2540;
+            margin-bottom: 0.5rem;
         }
 
-        .welcome-card p {
+        .page-desc {
+            color: #6b7280;
+            font-size: 0.9375rem;
+        }
+
+        .btn-primary {
+            background: #0a2540;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: #ffd700;
+            color: #0a2540;
+        }
+
+        .btn-primary svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .admin-table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
             font-size: 1.125rem;
-            color: rgba(255,255,255,0.8);
+            font-weight: 700;
+            color: #0a2540;
         }
 
-        .category-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 0.625rem 1rem 0.625rem 2.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            width: 300px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: #6b7280;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table thead {
+            background: #f9fafb;
+        }
+
+        .admin-table th {
+            padding: 1rem 2rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-table td {
+            padding: 1.25rem 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .admin-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .admin-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .admin-cell {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-avatar-table {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a2540;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .admin-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .admin-name-table {
+            font-weight: 600;
+            color: #0a2540;
+            font-size: 0.9375rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .admin-email-table {
+            font-size: 0.8125rem;
+            color: #6b7280;
+        }
+
+        .badge {
+            padding: 0.375rem 0.875rem;
             border-radius: 6px;
             font-size: 0.75rem;
             font-weight: 700;
-            margin-top: 1rem;
             letter-spacing: 0.5px;
         }
 
@@ -355,245 +495,123 @@
             color: white;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
         }
 
-        .stat-card {
-            background: white;
-            padding: 1.75rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        .btn-edit {
+            padding: 0.5rem 0.875rem;
+            background: #f3f4f6;
             border: 1px solid #e5e7eb;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-
-        .stat-label {
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin-bottom: 0.75rem;
-            font-weight: 500;
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #0a2540;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-meta {
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 0.8125rem;
-            color: #10b981;
-            font-weight: 500;
+            font-weight: 600;
+            color: #374151;
+            transition: all 0.2s;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .admin-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
+        .btn-edit:hover {
+            background: #e5e7eb;
         }
 
-        .section-header {
+        .btn-delete {
+            padding: 0.5rem 0.875rem;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: #dc2626;
+            transition: all 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-delete:hover {
+            background: #fee2e2;
+        }
+
+        .pagination {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e5e7eb;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f3f4f6;
         }
 
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0a2540;
-        }
-
-        .view-all-btn {
-            color: #0a2540;
-            text-decoration: none;
+        .pagination-info {
             font-size: 0.875rem;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-
-        .view-all-btn:hover {
-            color: #ffd700;
-        }
-
-        .admin-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .admin-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.25rem;
-            background: #f9fafb;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            transition: all 0.2s;
-        }
-
-        .admin-item:hover {
-            background: #f3f4f6;
-            border-color: #d1d5db;
-        }
-
-        .admin-avatar {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: #ffd700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #0a2540;
-            font-weight: 700;
-            font-size: 1.125rem;
-        }
-
-        .admin-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .admin-name {
-            font-weight: 600;
-            color: #0a2540;
-            margin-bottom: 0.25rem;
-            font-size: 0.9375rem;
-        }
-
-        .admin-email {
-            font-size: 0.8125rem;
             color: #6b7280;
         }
 
-        .admin-badge {
-            padding: 0.375rem 0.875rem;
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #e5e7eb;
             border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            transition: all 0.2s;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .mobile-menu-toggle {
-            display: none;
+        .pagination-btn:hover:not(:disabled) {
+            background: #f3f4f6;
         }
 
-        .mobile-overlay {
-            display: none;
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.active {
+            background: #0a2540;
+            color: white;
+            border-color: #0a2540;
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.mobile-active {
-                transform: translateX(0);
-            }
-
             .main-content {
                 margin-left: 0;
-            }
-
-            .mobile-menu-toggle {
-                display: flex;
-                position: fixed;
-                bottom: 2rem;
-                right: 2rem;
-                width: 56px;
-                height: 56px;
-                background: #0a2540;
-                border: none;
-                border-radius: 50%;
-                cursor: pointer;
-                z-index: 101;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                align-items: center;
-                justify-content: center;
-            }
-
-            .mobile-menu-toggle svg {
-                width: 24px;
-                height: 24px;
-                stroke: white;
-                fill: none;
-                stroke-width: 2;
-            }
-
-            .mobile-overlay.active {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.5);
-                z-index: 99;
-            }
-
-            .topbar {
-                padding: 1rem;
-            }
-
-            .topbar-left h2 {
-                font-size: 1.25rem;
-            }
-
-            .topbar-subtitle {
-                font-size: 0.75rem;
             }
 
             .content {
                 padding: 1rem;
             }
 
-            .welcome-card {
-                padding: 1.5rem;
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
             }
 
-            .welcome-card h1 {
-                font-size: 1.5rem;
+            .search-input {
+                width: 100%;
             }
 
-            .welcome-card p {
-                font-size: 0.9375rem;
+            .admin-table-container {
+                overflow-x: auto;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .logout-btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.8125rem;
-            }
-
-            .icon-btn {
-                width: 38px;
-                height: 38px;
+            .admin-table {
+                min-width: 600px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="sidebar" id="sidebar">
+    <!-- Reuse sidebar from dashboard -->
+    <div class="sidebar">
         <div class="sidebar-header">
             <div class="brand">
                 <div class="brand-logo">
@@ -613,7 +631,6 @@
             <div class="menu-section">
                 <div class="menu-label">Menu Utama</div>
                 
-                <!-- Dashboard Dropdown -->
                 <div class="menu-dropdown">
                     <div class="menu-item has-dropdown active" onclick="toggleDropdown(this)">
                         <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
@@ -630,14 +647,14 @@
                         </svg>
                     </div>
                     <div class="submenu active">
-                        <a href="{{ route('admin.dashboard') }}" class="submenu-item active">
+                        <a href="{{ route('admin.dashboard') }}" class="submenu-item">
                             <svg viewBox="0 0 24 24">
                                 <polyline points="9 11 12 14 22 4"/>
                                 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
                             </svg>
                             <span>Overview</span>
                         </a>
-                        <a href="{{ route('admin.info-admin') }}" class="submenu-item">
+                        <a href="{{ route('admin.info-admin') }}" class="submenu-item active">
                             <svg viewBox="0 0 24 24">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
                                 <circle cx="9" cy="7" r="4"/>
@@ -669,7 +686,6 @@
                     <svg viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="3"/>
                         <path d="M12 1v6m0 6v6m-9-9h6m6 0h6"/>
-                        <path d="M19.07 4.93l-3.53 3.53m-7.08 7.08l-3.53 3.53m15.14 0l-3.53-3.53m-7.08-7.08L4.93 4.93"/>
                     </svg>
                     <span>Pengaturan</span>
                 </a>
@@ -732,8 +748,8 @@
     <div class="main-content">
         <div class="topbar">
             <div class="topbar-left">
-                <h2>Dashboard</h2>
-                <div class="topbar-subtitle">{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM YYYY') }}</div>
+                <h2>Info Admin</h2>
+                <div class="topbar-subtitle">Kelola Akun Administrator</div>
             </div>
             <div class="topbar-actions">
                 <button class="icon-btn">
@@ -756,83 +772,97 @@
         </div>
 
         <div class="content">
-            <div class="welcome-card">
-                <h1>Selamat Datang, {{ $admin->name }}</h1>
-                <p>Dashboard Admin HIPMI Jawa Barat</p>
-                <span class="category-badge badge-{{ $admin->category }}">
-                    {{ strtoupper($admin->category) }}
-                </span>
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Manajemen Admin</h1>
+                    <p class="page-desc">Kelola seluruh akun administrator HIPMI Jawa Barat</p>
+                </div>
+                <a href="{{ route('admin.create-admin') }}" class="btn-primary">
+    <svg viewBox="0 0 24 24">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Tambah Admin Baru
+</a>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total Admin</div>
-                    <div class="stat-value">{{ $totalAdmins }}</div>
-                    <div class="stat-meta">BPC: {{ $adminsBPC }} | BPD: {{ $adminsBPD }}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Total Anggota</div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-meta">Belum ada data</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Total Event</div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-meta">Belum ada data</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Total Berita</div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-meta">Belum ada data</div>
-                </div>
-            </div>
-
-            <div class="admin-section">
-                <div class="section-header">
-                    <h3 class="section-title">Daftar Admin Terdaftar</h3>
-                    <a href="{{ route('admin.info-admin') }}" class="view-all-btn">Lihat Semua</a>
-                </div>
-                <div class="admin-list">
-                    @foreach($recentAdmins as $adminItem)
-                    <div class="admin-item">
-                        <div class="admin-avatar">{{ strtoupper(substr($adminItem->name, 0, 2)) }}</div>
-                        <div class="admin-info">
-                            <div class="admin-name">{{ $adminItem->name }}</div>
-                            <div class="admin-email">{{ $adminItem->email }}</div>
-                        </div>
-                        <span class="admin-badge badge-{{ $adminItem->category }}">{{ strtoupper($adminItem->category) }}</span>
+            <div class="admin-table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Daftar Admin ({{ $admins->total() }})</h3>
+                    <div class="search-box">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Cari admin...">
                     </div>
-                    @endforeach
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Admin</th>
+                            <th>Username</th>
+                            <th>Kategori</th>
+                            <th>Terdaftar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($admins as $adminItem)
+                        <tr>
+                            <td>
+                                <div class="admin-cell">
+                                    <div class="admin-avatar-table">{{ strtoupper(substr($adminItem->name, 0, 2)) }}</div>
+                                    <div class="admin-details">
+                                        <div class="admin-name-table">{{ $adminItem->name }}</div>
+                                        <div class="admin-email-table">{{ $adminItem->email }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ $adminItem->username }}</td>
+                            <td>
+                                <span class="badge badge-{{ $adminItem->category }}">
+                                    {{ strtoupper($adminItem->category) }}
+                                </span>
+                            </td>
+                            <td>{{ $adminItem->created_at->format('d M Y') }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-edit">Edit</button>
+                                    <button class="btn-delete">Hapus</button>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <div class="pagination-info">
+                        Menampilkan {{ $admins->firstItem() }} - {{ $admins->lastItem() }} dari {{ $admins->total() }} admin
+                    </div>
+                    <div class="pagination-buttons">
+                        <button class="pagination-btn" {{ $admins->onFirstPage() ? 'disabled' : '' }}>
+                            Previous
+                        </button>
+                        
+                        @foreach($admins->getUrlRange(1, $admins->lastPage()) as $page => $url)
+                            <button class="pagination-btn {{ $page == $admins->currentPage() ? 'active' : '' }}">
+                                {{ $page }}
+                            </button>
+                        @endforeach
+                        
+                        <button class="pagination-btn" {{ !$admins->hasMorePages() ? 'disabled' : '' }}>
+                            Next
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button class="mobile-menu-toggle" id="mobileMenuToggle">
-        <svg viewBox="0 0 24 24">
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-    </button>
-
-    <div class="mobile-overlay" id="mobileOverlay"></div>
-
     <script>
-        const sidebar = document.getElementById('sidebar');
-        const mobileToggle = document.getElementById('mobileMenuToggle');
-        const mobileOverlay = document.getElementById('mobileOverlay');
-
-        mobileToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('mobile-active');
-            mobileOverlay.classList.toggle('active');
-        });
-
-        mobileOverlay.addEventListener('click', () => {
-            sidebar.classList.remove('mobile-active');
-            mobileOverlay.classList.remove('active');
-        });
-
         function toggleDropdown(element) {
             element.classList.toggle('active');
             const submenu = element.nextElementSibling;

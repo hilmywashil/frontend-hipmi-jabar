@@ -4,11 +4,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 
-Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AdminAuthController::class, 'login'])->name('login.post');
-
 Route::prefix('admin')->name('admin.')->group(function () {
+    // Route login (tanpa middleware)
+    Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminAuthController::class, 'login'])->name('login.post');
+    
+    // Route yang butuh login
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('info-admin', [AdminDashboardController::class, 'infoAdmin'])->name('info-admin');
+    Route::get('create-admin', [AdminDashboardController::class, 'createAdmin'])->name('create-admin');
+    Route::post('store-admin', [AdminDashboardController::class, 'storeAdmin'])->name('store-admin');
+    Route::get('edit-admin/{admin}', [AdminDashboardController::class, 'editAdmin'])->name('edit-admin');
+    Route::put('update-admin/{admin}', [AdminDashboardController::class, 'updateAdmin'])->name('update-admin');
+    Route::delete('delete-admin/{admin}', [AdminDashboardController::class, 'deleteAdmin'])->name('delete-admin');
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
 

@@ -14,7 +14,7 @@
 
       <h1 class="login-title">Login</h1>
 
-      <form class="login-form" action="{{ route('login.post') }}" method="post">
+      <form class="login-form" action="{{ route('admin.login') }}" method="post">
         @csrf
         @if ($errors->any())
         <div style="color: red; margin-bottom: 1rem;">
