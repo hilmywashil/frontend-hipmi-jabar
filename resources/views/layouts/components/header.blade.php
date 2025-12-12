@@ -21,11 +21,21 @@
                 </div>
 
                 <div class="menu" id="menu">
-                    <a href="{{ route('home') }}" class="nav-link">Beranda</a>
-                    <a href="{{ route('organisasi') }}" class="nav-link">Organisasi</a>
-                    <a href="{{  route('e-katalog') }}" class="nav-link">E-Katalog</a>
-                    <a href="{{  route('berita') }}" class="nav-link">Berita</a>
-                    <a href="{{  route('umkm') }}" class="nav-link">UMKM</a>
+                    <a href="{{ route('home') }}" class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}">
+                        Beranda
+                    </a>
+                    <a href="{{ route('organisasi') }}" class="nav-link {{ Request::routeIs('organisasi') ? 'active' : '' }}">
+                        Organisasi
+                    </a>
+                    <a href="{{ route('e-katalog') }}" class="nav-link {{ Request::routeIs('e-katalog') ? 'active' : '' }}">
+                        E-Katalog
+                    </a>
+                    <a href="{{ route('berita') }}" class="nav-link {{ Request::routeIs('berita') ? 'active' : '' }}">
+                        Berita
+                    </a>
+                    <a href="{{ route('umkm') }}" class="nav-link {{ Request::routeIs('umkm') ? 'active' : '' }}">
+                        UMKM
+                    </a>
                     <div class="buttons-mobile">
                         <a href="#" class="btn-transparent">Jadi Anggota</a>
                         <a href="{{ route('login') }}" class="btn">Login</a>

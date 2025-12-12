@@ -3,8 +3,8 @@
 @section('title', 'Organisasi - HIPMI Jawa Barat')
 
 @section('content')
-    <section class="page-banner" style="padding: 100px 100px 50px 100px; !important">
-        <h1>Struktur Organisasi BPD</h1>
+    <section class="page-banner">
+        <h1>Struktur Organisasi</h1>
         <p>Struktur Organisasi BPD HIPMI Jawa Barat</p>
     </section>
     <section class="organisasi">
