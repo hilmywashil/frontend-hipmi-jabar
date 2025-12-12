@@ -383,172 +383,6 @@
 /* ================== END MISI SECTION ================== */
 
 /* ================== PENGUMUMAN SECTION ================== */
-.pengumuman {
-    display: flex;
-    flex-direction: column;
-    padding: 100px;
-    background-color: #f9f9f9;
-    text-align: center;
-}
-
-.pengumuman>h2 {
-    font-size: 30px;
-    color: #04293B;
-    margin-bottom: 50px;
-    text-align: center;
-}
-
-.pengumuman-content {
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    justify-content: center;
-}
-
-.pengumuman-lastest {
-    flex: 1;
-}
-
-.pengumuman-banner-card {
-    position: relative;
-    width: 100%;
-    height: 400px;
-    border-radius: 20px;
-    overflow: hidden;
-    margin: auto;
-}
-
-.pengumuman-banner-bg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.pengumuman-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
-}
-
-.pengumuman-banner-content {
-    position: absolute;
-    bottom: 30px;
-    left: 40px;
-    color: white;
-    z-index: 2;
-    text-align: left;
-
-}
-
-.pengumuman-badge {
-    background: #FFD500;
-    color: #000;
-    padding: 6px 14px;
-    border-radius: 14px;
-    font-size: 14px;
-    display: inline-block;
-    margin-bottom: 12px;
-    font-weight: bold;
-}
-
-.pengumuman-banner-content h2 {
-    font-size: 20px;
-    margin: 0;
-    font-weight: 600;
-    max-width: 600px;
-}
-
-.pengumuman-date {
-    margin: 8px 0 20px;
-    font-size: 15px;
-    opacity: 0.85;
-}
-
-.pengumuman-btn-more {
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 15px;
-}
-
-.pengumuman-others {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    flex-wrap: wrap;
-
-}
-
-.pengumuman-others-banner {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    display: block;
-    border-radius: 10px;
-}
-
-.pengumuman-others-content {
-    text-align: left;
-    margin-top: 10px;
-}
-
-.pengumuman-others-content h2 {
-    font-size: 18px;
-    margin: 0;
-}
-
-.pengumuman-others-btn-more {
-    color: #04293B;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 15px;
-}
-
-
-@media (max-width: 768px) {
-    .pengumuman {
-        padding: 50px;
-        justify-content: center;
-    }
-
-    .pengumuman>h2 {
-        font-size: 30px;
-    }
-
-    .pengumuman-content {
-        flex-direction: column;
-        gap: 30px;
-    }
-
-
-    .pengumuman-banner-content {
-        left: 20px;
-        bottom: 20px;
-    }
-
-    .pengumuman-others-banner {
-        height: 200px;
-    }
-
-    .pengumuman-others-content h2 {
-        font-size: 15px;
-        margin: 0;
-    }
-
-    .pengumuman-date {
-        font-size: 12px;
-    }
-
-    .pengumuman-btn-more,
-    .pengumuman-others-btn-more {
-        font-size: 12px;
-    }
-}
 
 /* ================== END PENGUMUMAN SECTION ================== */
 
@@ -838,7 +672,6 @@
         gap: 30px;
     }
 
-
     .events-banner-content {
         left: 20px;
         bottom: 20px;
@@ -848,9 +681,25 @@
         height: 300px;
     }
 
+    .events-banner-card h2,
+    .events-banner-card-lastest h2 {
+        font-size: 15px;
+    }
+
     .events-banner-card-lastest {
         max-height: 300px;
     }
+
+    .events-others {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .events-date {
+        font-size: 12px;
+    }
+
 
 }
 
@@ -959,4 +808,253 @@
         padding: 50px;
         flex-direction: column;
     }
+}
+
+/* ================== END DAFTARKAN BISNIS ANDA SECTION ================== */
+
+/* ================== BERITA DOKUMENTASI SECTION ================== */
+.berita-home {
+    display: flex;
+    flex-direction: column;
+    padding: 100px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.berita-home>h2 {
+    font-size: 30px;
+    color: #04293B;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.berita-home-content {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: center;
+}
+
+.berita-home-lastest {
+    flex: 1;
+}
+
+.berita-home-banner-card {
+    border: #04293B 1px solid;
+    position: relative;
+    width: 100%;
+    height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: auto;
+}
+
+.berita-home-banner-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.berita-home-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+}
+
+.berita-home-banner-content {
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+    color: white;
+    z-index: 2;
+    text-align: left;
+
+}
+
+.berita-home-badge {
+    background: #FFD500;
+    color: #000;
+    padding: 6px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.berita-home-banner-content h2 {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+    max-width: 600px;
+}
+
+.berita-home-date {
+    margin: 8px 0 20px;
+    font-size: 15px;
+    opacity: 0.85;
+}
+
+.berita-home-btn-more {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.berita-home-others {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    flex-wrap: wrap;
+
+}
+
+.berita-home-others-banner {
+    border: #04293B 1px solid;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px;
+}
+
+.berita-home-others-content {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.berita-home-others-content h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.berita-home-others-btn-more {
+    color: #04293B;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.berita-home-more {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+
+@media (max-width: 768px) {
+    .berita-home {
+        padding: 50px;
+        justify-content: center;
+    }
+
+    .berita-home>h2 {
+        font-size: 30px;
+    }
+
+    .berita-home-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+
+    .berita-home-banner-content {
+        left: 20px;
+        bottom: 20px;
+    }
+
+    .berita-home-others-banner {
+        height: 200px;
+    }
+
+    .berita-home-others-content h2 {
+        font-size: 15px;
+        margin: 0;
+    }
+
+    .berita-home-date {
+        font-size: 12px;
+    }
+
+    .berita-home-btn-more,
+    .berita-home-others-btn-more {
+        font-size: 12px;
+    }
+
+    .berita-home-more {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+}
+
+
+/* ================== BUKU INFORMASI SECTION ================== */
+
+.buku-informasi-home {
+    display: flex;
+    flex-direction: column;
+    padding: 100px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.buku-informasi-home>h2 {
+    font-size: 30px;
+    color: #04293B;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.buku-informasi-home-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+}
+
+.card-anggota {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card-img {
+    width: 80px;
+    margin-bottom: 15px;
+}
+
+.nama {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.jabatan {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
+
+.owl-dots .owl-dot span {
+    width: 10px;
+    height: 10px;
+    background: #C7C7C7 !important;
+}
+
+.owl-dots .owl-dot.active span {
+    background: #173B56 !important;
 }

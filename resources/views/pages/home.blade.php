@@ -106,46 +106,32 @@
             </div>
         </div>
     </section>
-    <section class="pengumuman">
+    <section class="buku-informasi-home">
         <div class="green-accent" style="align-self: center; !important"></div>
-        <h2>Pengumuman</h2>
-        <div class="pengumuman-content">
-            <div class="pengumuman-lastest">
-                <div class="pengumuman-banner-card">
-                    <img src="{{ asset('images/missions/mission-1.png') }}" class="pengumuman-banner-bg">
+        <h2>buku-informasi-home</h2>
+        <div class="buku-informasi-home-content">
+            <div class="owl-carousel anggota-carousel">
 
-                    <div class="pengumuman-overlay"></div>
-
-                    <div class="pengumuman-banner-content">
-                        <!-- <span class="pengumuman-badge">Pengumuman</span> -->
-                        <h2>Presiden Joko Widodo Buka Rakernas HIPMI Ke-XVIII</h2>
-                        <p class="pengumuman-date">Oktober 28, 2025</p>
-
-                        <a href="#" class="pengumuman-btn-more">Lihat Lebih Banyak</a>
+                <div class="item">
+                    <div class="card-anggota">
+                        <img src="/img/logo.png" class="card-img">
+                        <h4 class="nama">Nama Anggota</h4>
+                        <p class="jabatan">Nama Usaha / Jabatan</p>
                     </div>
                 </div>
+
+                <div class="item">
+                    <div class="card-anggota">
+                        <img src="/img/logo.png" class="card-img">
+                        <h4 class="nama">Nama Anggota</h4>
+                        <p class="jabatan">Nama Usaha / Jabatan</p>
+                    </div>
+                </div>
+
             </div>
-            <div class="pengumuman-others">
-                <div class="pengumuman-others-card">
-                    <img src="{{ asset('images/missions/mission-1.png') }}" class="pengumuman-others-banner">
 
-                    <div class="pengumuman-others-content">
-                        <h2>HIPMI Banten Diminta Jawab Tantangan Besar Pengangguran</h2>
-                        <p class="pengumuman-date">Oktober 28, 2025</p>
-
-                        <a href="#" class="pengumuman-others-btn-more">Lihat Lebih Banyak</a>
-                    </div>
-                </div>
-                <div class="pengumuman-others-card">
-                    <img src="{{ asset('images/missions/mission-1.png') }}" class="pengumuman-others-banner">
-
-                    <div class="pengumuman-others-content">
-                        <h2>HIPMI Banten Diminta Jawab Tantangan Besar Pengangguran</h2>
-                        <p class="pengumuman-date">Oktober 28, 2025</p>
-
-                        <a href="#" class="pengumuman-others-btn-more">Lihat Lebih Banyak</a>
-                    </div>
-                </div>
+            <div style="text-align:center; margin-top:25px;">
+                <a href="#" class="lihat-btn">Lihat Lebih Banyak ▶</a>
             </div>
         </div>
     </section>
@@ -221,7 +207,7 @@
     </section>
     <section class="events">
         <div class="green-accent" style="align-self: center; !important"></div>
-        <h2>Acara Kami di HIPMI</h2>
+        <h2>Informasi Kegiatan BPD</h2>
         <div class="events-content">
             <div class="events-lastest">
                 <div class="events-banner-card-lastest">
@@ -328,6 +314,84 @@
         <img src="{{ asset('images/maju-babarengan.png') }}" alt="">
         <h1>DAFTARKAN BISNIS ANDA</h1>
         <a href="#" class="btn">Lihat Lebih Banyak</a>
+    </section>
+    <section class="berita-home">
+        <div class="green-accent" style="align-self: center; !important"></div>
+        <h2>Berita & Dokumentasi</h2>
+        <div class="berita-home-content">
+            <div class="berita-home-lastest">
+                <div class="berita-home-banner-card">
+                    <img src="{{ asset('images/missions/mission-1.png') }}" class="berita-home-banner-bg">
+
+                    <div class="berita-home-overlay"></div>
+
+                    <div class="berita-home-banner-content">
+                        <!-- <span class="berita-home-badge">berita-home</span> -->
+                        <h2>Presiden Joko Widodo Buka Rakernas HIPMI Ke-XVIII</h2>
+                        <p class="berita-home-date">Oktober 28, 2025</p>
+
+                        <a href="#" class="berita-home-btn-more">Lihat Lebih Banyak</a>
+                    </div>
+                </div>
+            </div>
+            <div class="berita-home-others">
+                <div class="berita-home-others-card">
+                    <img src="{{ asset('images/missions/mission-1.png') }}" class="berita-home-others-banner">
+
+                    <div class="berita-home-others-content">
+                        <h2>HIPMI Banten Diminta Jawab Tantangan Besar Pengangguran</h2>
+                        <p class="berita-home-date">Oktober 28, 2025</p>
+
+                        <a href="#" class="berita-home-others-btn-more">Lihat Lebih Banyak</a>
+                    </div>
+                </div>
+                <div class="berita-home-others-card">
+                    <img src="{{ asset('images/missions/mission-1.png') }}" class="berita-home-others-banner">
+
+                    <div class="berita-home-others-content">
+                        <h2>HIPMI Banten Diminta Jawab Tantangan Besar Pengangguran</h2>
+                        <p class="berita-home-date">Oktober 28, 2025</p>
+
+                        <a href="#" class="berita-home-others-btn-more">Lihat Lebih Banyak</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="berita-home-more">
+            <div class="berita-home-others-card">
+                <img src="{{ asset('images/missions/mission-1.png') }}" class="berita-home-others-banner">
+
+                <div class="berita-home-others-content">
+                    <h2>HIPMI Banten Diminta Jawab Tantangan Besar Pengangguran</h2>
+                    <p class="berita-home-date">Oktober 28, 2025</p>
+
+                    <a href="#" class="berita-home-others-btn-more">Lihat Lebih Banyak</a>
+                </div>
+            </div>
+            <div class="berita-home-others-card">
+                <img src="{{ asset('images/missions/mission-1.png') }}" class="berita-home-others-banner">
+
+                <div class="berita-home-others-content">
+                    <h2>HIPMI Banten Diminta Jawab Tantangan Besar Pengangguran</h2>
+                    <p class="berita-home-date">Oktober 28, 2025</p>
+
+                    <a href="#" class="berita-home-others-btn-more">Lihat Lebih Banyak</a>
+                </div>
+            </div>
+            <div class="berita-home-others-card">
+                <img src="{{ asset('images/missions/mission-1.png') }}" class="berita-home-others-banner">
+
+                <div class="berita-home-others-content">
+                    <h2>HIPMI Banten Diminta Jawab Tantangan Besar Pengangguran</h2>
+                    <p class="berita-home-date">Oktober 28, 2025</p>
+
+                    <a href="#" class="berita-home-others-btn-more">Lihat Lebih Banyak</a>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 50px;">
+            <a href="#" class="btn-ekatalog-home">Lihat Lebih Banyak</a>
+        </div>
 
     </section>
 @endsection
