@@ -145,6 +145,7 @@
         border-radius: 12px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         border: 1px solid #e5e7eb;
+        margin-bottom: 2rem;
     }
 
     .section-header {
@@ -219,6 +220,139 @@
         object-fit: cover;
     }
 
+    /* Katalog Card Style */
+    .katalog-item {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .katalog-item:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+        border-color: #ffd700;
+    }
+
+    .katalog-thumbnail {
+        width: 120px;
+        height: 120px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+    }
+
+    .katalog-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .katalog-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+    }
+
+    .katalog-header {
+        margin-bottom: 0.5rem;
+    }
+
+    .katalog-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #0a2540;
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+
+    .katalog-field {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 0.75rem;
+    }
+
+    .katalog-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .katalog-meta {
+        font-size: 0.8125rem;
+        color: #9ca3af;
+    }
+
+    /* Organisasi Card Style */
+    .organisasi-item {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .organisasi-item:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+        border-color: #3b82f6;
+    }
+
+    .organisasi-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: #f3f4f6;
+        border: 2px solid #e5e7eb;
+    }
+
+    .organisasi-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .organisasi-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+    }
+
+    .organisasi-name {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #0a2540;
+        margin-bottom: 0.25rem;
+    }
+
+    .organisasi-position {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 0.75rem;
+    }
+
+    .organisasi-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     .admin-info {
         flex: 1;
         min-width: 0;
@@ -242,6 +376,40 @@
         font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.5px;
+    }
+
+    .badge-aktif {
+        background: #10b981;
+        color: white;
+    }
+
+    .badge-ketua_umum,
+    .badge-wakil_ketua_umum {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .badge-ketua_bidang {
+        background: #8b5cf6;
+        color: white;
+    }
+
+    .badge-sekretaris_umum,
+    .badge-wakil_sekretaris_umum {
+        background: #f59e0b;
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #9ca3af;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
     }
 
     @media (max-width: 768px) {
@@ -271,11 +439,20 @@
         .stats-grid {
             grid-template-columns: 1fr;
         }
+
+        .admin-item {
+            flex-wrap: wrap;
+        }
+
+        .admin-badge {
+            margin-left: auto;
+        }
     }
 </style>
 @endpush
 
 @section('content')
+{{-- Welcome Card --}}
 <div class="welcome-card">
     <div class="welcome-content">
         <div class="welcome-avatar">
@@ -295,36 +472,52 @@
     </div>
 </div>
 
+{{-- Statistics Cards --}}
 <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-label">Total Admin</div>
         <div class="stat-value">{{ $totalAdmins }}</div>
         <div class="stat-meta">BPC: {{ $adminsBPC }} | BPD: {{ $adminsBPD }}</div>
     </div>
+    
     <div class="stat-card">
-        <div class="stat-label">Total Anggota</div>
-        <div class="stat-value">0</div>
-        <div class="stat-meta">Belum ada data</div>
+        <div class="stat-label">Total E-Katalog</div>
+        <div class="stat-value">{{ $totalKatalog }}</div>
+        <div class="stat-meta">
+            @if($totalKatalogInactive > 0)
+                {{ $totalKatalogInactive }} tidak aktif
+            @else
+                Semua aktif
+            @endif
+        </div>
     </div>
+    
     <div class="stat-card">
-        <div class="stat-label">Total Event</div>
-        <div class="stat-value">0</div>
-        <div class="stat-meta">Belum ada data</div>
+        <div class="stat-label">Total Anggota Organisasi</div>
+        <div class="stat-value">{{ $totalOrganisasi }}</div>
+        <div class="stat-meta">
+            Ketua Bidang: {{ $organisasiByKategori['ketua_bidang'] }}
+        </div>
     </div>
+    
     <div class="stat-card">
-        <div class="stat-label">Total Berita</div>
-        <div class="stat-value">0</div>
-        <div class="stat-meta">Belum ada data</div>
+        <div class="stat-label">Struktur Organisasi</div>
+        <div class="stat-value">{{ $totalOrganisasi }}</div>
+        <div class="stat-meta">
+            Ketum: {{ $organisasiByKategori['ketua_umum'] }} | 
+            Waketum: {{ $organisasiByKategori['wakil_ketua_umum'] }}
+        </div>
     </div>
 </div>
 
+{{-- Admin List Section --}}
 <div class="admin-section">
     <div class="section-header">
         <h3 class="section-title">Daftar Admin Terdaftar</h3>
         <a href="{{ route('admin.info-admin') }}" class="view-all-btn">Lihat Semua</a>
     </div>
     <div class="admin-list">
-        @foreach($recentAdmins as $adminItem)
+        @forelse($recentAdmins as $adminItem)
         <div class="admin-item">
             <div class="admin-avatar">
                 @if($adminItem->photo)
@@ -339,7 +532,78 @@
             </div>
             <span class="admin-badge badge-{{ $adminItem->category }}">{{ strtoupper($adminItem->category) }}</span>
         </div>
-        @endforeach
+        @empty
+        <div class="empty-state">
+            <i class="fas fa-users"></i>
+            <p>Belum ada admin terdaftar</p>
+        </div>
+        @endforelse
+    </div>
+</div>
+
+{{-- Katalog Section --}}
+<div class="admin-section"> 
+    <div class="section-header">
+        <h3 class="section-title">E-Katalog Terbaru</h3>
+        <a href="{{ route('admin.katalog.index') }}" class="view-all-btn">Lihat Semua</a>
+    </div>
+    <div class="admin-list">
+        @forelse($recentKatalogs as $katalog)
+        <div class="katalog-item">
+            <div class="katalog-thumbnail">
+                <img src="{{ $katalog->logo_url }}" alt="{{ $katalog->company_name }}">
+            </div>
+            <div class="katalog-content">
+                <div class="katalog-header">
+                    <h4 class="katalog-title">{{ $katalog->company_name }}</h4>
+                    <p class="katalog-field">{{ $katalog->business_field }}</p>
+                </div>
+                <div class="katalog-footer">
+                    <span class="katalog-meta">Ditambahkan {{ $katalog->created_at->diffForHumans() }}</span>
+                    <span class="admin-badge badge-aktif">AKTIF</span>
+                </div>
+            </div>
+        </div>
+        @empty
+        <div class="empty-state">
+            <i class="fas fa-briefcase"></i>
+            <p>Belum ada katalog bisnis</p>
+        </div>
+        @endforelse
+    </div>
+</div>
+
+{{-- Organisasi Section --}}
+<div class="admin-section">
+    <div class="section-header">
+        <h3 class="section-title">Struktur Organisasi Terbaru</h3>
+        <a href="{{ route('admin.organisasi.index') }}" class="view-all-btn">Lihat Semua</a>
+    </div>
+    <div class="admin-list">
+        @forelse($recentOrganisasi as $org)
+        <div class="organisasi-item">
+            <div class="organisasi-photo">
+                <img src="{{ $org->foto_url }}" alt="{{ $org->nama }}">
+            </div>
+            <div class="organisasi-content">
+                <div>
+                    <h4 class="organisasi-name">{{ $org->nama }}</h4>
+                    <p class="organisasi-position">{{ $org->jabatan }}</p>
+                </div>
+                <div class="organisasi-footer">
+                    <span class="katalog-meta">Urutan: {{ $org->urutan }}</span>
+                    <span class="admin-badge badge-{{ $org->kategori }}">
+                        {{ strtoupper(str_replace('_', ' ', $org->kategori)) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        @empty
+        <div class="empty-state">
+            <i class="fas fa-sitemap"></i>
+            <p>Belum ada data organisasi</p>
+        </div>
+        @endforelse
     </div>
 </div>
 @endsection

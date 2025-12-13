@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Katalog;
+use App\Models\Organisasi;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -14,13 +16,42 @@ class AdminDashboardController extends Controller
     public function index(): View
     {
         $admin = Auth::guard('admin')->user();
+        
+        // Admin Statistics
         $totalAdmins = Admin::count();
         $adminsBPC = Admin::where('category', 'bpc')->count();
         $adminsBPD = Admin::where('category', 'bpd')->count();
+        $recentAdmins = Admin::latest()->take(5)->get();
         
-        $recentAdmins = Admin::latest()->take(3)->get();
+        // Katalog Statistics
+        $totalKatalog = Katalog::where('is_active', true)->count();
+        $totalKatalogInactive = Katalog::where('is_active', false)->count();
+        $recentKatalogs = Katalog::where('is_active', true)->latest()->take(5)->get();
         
-        return view('admin.dashboard', compact('admin', 'totalAdmins', 'adminsBPC', 'adminsBPD', 'recentAdmins'));
+        // Organisasi Statistics
+        $totalOrganisasi = Organisasi::where('aktif', true)->count();
+        $organisasiByKategori = [
+            'ketua_umum' => Organisasi::aktif()->kategori('ketua_umum')->count(),
+            'wakil_ketua_umum' => Organisasi::aktif()->kategori('wakil_ketua_umum')->count(),
+            'ketua_bidang' => Organisasi::aktif()->kategori('ketua_bidang')->count(),
+            'sekretaris_umum' => Organisasi::aktif()->kategori('sekretaris_umum')->count(),
+            'wakil_sekretaris_umum' => Organisasi::aktif()->kategori('wakil_sekretaris_umum')->count(),
+        ];
+        $recentOrganisasi = Organisasi::aktif()->ordered()->take(5)->get();
+        
+        return view('admin.dashboard', compact(
+            'admin',
+            'totalAdmins',
+            'adminsBPC',
+            'adminsBPD',
+            'recentAdmins',
+            'totalKatalog',
+            'totalKatalogInactive',
+            'recentKatalogs',
+            'totalOrganisasi',
+            'organisasiByKategori',
+            'recentOrganisasi'
+        ));
     }
     
     public function infoAdmin(): View
