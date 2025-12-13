@@ -89,15 +89,42 @@
                 </svg>
                 <span>Beranda</span>
             </a>
-            <a href="{{ route('organisasi') }}" class="menu-item" target="_blank">
-                <svg viewBox="0 0 24 24">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-                <span>Organisasi</span>
-            </a>
+
+            {{-- Organisasi Dropdown --}}
+            <div class="menu-dropdown">
+                <div class="menu-item has-dropdown {{ $activeMenu === 'organisasi' ? 'active' : '' }}" onclick="toggleDropdown(this)">
+                    <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <span>Organisasi</span>
+                    </div>
+                    <svg class="dropdown-icon" viewBox="0 0 24 24">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                <div class="submenu {{ $activeMenu === 'organisasi' ? 'active' : '' }}">
+                    <a href="{{ route('organisasi') }}" class="submenu-item" target="_blank">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span>Lihat Halaman</span>
+                    </a>
+                    <a href="{{ route('admin.organisasi.index') }}" class="submenu-item {{ $activeMenu === 'organisasi' ? 'active' : '' }}">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        <span>Kelola Data</span>
+                    </a>
+                </div>
+            </div>
+
             <a href="{{ route('e-katalog') }}" class="menu-item" target="_blank">
                 <svg viewBox="0 0 24 24">
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>

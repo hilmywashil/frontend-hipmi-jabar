@@ -1,16 +1,17 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\OrganisasiController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    
+
     Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [AdminAuthController::class, 'login'])->name('login.post');
-    
-    
+
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('info-admin', [AdminDashboardController::class, 'infoAdmin'])->name('info-admin');
     Route::get('create-admin', [AdminDashboardController::class, 'createAdmin'])->name('create-admin');
@@ -19,11 +20,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('update-admin/{admin}', [AdminDashboardController::class, 'updateAdmin'])->name('update-admin');
     Route::delete('delete-admin/{admin}', [AdminDashboardController::class, 'deleteAdmin'])->name('delete-admin');
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
-  Route::get('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile');
-    Route::put('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
-    Route::post('/profile/photo', [App\Http\Controllers\Admin\ProfileController::class, 'updatePhoto'])->name('profile.photo');
-    Route::delete('/profile/photo', [App\Http\Controllers\Admin\ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+    
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
+    Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+
+
+    Route::resource('organisasi', OrganisasiController::class);
 });
 
 Route::view('/', 'pages.home')->name('home');
