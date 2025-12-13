@@ -111,84 +111,31 @@
         <h2>Buku Informasi Anggota HIPMI Jabar</h2>
         <div class="buku-informasi-home-content">
             <div class="owl-carousel anggota-carousel">
-
-                <a href="{{ route('e-katalog.detail') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/hipmi-logo.png') }}">
-                        <div class="container">
-                            <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                            <p>Bidang Perusahaan</p>
+                @forelse($katalogs as $katalog)
+                    <a href="{{ route('e-katalog.detail', $katalog->id) }}">
+                        <div class="buku-card">
+                            <img src="{{ $katalog->logo_url }}" alt="{{ $katalog->company_name }}">
+                            <div class="container">
+                                <h4><b>{{ Str::limit($katalog->company_name, 20, '...') }}</b></h4>
+                                <p>{{ Str::limit($katalog->business_field, 25, '...') }}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-                <a href="{{ route('e-katalog.detail') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/hipmi-logo.png') }}">
-                        <div class="container">
-                            <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                            <p>Bidang Perusahaan</p>
+                    </a>
+                @empty
+                    <a href="{{ route('e-katalog') }}">
+                        <div class="buku-card">
+                            <img src="{{ asset('images/hipmi-logo.png') }}">
+                            <div class="container">
+                                <h4><b>Belum Ada Data</b></h4>
+                                <p>Klik untuk lihat katalog</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-                <a href="{{ route('e-katalog.detail') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/hipmi-logo.png') }}">
-                        <div class="container">
-                            <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                            <p>Bidang Perusahaan</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('e-katalog.detail') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/hipmi-logo.png') }}">
-                        <div class="container">
-                            <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                            <p>Bidang Perusahaan</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('e-katalog.detail') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/hipmi-logo.png') }}">
-                        <div class="container">
-                            <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                            <p>Bidang Perusahaan</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('e-katalog.detail') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/hipmi-logo.png') }}">
-                        <div class="container">
-                            <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                            <p>Bidang Perusahaan</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('e-katalog.detail') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/hipmi-logo.png') }}">
-                        <div class="container">
-                            <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                            <p>Bidang Perusahaan</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('e-katalog.detail') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/hipmi-logo.png') }}">
-                        <div class="container">
-                            <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                            <p>Bidang Perusahaan</p>
-                        </div>
-                    </div>
-                </a>
-
+                    </a>
+                @endforelse
             </div>
 
             <div style="text-align:center; margin-top:25px;">
-                <a href="#" class="btn-ekatalog-home">Lihat Lebih Banyak</a>
+                <a href="{{ route('e-katalog') }}" class="btn-ekatalog-home">Lihat Lebih Banyak</a>
             </div>
         </div>
     </section>
@@ -343,28 +290,30 @@
         <div class="green-accent" style="align-self: center; !important"></div>
         <h2>E-Katalog Bisnis HIPMI Jabar</h2>
         <div class="e-katalog-content-home">
-            <!-- Looping dari sini cuy -->
-            <a href="{{ route('e-katalog.detail') }}">
-                <div class="katalog-card">
-                    <img src="{{ asset('images/hipmi-logo.png') }}">
-                    <div class="container">
-                        <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                        <p>Bidang Perusahaan</p>
+            @forelse($katalogs->take(2) as $katalog)
+                <a href="{{ route('e-katalog.detail', $katalog->id) }}">
+                    <div class="katalog-card">
+                        <img src="{{ $katalog->logo_url }}" alt="{{ $katalog->company_name }}">
+                        <div class="container">
+                            <h4><b>{{ Str::limit($katalog->company_name, 20, '...') }}</b></h4>
+                            <p>{{ Str::limit($katalog->business_field, 25, '...') }}</p>
+                        </div>
                     </div>
-                </div>
-            </a>
-            <a href="{{ route('e-katalog.detail') }}">
-                <div class="katalog-card">
-                    <img src="{{ asset('images/hipmi-logo.png') }}">
-                    <div class="container">
-                        <h4><b>{{ Str::limit('Nama Perusahaan', 20, '...') }}</b></h4>
-                        <p>Bidang Perusahaan</p>
+                </a>
+            @empty
+                <a href="{{ route('e-katalog') }}">
+                    <div class="katalog-card">
+                        <img src="{{ asset('images/hipmi-logo.png') }}">
+                        <div class="container">
+                            <h4><b>Belum Ada Data</b></h4>
+                            <p>Klik untuk lihat katalog</p>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            @endforelse
         </div>
         <div style="margin-top: 50px;">
-            <a href="#" class="btn-ekatalog-home">Lihat Lebih Banyak</a>
+            <a href="{{ route('e-katalog') }}" class="btn-ekatalog-home">Lihat Lebih Banyak</a>
         </div>
     </section>
     <section class="daftarkan-bisnis-anda">

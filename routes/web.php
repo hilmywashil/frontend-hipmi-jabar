@@ -7,7 +7,9 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\OrganisasiController;
 use App\Http\Controllers\Admin\KatalogController as AdminKatalogController;
 use App\Http\Controllers\KatalogController;
+use App\Http\Controllers\HomeController;
 
+// Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
@@ -30,17 +32,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('organisasi', OrganisasiController::class);
     
-    // Admin E-Katalog Routes - pakai 'katalog' untuk admin
+    // Admin E-Katalog Routes
     Route::resource('katalog', AdminKatalogController::class);
 });
 
 // Public Routes
-Route::view('/', 'pages.home')->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// E-Katalog Public Routes - pakai 'e-katalog' untuk public
+// E-Katalog Public Routes
 Route::get('/e-katalog', [KatalogController::class, 'index'])->name('e-katalog');
 Route::get('/e-katalog/{katalog}', [KatalogController::class, 'show'])->name('e-katalog.detail');
 
+// Other Public Pages
 Route::view('/organisasi', 'pages.organisasi')->name('organisasi');
 Route::view('/berita', 'pages.berita')->name('berita');
 Route::view('/umkm', 'pages.umkm')->name('umkm');
