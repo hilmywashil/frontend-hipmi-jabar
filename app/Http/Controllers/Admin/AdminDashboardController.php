@@ -57,6 +57,12 @@ class AdminDashboardController extends Controller
     public function infoAdmin(): View
     {
         $admin = Auth::guard('admin')->user();
+        
+        // Cek apakah admin adalah BPD
+        if ($admin->category !== 'bpd') {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
+        
         $admins = Admin::latest()->paginate(10);
         
         return view('admin.info-admin', compact('admin', 'admins'));
@@ -65,11 +71,24 @@ class AdminDashboardController extends Controller
     public function createAdmin(): View
     {
         $admin = Auth::guard('admin')->user();
+        
+        // Cek apakah admin adalah BPD
+        if ($admin->category !== 'bpd') {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
+        
         return view('admin.create-admin', compact('admin'));
     }
     
     public function storeAdmin(Request $request)
     {
+        $admin = Auth::guard('admin')->user();
+        
+        // Cek apakah admin adalah BPD
+        if ($admin->category !== 'bpd') {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+        
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:admins',
@@ -92,11 +111,24 @@ class AdminDashboardController extends Controller
     public function editAdmin(Admin $admin): View
     {
         $currentAdmin = Auth::guard('admin')->user();
+        
+        // Cek apakah admin adalah BPD
+        if ($currentAdmin->category !== 'bpd') {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
+        
         return view('admin.edit-admin', compact('admin', 'currentAdmin'));
     }
     
     public function updateAdmin(Request $request, Admin $admin)
     {
+        $currentAdmin = Auth::guard('admin')->user();
+        
+        // Cek apakah admin adalah BPD
+        if ($currentAdmin->category !== 'bpd') {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+        
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:admins,username,' . $admin->id,
@@ -121,6 +153,13 @@ class AdminDashboardController extends Controller
     
     public function deleteAdmin(Admin $admin)
     {
+        $currentAdmin = Auth::guard('admin')->user();
+        
+        // Cek apakah admin adalah BPD
+        if ($currentAdmin->category !== 'bpd') {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+        
         $admin->delete();
         return redirect()->route('admin.info-admin')->with('success', 'Admin berhasil dihapus!');
     }
