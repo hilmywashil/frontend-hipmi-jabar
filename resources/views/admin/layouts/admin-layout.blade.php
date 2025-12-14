@@ -6,8 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
     <title>@yield('title', 'Dashboard Admin') - HIPMI Jawa Barat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     {{-- Admin Styles --}}
     <link rel="stylesheet" href="{{ asset('css/admin-layout.css') }}">
@@ -205,7 +207,8 @@
         <div class="topbar">
             <div class="topbar-left">
                 <h2>@yield('page-title', 'Dashboard')</h2>
-                <div class="topbar-subtitle">{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM YYYY') }}</div>
+                <div class="topbar-subtitle">{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
+                </div>
             </div>
             <div class="topbar-actions">
                 <button class="icon-btn">
@@ -225,14 +228,16 @@
                 <a href="{{ route('admin.profile') }}" class="topbar-user-profile">
                     <div class="topbar-user-avatar">
                         @if(auth()->guard('admin')->user()->photo)
-                            <img src="{{ auth()->guard('admin')->user()->photo_url }}" alt="{{ auth()->guard('admin')->user()->name }}">
+                            <img src="{{ auth()->guard('admin')->user()->photo_url }}"
+                                alt="{{ auth()->guard('admin')->user()->name }}">
                         @else
                             {{ strtoupper(substr(auth()->guard('admin')->user()->name ?? 'A', 0, 2)) }}
                         @endif
                     </div>
                     <div class="topbar-user-details">
                         <div class="topbar-user-name">{{ auth()->guard('admin')->user()->name ?? 'Admin' }}</div>
-                        <div class="topbar-user-role">{{ auth()->guard('admin')->user()->category === 'bpc' ? 'BPC' : 'BPD' }}</div>
+                        <div class="topbar-user-role">
+                            {{ auth()->guard('admin')->user()->category === 'bpc' ? 'BPC' : 'BPD' }}</div>
                     </div>
                 </a>
 
@@ -260,7 +265,8 @@
                 <h3 class="logout-modal-title">Konfirmasi Logout</h3>
             </div>
             <p class="logout-modal-text">
-                Apakah Anda yakin ingin keluar dari dashboard admin? Anda harus login kembali untuk mengakses halaman ini.
+                Apakah Anda yakin ingin keluar dari dashboard admin? Anda harus login kembali untuk mengakses halaman
+                ini.
             </p>
             <div class="logout-modal-actions">
                 <button type="button" class="modal-btn modal-btn-cancel" onclick="hideLogoutModal()">Batal</button>
@@ -288,14 +294,14 @@
         }
 
         // Close modal when clicking outside
-        document.getElementById('logoutModal').addEventListener('click', function(e) {
+        document.getElementById('logoutModal').addEventListener('click', function (e) {
             if (e.target === this) {
                 hideLogoutModal();
             }
         });
 
         // Close modal with ESC key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 hideLogoutModal();
             }
