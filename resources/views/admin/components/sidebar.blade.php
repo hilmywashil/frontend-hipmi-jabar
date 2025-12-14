@@ -65,7 +65,7 @@
                 </svg>
                 <span>Editor</span>
             </a>
-            <a href="#" class="menu-item {{ $activeMenu === 'anggota' ? 'active' : '' }}">
+            <a href="{{ route('admin.anggota.index') }}" class="menu-item {{ $activeMenu === 'anggota' ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                     <circle cx="9" cy="7" r="4"/>

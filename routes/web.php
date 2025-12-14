@@ -7,8 +7,10 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\OrganisasiController;
 use App\Http\Controllers\Admin\KatalogController as AdminKatalogController;
 use App\Http\Controllers\Admin\MisiController;
+use App\Http\Controllers\Admin\AnggotaManagementController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AnggotaController;
 
 // =====================================================
 // ADMIN ROUTES
@@ -52,6 +54,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         // Misi CRUD
         Route::resource('misi', MisiController::class);
+        
+        // Anggota Management
+        Route::prefix('anggota')->name('anggota.')->group(function () {
+            Route::get('/', [AnggotaManagementController::class, 'index'])->name('index');
+            Route::get('/{anggota}', [AnggotaManagementController::class, 'show'])->name('show');
+            Route::post('/{anggota}/approve', [AnggotaManagementController::class, 'approve'])->name('approve');
+            Route::post('/{anggota}/reject', [AnggotaManagementController::class, 'reject'])->name('reject');
+            Route::delete('/{anggota}', [AnggotaManagementController::class, 'destroy'])->name('destroy');
+        });
     });
 });
 
@@ -71,4 +82,9 @@ Route::view('/organisasi', 'pages.organisasi')->name('organisasi');
 Route::view('/berita', 'pages.berita')->name('berita');
 Route::view('/berita/detail', 'pages.details.berita-detail')->name('berita-detail');
 Route::view('/umkm', 'pages.umkm')->name('umkm');
-Route::view('/jadi-anggota', 'pages.jadi-anggota')->name('jadi-anggota');
+
+// Jadi Anggota - Form & Submit
+Route::get('/jadi-anggota', function () {
+    return view('pages.jadi-anggota');
+})->name('jadi-anggota');
+Route::post('/jadi-anggota', [AnggotaController::class, 'store'])->name('jadi-anggota.store');

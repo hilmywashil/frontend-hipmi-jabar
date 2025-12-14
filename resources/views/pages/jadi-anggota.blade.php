@@ -1,10 +1,50 @@
 @extends('layouts.app')
 
 @section('title', 'Jadi Anggota - HIPMI Jawa Barat')
+{{-- Success/Error Messages --}}
+@if(session('success'))
+<div class="alert alert-success">
+    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>{{ session('success') }}</span>
+</div>
+@endif
+
+@if(session('error'))
+<div class="alert alert-error">
+    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="15" y1="9" x2="9" y2="15"></line>
+        <line x1="9" y1="9" x2="15" y2="15"></line>
+    </svg>
+    <span>{{ session('error') }}</span>
+</div>
+@endif
+
+@if($errors->any())
+<div class="alert alert-error">
+    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <div>
+        <strong>Ada beberapa kesalahan:</strong>
+        <ul style="margin: 10px 0 0 20px; padding: 0;">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+</div>
+@endif
 
 @section('content')
 <!-- Include Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
 <section class="ja-page-banner">
     <h1>Jadi Anggota</h1>
@@ -46,7 +86,7 @@
 
     <!-- Form Multi-Step -->
     <div class="form-section">
-        <form action="#" method="POST" enctype="multipart/form-data" id="multiStepForm">
+        <form action="{{ route('jadi-anggota.store') }}" method="POST" enctype="multipart/form-data" id="multiStepForm">
             @csrf
 
             <!-- Step 1: Data Pribadi -->
@@ -56,17 +96,17 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nama_usaha">Nama Usaha / Brand<span class="required">*</span></label>
-                        <input type="text" id="nama_usaha" name="nama_usaha" class="form-control" required>
+                        <input type="text" id="nama_usaha" name="nama_usaha" class="form-control" value="{{ old('nama_usaha') }}" required>
                     </div>
                     <div class="form-group">
                         <label>Jenis Kelamin<span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-label">
-                                <input type="radio" name="jenis_kelamin" value="laki-laki" required>
+                                <input type="radio" name="jenis_kelamin" value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '' }} required>
                                 <span>Laki-laki</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="jenis_kelamin" value="perempuan" required>
+                                <input type="radio" name="jenis_kelamin" value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'checked' : '' }} required>
                                 <span>Perempuan</span>
                             </label>
                         </div>
@@ -78,14 +118,14 @@
                         <label for="tempat_lahir">Tempat lahir<span class="required">*</span></label>
                         <select id="tempat_lahir" name="tempat_lahir" class="form-control" required>
                             <option value="">Pilih Kota/Kabupaten</option>
-                            <option value="Bandung">Bandung</option>
-                            <option value="Bekasi">Bekasi</option>
-                            <option value="Bogor">Bogor</option>
+                            <option value="Bandung" {{ old('tempat_lahir') == 'Bandung' ? 'selected' : '' }}>Bandung</option>
+                            <option value="Bekasi" {{ old('tempat_lahir') == 'Bekasi' ? 'selected' : '' }}>Bekasi</option>
+                            <option value="Bogor" {{ old('tempat_lahir') == 'Bogor' ? 'selected' : '' }}>Bogor</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="tanggal_lahir">Tanggal Lahir<span class="required">*</span></label>
-                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="form-control" required>
+                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}" required>
                     </div>
                 </div>
 
@@ -94,17 +134,17 @@
                         <label for="agama">Agama<span class="required">*</span></label>
                         <select id="agama" name="agama" class="form-control" required>
                             <option value="">Pilih Agama</option>
-                            <option value="Islam">Islam</option>
-                            <option value="Kristen">Kristen</option>
-                            <option value="Katolik">Katolik</option>
-                            <option value="Hindu">Hindu</option>
-                            <option value="Buddha">Buddha</option>
-                            <option value="Konghucu">Konghucu</option>
+                            <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                            <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                            <option value="Katolik" {{ old('agama') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
+                            <option value="Hindu" {{ old('agama') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                            <option value="Buddha" {{ old('agama') == 'Buddha' ? 'selected' : '' }}>Buddha</option>
+                            <option value="Konghucu" {{ old('agama') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="nomor_telepon">Nomor Telepon (yang terhubung dengan WhatsApp)<span class="required">*</span></label>
-                        <input type="tel" id="nomor_telepon" name="nomor_telepon" class="form-control" placeholder="Contoh: 081234567890" required>
+                        <input type="tel" id="nomor_telepon" name="nomor_telepon" class="form-control" value="{{ old('nomor_telepon') }}" placeholder="Contoh: 081234567890" required>
                     </div>
                 </div>
 
@@ -112,55 +152,55 @@
                     <label for="domisili">Domisili<span class="required">*</span></label>
                     <select id="domisili" name="domisili" class="form-control" required>
                         <option value="">Pilih Kabupaten/Kota</option>
-                        <option value="Kab. Bandung">Kab. Bandung</option>
-                        <option value="Kab. Bandung Barat">Kab. Bandung Barat</option>
-                        <option value="Kab. Bekasi">Kab. Bekasi</option>
-                        <option value="Kab. Bogor">Kab. Bogor</option>
-                        <option value="Kab. Ciamis">Kab. Ciamis</option>
-                        <option value="Kab. Cianjur">Kab. Cianjur</option>
-                        <option value="Kab. Cirebon">Kab. Cirebon</option>
-                        <option value="Kab. Garut">Kab. Garut</option>
-                        <option value="Kab. Indramayu">Kab. Indramayu</option>
-                        <option value="Kab. Karawang">Kab. Karawang</option>
-                        <option value="Kab. Kuningan">Kab. Kuningan</option>
-                        <option value="Kab. Majalengka">Kab. Majalengka</option>
-                        <option value="Kab. Pangandaran">Kab. Pangandaran</option>
-                        <option value="Kab. Purwakarta">Kab. Purwakarta</option>
-                        <option value="Kab. Subang">Kab. Subang</option>
-                        <option value="Kab. Sukabumi">Kab. Sukabumi</option>
-                        <option value="Kab. Sumedang">Kab. Sumedang</option>
-                        <option value="Kab. Tasikmalaya">Kab. Tasikmalaya</option>
-                        <option value="Kota Bandung">Kota Bandung</option>
-                        <option value="Kota Banjar">Kota Banjar</option>
-                        <option value="Kota Bekasi">Kota Bekasi</option>
-                        <option value="Kota Bogor">Kota Bogor</option>
-                        <option value="Kota Cimahi">Kota Cimahi</option>
-                        <option value="Kota Cirebon">Kota Cirebon</option>
-                        <option value="Kota Depok">Kota Depok</option>
-                        <option value="Kota Sukabumi">Kota Sukabumi</option>
-                        <option value="Kota Tasikmalaya">Kota Tasikmalaya</option>
+                        <option value="Kab. Bandung" {{ old('domisili') == 'Kab. Bandung' ? 'selected' : '' }}>Kab. Bandung</option>
+                        <option value="Kab. Bandung Barat" {{ old('domisili') == 'Kab. Bandung Barat' ? 'selected' : '' }}>Kab. Bandung Barat</option>
+                        <option value="Kab. Bekasi" {{ old('domisili') == 'Kab. Bekasi' ? 'selected' : '' }}>Kab. Bekasi</option>
+                        <option value="Kab. Bogor" {{ old('domisili') == 'Kab. Bogor' ? 'selected' : '' }}>Kab. Bogor</option>
+                        <option value="Kab. Ciamis" {{ old('domisili') == 'Kab. Ciamis' ? 'selected' : '' }}>Kab. Ciamis</option>
+                        <option value="Kab. Cianjur" {{ old('domisili') == 'Kab. Cianjur' ? 'selected' : '' }}>Kab. Cianjur</option>
+                        <option value="Kab. Cirebon" {{ old('domisili') == 'Kab. Cirebon' ? 'selected' : '' }}>Kab. Cirebon</option>
+                        <option value="Kab. Garut" {{ old('domisili') == 'Kab. Garut' ? 'selected' : '' }}>Kab. Garut</option>
+                        <option value="Kab. Indramayu" {{ old('domisili') == 'Kab. Indramayu' ? 'selected' : '' }}>Kab. Indramayu</option>
+                        <option value="Kab. Karawang" {{ old('domisili') == 'Kab. Karawang' ? 'selected' : '' }}>Kab. Karawang</option>
+                        <option value="Kab. Kuningan" {{ old('domisili') == 'Kab. Kuningan' ? 'selected' : '' }}>Kab. Kuningan</option>
+                        <option value="Kab. Majalengka" {{ old('domisili') == 'Kab. Majalengka' ? 'selected' : '' }}>Kab. Majalengka</option>
+                        <option value="Kab. Pangandaran" {{ old('domisili') == 'Kab. Pangandaran' ? 'selected' : '' }}>Kab. Pangandaran</option>
+                        <option value="Kab. Purwakarta" {{ old('domisili') == 'Kab. Purwakarta' ? 'selected' : '' }}>Kab. Purwakarta</option>
+                        <option value="Kab. Subang" {{ old('domisili') == 'Kab. Subang' ? 'selected' : '' }}>Kab. Subang</option>
+                        <option value="Kab. Sukabumi" {{ old('domisili') == 'Kab. Sukabumi' ? 'selected' : '' }}>Kab. Sukabumi</option>
+                        <option value="Kab. Sumedang" {{ old('domisili') == 'Kab. Sumedang' ? 'selected' : '' }}>Kab. Sumedang</option>
+                        <option value="Kab. Tasikmalaya" {{ old('domisili') == 'Kab. Tasikmalaya' ? 'selected' : '' }}>Kab. Tasikmalaya</option>
+                        <option value="Kota Bandung" {{ old('domisili') == 'Kota Bandung' ? 'selected' : '' }}>Kota Bandung</option>
+                        <option value="Kota Banjar" {{ old('domisili') == 'Kota Banjar' ? 'selected' : '' }}>Kota Banjar</option>
+                        <option value="Kota Bekasi" {{ old('domisili') == 'Kota Bekasi' ? 'selected' : '' }}>Kota Bekasi</option>
+                        <option value="Kota Bogor" {{ old('domisili') == 'Kota Bogor' ? 'selected' : '' }}>Kota Bogor</option>
+                        <option value="Kota Cimahi" {{ old('domisili') == 'Kota Cimahi' ? 'selected' : '' }}>Kota Cimahi</option>
+                        <option value="Kota Cirebon" {{ old('domisili') == 'Kota Cirebon' ? 'selected' : '' }}>Kota Cirebon</option>
+                        <option value="Kota Depok" {{ old('domisili') == 'Kota Depok' ? 'selected' : '' }}>Kota Depok</option>
+                        <option value="Kota Sukabumi" {{ old('domisili') == 'Kota Sukabumi' ? 'selected' : '' }}>Kota Sukabumi</option>
+                        <option value="Kota Tasikmalaya" {{ old('domisili') == 'Kota Tasikmalaya' ? 'selected' : '' }}>Kota Tasikmalaya</option>
                     </select>
                 </div>
 
                 <div class="form-group full-width">
                     <label for="alamat_domisili">Alamat Domisili<span class="required">*</span></label>
-                    <textarea id="alamat_domisili" name="alamat_domisili" class="form-control" rows="4" placeholder="Masukkan alamat lengkap Anda" required></textarea>
+                    <textarea id="alamat_domisili" name="alamat_domisili" class="form-control" rows="4" placeholder="Masukkan alamat lengkap Anda" required>{{ old('alamat_domisili') }}</textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="kode_pos">Kode Pos<span class="required">*</span></label>
-                        <input type="text" id="kode_pos" name="kode_pos" class="form-control" required>
+                        <input type="text" id="kode_pos" name="kode_pos" class="form-control" value="{{ old('kode_pos') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email<span class="required">*</span></label>
-                        <input type="email" id="email" name="email" class="form-control" required>
+                        <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" required>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
                     <label for="nomor_ktp">Nomor KTP<span class="required">*</span></label>
-                    <input type="text" id="nomor_ktp" name="nomor_ktp" class="form-control" maxlength="16" pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Contoh: 3201234567890123" required>
+                    <input type="text" id="nomor_ktp" name="nomor_ktp" class="form-control" value="{{ old('nomor_ktp') }}" maxlength="16" pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Contoh: 3201234567890123" required>
                 </div>
 
                 <div class="form-row">
@@ -186,21 +226,21 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nama_usaha_perusahaan">Nama Usaha<span class="required">*</span></label>
-                        <input type="text" id="nama_usaha_perusahaan" name="nama_usaha_perusahaan" class="form-control" required>
+                        <input type="text" id="nama_usaha_perusahaan" name="nama_usaha_perusahaan" class="form-control" value="{{ old('nama_usaha_perusahaan') }}" required>
                     </div>
                     <div class="form-group">
                         <label>Nama Legalitas Usaha<span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-label">
-                                <input type="radio" name="legalitas_usaha" value="PT" required>
+                                <input type="radio" name="legalitas_usaha" value="PT" {{ old('legalitas_usaha') == 'PT' ? 'checked' : '' }} required>
                                 <span>PT</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="legalitas_usaha" value="CV" required>
+                                <input type="radio" name="legalitas_usaha" value="CV" {{ old('legalitas_usaha') == 'CV' ? 'checked' : '' }} required>
                                 <span>CV</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="legalitas_usaha" value="PT Perorangan" required>
+                                <input type="radio" name="legalitas_usaha" value="PT Perorangan" {{ old('legalitas_usaha') == 'PT Perorangan' ? 'checked' : '' }} required>
                                 <span>PT Perorangan</span>
                             </label>
                         </div>
@@ -211,39 +251,39 @@
                     <label for="jabatan_usaha">Jabatan Dalam Usaha<span class="required">*</span></label>
                     <select id="jabatan_usaha" name="jabatan_usaha" class="form-control" required>
                         <option value="">Pilih Jabatan</option>
-                        <option value="Direktur Utama">Direktur Utama</option>
-                        <option value="Direktur">Direktur</option>
-                        <option value="Komisaris">Komisaris</option>
-                        <option value="Pemilik">Pemilik</option>
-                        <option value="CEO">CEO</option>
-                        <option value="Managing Director">Managing Director</option>
+                        <option value="Direktur Utama" {{ old('jabatan_usaha') == 'Direktur Utama' ? 'selected' : '' }}>Direktur Utama</option>
+                        <option value="Direktur" {{ old('jabatan_usaha') == 'Direktur' ? 'selected' : '' }}>Direktur</option>
+                        <option value="Komisaris" {{ old('jabatan_usaha') == 'Komisaris' ? 'selected' : '' }}>Komisaris</option>
+                        <option value="Pemilik" {{ old('jabatan_usaha') == 'Pemilik' ? 'selected' : '' }}>Pemilik</option>
+                        <option value="CEO" {{ old('jabatan_usaha') == 'CEO' ? 'selected' : '' }}>CEO</option>
+                        <option value="Managing Director" {{ old('jabatan_usaha') == 'Managing Director' ? 'selected' : '' }}>Managing Director</option>
                     </select>
                 </div>
 
                 <div class="form-group full-width">
                     <label for="alamat_kantor">Alamat Kantor<span class="required">*</span></label>
-                    <textarea id="alamat_kantor" name="alamat_kantor" class="form-control" rows="4" required></textarea>
+                    <textarea id="alamat_kantor" name="alamat_kantor" class="form-control" rows="4" required>{{ old('alamat_kantor') }}</textarea>
                 </div>
 
                 <div class="form-group full-width">
                     <label for="bidang_usaha">Bidang Usaha (Utama)<span class="required">*</span></label>
-                    <textarea id="bidang_usaha" name="bidang_usaha" class="form-control" rows="4" required></textarea>
+                    <textarea id="bidang_usaha" name="bidang_usaha" class="form-control" rows="4" required>{{ old('bidang_usaha') }}</textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="brand_usaha">Brand Usaha<span class="required">*</span></label>
-                        <input type="text" id="brand_usaha" name="brand_usaha" class="form-control" required>
+                        <input type="text" id="brand_usaha" name="brand_usaha" class="form-control" value="{{ old('brand_usaha') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="jumlah_karyawan">Jumlah Karyawan<span class="required">*</span></label>
-                        <input type="number" id="jumlah_karyawan" name="jumlah_karyawan" class="form-control" required>
+                        <input type="number" id="jumlah_karyawan" name="jumlah_karyawan" class="form-control" value="{{ old('jumlah_karyawan') }}" required>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
                     <label for="nomor_ktp_perusahaan">Nomor KTP<span class="required">*</span></label>
-                    <input type="text" id="nomor_ktp_perusahaan" name="nomor_ktp_perusahaan" class="form-control" maxlength="16" pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Contoh: 3201234567890123" required>
+                    <input type="text" id="nomor_ktp_perusahaan" name="nomor_ktp_perusahaan" class="form-control" value="{{ old('nomor_ktp_perusahaan') }}" maxlength="16" pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Contoh: 3201234567890123" required>
                 </div>
 
                 <div class="form-row">
@@ -251,20 +291,19 @@
                         <label>Nama Legalitas Usaha<span class="required">*</span></label>
                         <div class="radio-group-vertical">
                             <label class="radio-label">
-                                <input type="radio" name="usia_perusahaan" value="< 1 Tahun" required>
-                                <span>
-                                    < 1 Tahun</span>
+                                <input type="radio" name="usia_perusahaan" value="< 1 Tahun" {{ old('usia_perusahaan') == '< 1 Tahun' ? 'checked' : '' }} required>
+                                <span>< 1 Tahun</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="usia_perusahaan" value="1 - 2 Tahun" required>
+                                <input type="radio" name="usia_perusahaan" value="1 - 2 Tahun" {{ old('usia_perusahaan') == '1 - 2 Tahun' ? 'checked' : '' }} required>
                                 <span>1 - 2 Tahun</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="usia_perusahaan" value="2 - 5 Tahun" required>
+                                <input type="radio" name="usia_perusahaan" value="2 - 5 Tahun" {{ old('usia_perusahaan') == '2 - 5 Tahun' ? 'checked' : '' }} required>
                                 <span>2 - 5 Tahun</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="usia_perusahaan" value="> 5 Tahun" required>
+                                <input type="radio" name="usia_perusahaan" value="> 5 Tahun" {{ old('usia_perusahaan') == '> 5 Tahun' ? 'checked' : '' }} required>
                                 <span>> 5 Tahun</span>
                             </label>
                         </div>
@@ -273,16 +312,15 @@
                         <label>Omset Perusahaan PerTahun<span class="required">*</span></label>
                         <div class="radio-group-vertical">
                             <label class="radio-label">
-                                <input type="radio" name="omset_perusahaan" value="< Rp. 1.000.000.000" required>
-                                <span>
-                                    < Rp. 1.000.000.000</span>
+                                <input type="radio" name="omset_perusahaan" value="< Rp. 1.000.000.000" {{ old('omset_perusahaan') == '< Rp. 1.000.000.000' ? 'checked' : '' }} required>
+                                <span>< Rp. 1.000.000.000</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="omset_perusahaan" value="Rp. 1.000.000.000 - Rp. 4.000.000.000" required>
+                                <input type="radio" name="omset_perusahaan" value="Rp. 1.000.000.000 - Rp. 4.000.000.000" {{ old('omset_perusahaan') == 'Rp. 1.000.000.000 - Rp. 4.000.000.000' ? 'checked' : '' }} required>
                                 <span>Rp. 1.000.000.000 - Rp. 4.000.000.000</span>
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="omset_perusahaan" value="> Rp. 4.000.000.000" required>
+                                <input type="radio" name="omset_perusahaan" value="> Rp. 4.000.000.000" {{ old('omset_perusahaan') == '> Rp. 4.000.000.000' ? 'checked' : '' }} required>
                                 <span>> Rp. 4.000.000.000</span>
                             </label>
                         </div>
@@ -292,11 +330,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="npwp_perusahaan">NPWP Perusahaan<span class="required">*</span></label>
-                        <input type="text" id="npwp_perusahaan" name="npwp_perusahaan" class="form-control" required>
+                        <input type="text" id="npwp_perusahaan" name="npwp_perusahaan" class="form-control" value="{{ old('npwp_perusahaan') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="no_nota_pendirian">No. Nota Pendirian<span class="required">*</span></label>
-                        <input type="text" id="no_nota_pendirian" name="no_nota_pendirian" class="form-control" required>
+                        <input type="text" id="no_nota_pendirian" name="no_nota_pendirian" class="form-control" value="{{ old('no_nota_pendirian') }}" required>
                     </div>
                 </div>
 
@@ -337,18 +375,18 @@
 
                 <div class="form-group full-width">
                     <label for="sfc_hipmi">SFC HIPMI<span class="required">*</span></label>
-                    <input type="text" id="sfc_hipmi" name="sfc_hipmi" class="form-control" required>
+                    <input type="text" id="sfc_hipmi" name="sfc_hipmi" class="form-control" value="{{ old('sfc_hipmi') }}" required>
                 </div>
 
                 <div class="form-group full-width">
                     <label>Apakah anda referensi dari Anggota HIPMI?<span class="required">*</span></label>
                     <div class="radio-group-vertical">
                         <label class="radio-label">
-                            <input type="radio" name="referensi_hipmi" value="Ya" required>
+                            <input type="radio" name="referensi_hipmi" value="Ya" {{ old('referensi_hipmi') == 'Ya' ? 'checked' : '' }} required>
                             <span>Ya</span>
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="referensi_hipmi" value="Tidak" required>
+                            <input type="radio" name="referensi_hipmi" value="Tidak" {{ old('referensi_hipmi') == 'Tidak' ? 'checked' : '' }} required>
                             <span>Tidak</span>
                         </label>
                     </div>
@@ -358,11 +396,11 @@
                     <label>Apakah Anda aktif di organisasi selain HIPMI?<span class="required">*</span></label>
                     <div class="radio-group-vertical">
                         <label class="radio-label">
-                            <input type="radio" name="organisasi_lain" value="Ya" required>
+                            <input type="radio" name="organisasi_lain" value="Ya" {{ old('organisasi_lain') == 'Ya' ? 'checked' : '' }} required>
                             <span>Ya</span>
                         </label>
                         <label class="radio-label">
-                            <input type="radio" name="organisasi_lain" value="Tidak" required>
+                            <input type="radio" name="organisasi_lain" value="Tidak" {{ old('organisasi_lain') == 'Tidak' ? 'checked' : '' }} required>
                             <span>Tidak</span>
                         </label>
                     </div>
@@ -374,29 +412,115 @@
                 </div>
             </div>
 
-            <!-- Step 4: Daftar -->
-            <div class="form-step" data-step="4">
-                <h2 class="form-title">Daftar</h2>
+      <!-- Step 4: Daftar -->
+<div class="form-step" data-step="4">
+    <h2 class="form-title">Daftar</h2>
 
-                <div class="form-group full-width">
-                    <label>Dengan ini saya menyatakan bahwa data yang saya isi adalah benar dan valid<span class="required">*</span></label>
-                    <div class="radio-group-vertical">
-                        <label class="radio-label">
-                            <input type="radio" name="pernyataan" value="Ya, saya setuju" required>
-                            <span>Ya, saya setuju</span>
-                        </label>
-                    </div>
-                </div>
+    <div class="form-group full-width">
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #007bff;">
+            <label class="radio-label" style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin: 0;">
+                <input type="checkbox" name="pernyataan" value="1" 
+                       {{ old('pernyataan') ? 'checked' : '' }} 
+                       required
+                       style="margin-top: 4px; width: 18px; height: 18px; cursor: pointer;">
+                <span style="font-size: 15px; line-height: 1.6;">
+                    Dengan ini saya menyatakan bahwa data yang saya isi adalah <strong>benar dan valid</strong>, 
+                    serta bersedia mengikuti seluruh tahapan seleksi keanggotaan HIPMI Jawa Barat.
+                    <span class="required" style="color: #dc3545;">*</span>
+                </span>
+            </label>
+        </div>
+    </div>
 
-                <div class="form-actions-two">
-                    <button type="button" class="btn-secondary btn-prev" data-prev="3">Sebelumnya</button>
-                    <button type="submit" class="btn-submit">Daftar</button>
-                </div>
-            </div>
-
+    <div class="form-actions-two">
+        <button type="button" class="btn-secondary btn-prev" data-prev="3">Sebelumnya</button>
+        <button type="submit" class="btn-submit">Daftar</button>
+    </div>
+</div>
         </form>
     </div>
 </section>
+
+<style>
+/* Alert Styles */
+.alert {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert svg {
+    flex-shrink: 0;
+    margin-right: 12px;
+    margin-top: 2px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-success svg {
+    stroke: #28a745;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.alert-error svg {
+    stroke: #dc3545;
+}
+
+.alert strong {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.alert ul li {
+    margin-bottom: 4px;
+}
+
+.alert ul li:last-child {
+    margin-bottom: 0;
+}
+
+/* Field validation styles */
+.field-invalid {
+    border: 2px solid #ff4444 !important;
+    background-color: #fff5f5 !important;
+}
+
+.field-invalid:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1) !important;
+}
+</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
