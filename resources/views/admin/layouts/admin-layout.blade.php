@@ -188,7 +188,7 @@
             font-weight: 500;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .topbar-user-profile {
                 display: none;
             }

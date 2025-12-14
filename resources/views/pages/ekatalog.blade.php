@@ -13,7 +13,6 @@
         <form action="{{ route('e-katalog') }}" method="GET" class="search-box">
             <input type="text" name="search" placeholder="Cari nama perusahaan atau bidang..." value="{{ request('search') }}">
             <button type="submit" style="background: none; border: none; cursor: pointer;">
-                <i class="fa fa-search"></i>
             </button>
         </form>
     </section>

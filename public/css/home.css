@@ -56,7 +56,7 @@
     margin-top: 30px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .hero {
         flex-direction: column;
         padding: 100px 20px 50px 20px;
@@ -140,7 +140,7 @@
     height: 80px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .main-info {
         background-color: #04293B;
         padding: 50px;
@@ -237,7 +237,7 @@
     height: auto;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .visi {
         flex-direction: column;
         padding: 50px;
@@ -321,7 +321,7 @@
     object-fit: cover;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .misi {
         padding: 50px;
     }
@@ -478,7 +478,7 @@
     cursor: pointer;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .strategic-plan {
         padding: 50px 20px 50px 20px;
         gap: 50px;
@@ -657,7 +657,7 @@
     flex-wrap: wrap;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .events {
         padding: 50px;
         justify-content: center;
@@ -757,7 +757,7 @@
     transition: transform 0.3s;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .ekatalog-home {
         padding: 50px 30px;
         justify-content: center;
@@ -806,7 +806,7 @@
     color: #ffffff;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .daftarkan-bisnis-anda {
         padding: 50px;
         flex-direction: column;
@@ -953,7 +953,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .berita-home {
         padding: 50px;
         justify-content: center;
@@ -1064,7 +1064,7 @@
     padding: 0 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .buku-informasi-home {
         padding: 50px;
         justify-content: center;

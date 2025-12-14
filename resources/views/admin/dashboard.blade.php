@@ -412,7 +412,7 @@
             opacity: 0.5;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .welcome-content {
                 flex-direction: column;
                 text-align: center;

@@ -183,7 +183,7 @@ body {
     object-fit: contain;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .login-card {
         height: 100%;
         flex-direction: column;

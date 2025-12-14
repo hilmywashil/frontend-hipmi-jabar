@@ -309,7 +309,7 @@
         stroke-width: 2;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .form-grid {
             grid-template-columns: 1fr;
         }
