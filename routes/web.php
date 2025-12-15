@@ -89,4 +89,6 @@ Route::get('/jadi-anggota', function () {
 })->name('jadi-anggota');
 Route::post('/jadi-anggota', [AnggotaController::class, 'store'])->name('jadi-anggota.store');
 Route::view('/detail-buku', 'pages.details.buku-detail')->name('detail-buku');
+Route::view('/informasi-kegiatan', 'pages.informasi-kegiatan')->name('informasi-kegiatan');
+Route::view('/detail-kegiatan', 'pages.details.kegiatan-detail')->name('detail-kegiatan');
 Route::view('/buku-informasi-anggota', 'pages.buku-anggota')->name('buku-anggota');

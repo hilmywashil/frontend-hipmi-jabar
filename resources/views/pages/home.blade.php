@@ -101,51 +101,7 @@
         <h2>Buku Informasi Anggota HIPMI Jabar</h2>
         <div class="buku-informasi-home-content">
             <div class="owl-carousel anggota-carousel">
-                <a href="{{ route('detail-buku') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/photo.jpg') }}">
-                        <div class="container">
-                            <h4><b>Nama Anggota</b></h4>
-                            <p>Jabatan Anggota</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('detail-buku') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/photo.jpg') }}">
-                        <div class="container">
-                            <h4><b>Nama Anggota</b></h4>
-                            <p>Jabatan Anggota</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('detail-buku') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/photo.jpg') }}">
-                        <div class="container">
-                            <h4><b>Nama Anggota</b></h4>
-                            <p>Jabatan Anggota</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('detail-buku') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/photo.jpg') }}">
-                        <div class="container">
-                            <h4><b>Nama Anggota</b></h4>
-                            <p>Jabatan Anggota</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('detail-buku') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/photo.jpg') }}">
-                        <div class="container">
-                            <h4><b>Nama Anggota</b></h4>
-                            <p>Jabatan Anggota</p>
-                        </div>
-                    </div>
-                </a>
+                {{-- LOOP MAX 10 AJA ZAK --}}
                 <a href="{{ route('detail-buku') }}">
                     <div class="buku-card">
                         <img src="{{ asset('images/photo.jpg') }}">
@@ -240,27 +196,30 @@
         <h2>Informasi Kegiatan BPD</h2>
         <div class="events-content">
             <div class="events-lastest">
-                <div class="events-banner-card-lastest">
-                    <img src="{{ asset('images/missions/mission-1.png') }}" class="events-banner-bg">
+                <a class="events-hover" href="{{ route('detail-kegiatan') }}" style="text-decoration: none; color: white;">
+                    <div class="events-banner-card-lastest">
+                        <img src="{{ asset('images/missions/mission-1.png') }}" class="events-banner-bg">
 
-                    <div class="events-overlay"></div>
+                        <div class="events-overlay"></div>
 
-                    <div class="events-banner-content">
-                        <!-- <span class="events-badge">events</span> -->
-                        <h2>Presiden Joko Widodo Buka Rakernas HIPMI Ke-XVIII</h2>
-                        <p class="events-date">Oktober 28, 2025</p>
+                        <div class="events-banner-content">
+                            <!-- <span class="events-badge">events</span> -->
+                            <h2>Presiden Joko Widodo Buka Rakernas HIPMI Ke-XVIII</h2>
+                            <p class="events-date">Oktober 28, 2025</p>
 
-                        <a href="#" class="events-btn-more">Lihat Lebih Banyak</a>
+                            <a href="#" class="events-btn-more">Lihat Lebih Banyak</a>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="events-others">
+                
                 <div class="events-banner-card">
                     <img src="{{ asset('images/missions/mission-1.png') }}" class="events-banner-bg">
 
                     <div class="events-overlay"></div>
 
-                    <div class="events-banner-content">
+                    <div class="events-banner-content" style="left: 20px; bottom: 20px; !important">
                         <!-- <span class="events-badge">events</span> -->
                         <h2>Presiden Joko Widodo Buka Rakernas HIPMI Ke-XVIII</h2>
                         <p class="events-date">Oktober 28, 2025</p>
@@ -273,7 +232,7 @@
 
                     <div class="events-overlay"></div>
 
-                    <div class="events-banner-content">
+                    <div class="events-banner-content" style="left: 20px; bottom: 20px; !important">
                         <!-- <span class="events-badge">events</span> -->
                         <h2>Presiden Joko Widodo Buka Rakernas HIPMI Ke-XVIII</h2>
                         <p class="events-date">Oktober 28, 2025</p>
@@ -286,7 +245,7 @@
 
                     <div class="events-overlay"></div>
 
-                    <div class="events-banner-content">
+                    <div class="events-banner-content" style="left: 20px; bottom: 20px; !important">
                         <!-- <span class="events-badge">events</span> -->
                         <h2>Presiden Joko Widodo Buka Rakernas HIPMI Ke-XVIII</h2>
                         <p class="events-date">Oktober 28, 2025</p>
@@ -299,7 +258,7 @@
 
                     <div class="events-overlay"></div>
 
-                    <div class="events-banner-content">
+                    <div class="events-banner-content" style="left: 20px; bottom: 20px; !important">
                         <!-- <span class="events-badge">events</span> -->
                         <h2>Presiden Joko Widodo Buka Rakernas HIPMI Ke-XVIII</h2>
                         <p class="events-date">Oktober 28, 2025</p>

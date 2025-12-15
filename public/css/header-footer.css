@@ -131,11 +131,14 @@ footer {
 
 .footer-content {
     display: flex;
+    flex-direction: row;
+    padding: 100px;
+    gap: 100px;
+    justify-content: space-between;
 }
 
 .footer-item {
     flex: 1;
-    padding: 100px;
     text-align: left;
 }
 
@@ -216,10 +219,11 @@ footer {
 
     .footer-content {
         flex-direction: column;
+        gap: 20px;
+        padding: 50px;
     }
 
     .footer-item {
-        padding: 50px;
         text-align: left;
     }
 
