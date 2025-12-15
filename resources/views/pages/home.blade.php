@@ -386,7 +386,7 @@
             </div>
         </div>
         <div style="margin-top: 50px;">
-            <a href="#" class="btn-ekatalog-home">Lihat Lebih Banyak</a>
+            <a href="{{ route('berita') }}" class="btn-ekatalog-home">Lihat Lebih Banyak</a>
         </div>
     </section>
 

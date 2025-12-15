@@ -76,6 +76,19 @@
     justify-content: end;
 }
 
+.detail-katalog-photo {
+    display: flex;
+    justify-content: end;
+}
+
+.detail-katalog-photo img {
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 20px;
+    border: #04293B 2px solid;
+}
+
 .detail-katalog-logo img {
     width: 500px;
     height: auto;
@@ -166,7 +179,16 @@
         width: 100%;
     }
 
+    .detail-katalog-photo img {
+        width: 100%;
+        height: 300px;
+    }
+
     .detail-katalog-logo {
+        justify-content: center;
+    }
+
+    .detail-katalog-photo {
         justify-content: center;
     }
 
