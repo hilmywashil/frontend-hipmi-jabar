@@ -1048,7 +1048,11 @@
 .buku-card img {
     width: 100%;
     height: 200px;
-    object-fit: contain;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: #04293B 1px solid;
+    border-radius: 10px;
+
 }
 
 .buku-card h4 {

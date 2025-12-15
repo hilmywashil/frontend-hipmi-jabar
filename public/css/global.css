@@ -5,6 +5,63 @@ html {
     scroll-behavior: smooth;
 }
 
+.anggota-carousel .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.anggota-carousel .owl-nav button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #04293B !important;
+    color: #fff !important;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    transition: 0.3s;
+}
+
+.anggota-carousel .owl-nav button:hover {
+    background: #facc15 !important;
+    color: #000 !important;
+}
+
+.anggota-carousel .owl-prev {
+    margin-left: -50px;
+}
+
+.anggota-carousel .owl-next {
+    margin-right: -50px;
+}
+
+.anggota-carousel .owl-nav button span {
+    display: none;
+}
+
+.anggota-carousel .owl-prev::before {
+    content: "\f104";
+    font-family: FontAwesome;
+}
+
+.anggota-carousel .owl-next::before {
+    content: "\f105";
+    font-family: FontAwesome;
+}
+
+@media (max-width: 1024px) {
+    .anggota-carousel .owl-nav {
+        display: none;
+    }
+}
+
 #btnTop {
     position: fixed;
     bottom: 20px;

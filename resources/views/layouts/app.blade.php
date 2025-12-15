@@ -13,10 +13,14 @@
     <link rel="stylesheet" href="{{ asset('css/organisasi.css') }}">
     <link rel="stylesheet" href="{{ asset('css/berita.css') }}">
     <link rel="stylesheet" href="{{ asset('css/jadi-anggota.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/buku-informasi.css') }}">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7o3V8A4o0p5d6W0ZQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -39,14 +43,14 @@
         $(document).ready(function () {
             $('.anggota-carousel').owlCarousel({
                 margin: 20,
-                dots: true,
+                nav: true,
                 autoplay: false,
                 autoplayTimeout: 3000,
                 responsive: {
-                    0: { items: 1 },
+                    0: { items: 2 },
                     480: { items: 2 },
                     768: { items: 3 },
-                    1024: { items: 4 }
+                    1024: { items: 5 }
                 }
             });
         });

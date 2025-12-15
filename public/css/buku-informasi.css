@@ -1,0 +1,20 @@
+.buku-informasi-anggota {
+    padding: 50px 100px;
+}
+
+.buku-filter {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.buku-informasi-anggota-content {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 30px
+}
+
+.buku-informasi-anggota-content a {
+    text-decoration: none;
+    color: #04293B;
+}

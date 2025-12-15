@@ -16,7 +16,7 @@ use App\Http\Controllers\AnggotaController;
 // ADMIN ROUTES
 // =====================================================
 Route::prefix('admin')->name('admin.')->group(function () {
-    
+
     // Route yang TIDAK perlu login (guest routes)
     Route::middleware('guest:admin')->group(function () {
         Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
@@ -27,7 +27,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(\App\Http\Middleware\AdminMiddleware::class)->group(function () {
         // Dashboard
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-        
+
         // Info Admin (BPD only)
         Route::get('info-admin', [AdminDashboardController::class, 'infoAdmin'])->name('info-admin');
         Route::get('create-admin', [AdminDashboardController::class, 'createAdmin'])->name('create-admin');
@@ -35,10 +35,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('edit-admin/{admin}', [AdminDashboardController::class, 'editAdmin'])->name('edit-admin');
         Route::put('update-admin/{admin}', [AdminDashboardController::class, 'updateAdmin'])->name('update-admin');
         Route::delete('delete-admin/{admin}', [AdminDashboardController::class, 'deleteAdmin'])->name('delete-admin');
-        
+
         // Logout
         Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
-        
+
         // Profile
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -48,13 +48,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Organisasi CRUD
         Route::resource('organisasi', OrganisasiController::class);
-        
+
         // E-Katalog CRUD
         Route::resource('katalog', AdminKatalogController::class);
-        
+
         // Misi CRUD
         Route::resource('misi', MisiController::class);
-        
+
         // Anggota Management
         Route::prefix('anggota')->name('anggota.')->group(function () {
             Route::get('/', [AnggotaManagementController::class, 'index'])->name('index');
@@ -88,3 +88,5 @@ Route::get('/jadi-anggota', function () {
     return view('pages.jadi-anggota');
 })->name('jadi-anggota');
 Route::post('/jadi-anggota', [AnggotaController::class, 'store'])->name('jadi-anggota.store');
+Route::view('/detail-buku', 'pages.details.buku-detail')->name('detail-buku');
+Route::view('/buku-informasi-anggota', 'pages.buku-anggota')->name('buku-anggota');

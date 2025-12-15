@@ -3,6 +3,9 @@
 @section('title', 'Kelola Anggota')
 @section('page-title', 'Kelola Anggota')
 
+@php
+    $activeMenu = 'anggota';
+@endphp
 
 @push('styles')
     <style>
