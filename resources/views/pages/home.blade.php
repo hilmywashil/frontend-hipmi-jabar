@@ -269,7 +269,7 @@
             </div>
         </div>
         <div style="text-align:center; margin-top: 50px;">
-            <a href="{{ route('buku-anggota') }}" class="btn">Lihat Lebih Banyak</a>
+            <a href="{{ route('informasi-kegiatan') }}" class="btn">Lihat Lebih Banyak</a>
         </div>
 
     </section>
@@ -308,7 +308,7 @@
     <section class="daftarkan-bisnis-anda">
         <img src="{{ asset('images/maju-babarengan.png') }}" alt="">
         <h1>DAFTARKAN BISNIS ANDA</h1>
-        <a href="#" class="btn">Lihat Lebih Banyak</a>
+        <a href="{{ route('umkm') }}" class="btn">Daftar Bisnis</a>
     </section>
 
     <section class="berita-home">

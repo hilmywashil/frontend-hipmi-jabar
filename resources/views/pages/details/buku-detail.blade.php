@@ -5,7 +5,7 @@
 @section('content')
     <section class="page-banner-2">
         <div class="detail-katalog-info">
-            <a href="{{ route('e-katalog') }}" class="fa fa-arrow-left back-button"></a>
+            <a href="{{ route('buku-anggota') }}" class="fa fa-arrow-left back-button"></a>
             <h1>Nama Anggota</h1>
             <p>Jabatan Anggota</p>
             <br>
