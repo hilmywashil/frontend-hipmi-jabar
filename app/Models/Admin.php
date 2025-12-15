@@ -18,6 +18,7 @@ class Admin extends Authenticatable
         'photo',
         'password',
         'category',
+        'domisili', 
     ];
 
     protected $hidden = [
@@ -42,6 +43,22 @@ class Admin extends Authenticatable
         return $this->category === 'bpd';
     }
 
+    
+    public function canApproveAnggota(): bool
+    {
+        return $this->category === 'bpc';
+    }
+
+    
+    public function canApproveAnggotaByDomisili($domisili): bool
+    {
+        if ($this->category === 'bpd') {
+            return false; 
+        }
+        
+        return $this->domisili === $domisili;
+    }
+
     public function getPhotoUrlAttribute(): string
     {
         if ($this->photo && Storage::disk('public')->exists($this->photo)) {
@@ -54,5 +71,11 @@ class Admin extends Authenticatable
     public function getInitialsAttribute(): string
     {
         return strtoupper(substr($this->name, 0, 2));
+    }
+
+    
+    public function approvedAnggotas()
+    {
+        return $this->hasMany(Anggota::class, 'approved_by');
     }
 }

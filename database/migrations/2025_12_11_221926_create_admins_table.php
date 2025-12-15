@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->string('password');
             $table->enum('category', ['bpc', 'bpd']);
+            $table->string('domisili')->nullable(); // TAMBAHKAN INI
             $table->rememberToken();
             $table->timestamps();
         });

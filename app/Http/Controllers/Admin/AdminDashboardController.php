@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Katalog;
 use App\Models\Organisasi;
+use App\Models\Anggota;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -14,51 +15,69 @@ use Illuminate\Support\Facades\Hash;
 class AdminDashboardController extends Controller
 {
     public function index(): View
-    {
-        $admin = Auth::guard('admin')->user();
+{
+    $admin = Auth::guard('admin')->user();
+    
+    // Dashboard untuk BPC - hanya lihat statistik anggota di domisilinya
+    if ($admin->category === 'bpc') {
+        $totalAnggota = Anggota::where('domisili', $admin->domisili)->count();
+        $pendingAnggota = Anggota::where('domisili', $admin->domisili)->where('status', 'pending')->count();
+        $approvedAnggota = Anggota::where('domisili', $admin->domisili)->where('status', 'approved')->count();
+        $rejectedAnggota = Anggota::where('domisili', $admin->domisili)->where('status', 'rejected')->count();
         
-        // Admin Statistics
-        $totalAdmins = Admin::count();
-        $adminsBPC = Admin::where('category', 'bpc')->count();
-        $adminsBPD = Admin::where('category', 'bpd')->count();
-        $recentAdmins = Admin::latest()->take(5)->get();
-        
-        // Katalog Statistics
-        $totalKatalog = Katalog::where('is_active', true)->count();
-        $totalKatalogInactive = Katalog::where('is_active', false)->count();
-        $recentKatalogs = Katalog::where('is_active', true)->latest()->take(5)->get();
-        
-        // Organisasi Statistics
-        $totalOrganisasi = Organisasi::where('aktif', true)->count();
-        $organisasiByKategori = [
-            'ketua_umum' => Organisasi::aktif()->kategori('ketua_umum')->count(),
-            'wakil_ketua_umum' => Organisasi::aktif()->kategori('wakil_ketua_umum')->count(),
-            'ketua_bidang' => Organisasi::aktif()->kategori('ketua_bidang')->count(),
-            'sekretaris_umum' => Organisasi::aktif()->kategori('sekretaris_umum')->count(),
-            'wakil_sekretaris_umum' => Organisasi::aktif()->kategori('wakil_sekretaris_umum')->count(),
-        ];
-        $recentOrganisasi = Organisasi::aktif()->ordered()->take(5)->get();
+        $recentAnggota = Anggota::where('domisili', $admin->domisili)
+            ->latest()
+            ->take(5)
+            ->get();
         
         return view('admin.dashboard', compact(
             'admin',
-            'totalAdmins',
-            'adminsBPC',
-            'adminsBPD',
-            'recentAdmins',
-            'totalKatalog',
-            'totalKatalogInactive',
-            'recentKatalogs',
-            'totalOrganisasi',
-            'organisasiByKategori',
-            'recentOrganisasi'
+            'totalAnggota',
+            'pendingAnggota',
+            'approvedAnggota',
+            'rejectedAnggota',
+            'recentAnggota'
         ));
     }
     
+    // Dashboard untuk BPD (kelola seluruh web kecuali approve anggota)
+    $totalAdmins = Admin::count();
+    $adminsBPC = Admin::where('category', 'bpc')->count();
+    $adminsBPD = Admin::where('category', 'bpd')->count();
+    $recentAdmins = Admin::latest()->take(5)->get();
+    
+    $totalKatalog = Katalog::where('is_active', true)->count();
+    $totalKatalogInactive = Katalog::where('is_active', false)->count();
+    $recentKatalogs = Katalog::where('is_active', true)->latest()->take(5)->get();
+    
+    $totalOrganisasi = Organisasi::where('aktif', true)->count();
+    $organisasiByKategori = [
+        'ketua_umum' => Organisasi::aktif()->kategori('ketua_umum')->count(),
+        'wakil_ketua_umum' => Organisasi::aktif()->kategori('wakil_ketua_umum')->count(),
+        'ketua_bidang' => Organisasi::aktif()->kategori('ketua_bidang')->count(),
+        'sekretaris_umum' => Organisasi::aktif()->kategori('sekretaris_umum')->count(),
+        'wakil_sekretaris_umum' => Organisasi::aktif()->kategori('wakil_sekretaris_umum')->count(),
+    ];
+    $recentOrganisasi = Organisasi::aktif()->ordered()->take(5)->get();
+    
+    return view('admin.dashboard', compact(
+        'admin',
+        'totalAdmins',
+        'adminsBPC',
+        'adminsBPD',
+        'recentAdmins',
+        'totalKatalog',
+        'totalKatalogInactive',
+        'recentKatalogs',
+        'totalOrganisasi',
+        'organisasiByKategori',
+        'recentOrganisasi'
+    ));
+}
     public function infoAdmin(): View
     {
         $admin = Auth::guard('admin')->user();
         
-        // Cek apakah admin adalah BPD
         if ($admin->category !== 'bpd') {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
@@ -72,19 +91,48 @@ class AdminDashboardController extends Controller
     {
         $admin = Auth::guard('admin')->user();
         
-        // Cek apakah admin adalah BPD
         if ($admin->category !== 'bpd') {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         
-        return view('admin.create-admin', compact('admin'));
+        // List domisili Jawa Barat
+        $domisiliList = [
+            'Bandung',
+            'Bandung Barat',
+            'Bekasi',
+            'Bogor',
+            'Ciamis',
+            'Cianjur',
+            'Cirebon',
+            'Garut',
+            'Indramayu',
+            'Karawang',
+            'Kuningan',
+            'Majalengka',
+            'Pangandaran',
+            'Purwakarta',
+            'Subang',
+            'Sukabumi',
+            'Sumedang',
+            'Tasikmalaya',
+            'Kota Bandung',
+            'Kota Banjar',
+            'Kota Bekasi',
+            'Kota Bogor',
+            'Kota Cimahi',
+            'Kota Cirebon',
+            'Kota Depok',
+            'Kota Sukabumi',
+            'Kota Tasikmalaya',
+        ];
+        
+        return view('admin.create-admin', compact('admin', 'domisiliList'));
     }
     
     public function storeAdmin(Request $request)
     {
         $admin = Auth::guard('admin')->user();
         
-        // Cek apakah admin adalah BPD
         if ($admin->category !== 'bpd') {
             abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
         }
@@ -95,6 +143,9 @@ class AdminDashboardController extends Controller
             'email' => 'required|string|email|max:255|unique:admins',
             'password' => 'required|string|min:8|confirmed',
             'category' => 'required|in:bpc,bpd',
+            'domisili' => 'required_if:category,bpc|nullable|string|max:255',
+        ], [
+            'domisili.required_if' => 'Domisili wajib diisi untuk BPC.',
         ]);
 
         Admin::create([
@@ -103,6 +154,7 @@ class AdminDashboardController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'category' => $validated['category'],
+            'domisili' => $validated['category'] === 'bpc' ? $validated['domisili'] : null,
         ]);
 
         return redirect()->route('admin.info-admin')->with('success', 'Admin berhasil ditambahkan!');
@@ -112,19 +164,47 @@ class AdminDashboardController extends Controller
     {
         $currentAdmin = Auth::guard('admin')->user();
         
-        // Cek apakah admin adalah BPD
         if ($currentAdmin->category !== 'bpd') {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         
-        return view('admin.edit-admin', compact('admin', 'currentAdmin'));
+        $domisiliList = [
+            'Bandung',
+            'Bandung Barat',
+            'Bekasi',
+            'Bogor',
+            'Ciamis',
+            'Cianjur',
+            'Cirebon',
+            'Garut',
+            'Indramayu',
+            'Karawang',
+            'Kuningan',
+            'Majalengka',
+            'Pangandaran',
+            'Purwakarta',
+            'Subang',
+            'Sukabumi',
+            'Sumedang',
+            'Tasikmalaya',
+            'Kota Bandung',
+            'Kota Banjar',
+            'Kota Bekasi',
+            'Kota Bogor',
+            'Kota Cimahi',
+            'Kota Cirebon',
+            'Kota Depok',
+            'Kota Sukabumi',
+            'Kota Tasikmalaya',
+        ];
+        
+        return view('admin.edit-admin', compact('admin', 'currentAdmin', 'domisiliList'));
     }
     
     public function updateAdmin(Request $request, Admin $admin)
     {
         $currentAdmin = Auth::guard('admin')->user();
         
-        // Cek apakah admin adalah BPD
         if ($currentAdmin->category !== 'bpd') {
             abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
         }
@@ -135,6 +215,9 @@ class AdminDashboardController extends Controller
             'email' => 'required|string|email|max:255|unique:admins,email,' . $admin->id,
             'password' => 'nullable|string|min:8|confirmed',
             'category' => 'required|in:bpc,bpd',
+            'domisili' => 'required_if:category,bpc|nullable|string|max:255',
+        ], [
+            'domisili.required_if' => 'Domisili wajib diisi untuk BPC.',
         ]);
 
         $admin->update([
@@ -142,6 +225,7 @@ class AdminDashboardController extends Controller
             'username' => $validated['username'],
             'email' => $validated['email'],
             'category' => $validated['category'],
+            'domisili' => $validated['category'] === 'bpc' ? $validated['domisili'] : null,
         ]);
 
         if ($request->filled('password')) {
@@ -155,7 +239,6 @@ class AdminDashboardController extends Controller
     {
         $currentAdmin = Auth::guard('admin')->user();
         
-        // Cek apakah admin adalah BPD
         if ($currentAdmin->category !== 'bpd') {
             abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
         }
@@ -163,4 +246,4 @@ class AdminDashboardController extends Controller
         $admin->delete();
         return redirect()->route('admin.info-admin')->with('success', 'Admin berhasil dihapus!');
     }
-}
+}   

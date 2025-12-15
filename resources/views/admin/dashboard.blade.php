@@ -472,17 +472,40 @@
         </div>
     </div>
 
-    {{-- Statistics Cards --}}
-    {{-- Statistics Cards --}}
-    <div class="stats-grid">
-        {{-- Total Admin - Hanya untuk BPD --}}
-        @if(auth()->guard('admin')->user()->category === 'bpd')
+   {{-- Statistics Cards --}}
+<div class="stats-grid">
+    @if($admin->category === 'bpc')
+        {{-- Statistik untuk BPC --}}
+        <div class="stat-card">
+            <div class="stat-label">Total Pendaftar</div>
+            <div class="stat-value">{{ $totalAnggota }}</div>
+            <div class="stat-meta">Wilayah {{ $admin->domisili }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Menunggu Verifikasi</div>
+            <div class="stat-value">{{ $pendingAnggota }}</div>
+            <div class="stat-meta">Perlu ditinjau</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Disetujui</div>
+            <div class="stat-value">{{ $approvedAnggota }}</div>
+            <div class="stat-meta">Anggota aktif</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Ditolak</div>
+            <div class="stat-value">{{ $rejectedAnggota }}</div>
+            <div class="stat-meta">Tidak memenuhi syarat</div>
+        </div>
+    @else
+        {{-- Statistik untuk BPD --}}
         <div class="stat-card">
             <div class="stat-label">Total Admin</div>
             <div class="stat-value">{{ $totalAdmins }}</div>
             <div class="stat-meta">BPC: {{ $adminsBPC }} | BPD: {{ $adminsBPD }}</div>
         </div>
-        @endif
         <div class="stat-card">
             <div class="stat-label">Total E-Katalog</div>
             <div class="stat-value">{{ $totalKatalog }}</div>
@@ -511,9 +534,46 @@
                 Waketum: {{ $organisasiByKategori['wakil_ketua_umum'] }}
             </div>
         </div>
+    @endif
+</div>
+@if($admin->category === 'bpc')
+    {{-- Content untuk BPC - Tampilkan Anggota Terbaru --}}
+    <div class="admin-section">
+        <div class="section-header">
+            <h3 class="section-title">Pendaftar Terbaru dari {{ $admin->domisili }}</h3>
+            <a href="{{ route('admin.anggota.index') }}" class="view-all-btn">Lihat Semua</a>
+        </div>
+        <div class="admin-list">
+            @forelse($recentAnggota as $anggota)
+            <div class="admin-item">
+                <div class="admin-avatar">
+                    {{ strtoupper(substr($anggota->nama_usaha, 0, 2)) }}
+                </div>
+                <div class="admin-info">
+                    <div class="admin-name">{{ $anggota->nama_usaha }}</div>
+                    <div class="admin-email">{{ $anggota->email }} - {{ $anggota->nama_usaha_perusahaan }}</div>
+                </div>
+                <span class="admin-badge badge-{{ $anggota->status }}">
+                    @if($anggota->status === 'pending')
+                        MENUNGGU
+                    @elseif($anggota->status === 'approved')
+                        DISETUJUI
+                    @else
+                        DITOLAK
+                    @endif
+                </span>
+            </div>
+            @empty
+            <div class="empty-state">
+                <i class="fas fa-users"></i>
+                <p>Belum ada pendaftar dari wilayah {{ $admin->domisili }}</p>
+            </div>
+            @endforelse
+        </div>
     </div>
+@else
+    {{-- Content untuk BPD - Admin List, Katalog, Organisasi (KODE YANG UDAH ADA) --}}
     {{-- Admin List Section - Hanya untuk BPD --}}
-    @if(auth()->guard('admin')->user()->category === 'bpd')
     <div class="admin-section">
         <div class="section-header">
             <h3 class="section-title">Daftar Admin Terdaftar</h3>
@@ -533,7 +593,10 @@
                     <div class="admin-name">{{ $adminItem->name }}</div>
                     <div class="admin-email">{{ $adminItem->email }}</div>
                 </div>
-                <span class="admin-badge badge-{{ $adminItem->category }}">{{ strtoupper($adminItem->category) }}</span>
+                <span class="admin-badge badge-{{ $adminItem->category }}">
+                    {{ strtoupper($adminItem->category) }}
+                    @if($adminItem->domisili) - {{ $adminItem->domisili }} @endif
+                </span>
             </div>
             @empty
             <div class="empty-state">
@@ -543,7 +606,7 @@
             @endforelse
         </div>
     </div>
-    @endif
+    
     {{-- Katalog Section --}}
     <div class="admin-section">
         <div class="section-header">
@@ -609,4 +672,5 @@
             @endforelse
         </div>
     </div>
+@endif
     @endsection
