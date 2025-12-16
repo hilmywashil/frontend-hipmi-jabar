@@ -62,6 +62,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/{anggota}/approve', [AnggotaManagementController::class, 'approve'])->name('approve');
             Route::post('/{anggota}/reject', [AnggotaManagementController::class, 'reject'])->name('reject');
             Route::delete('/{anggota}', [AnggotaManagementController::class, 'destroy'])->name('destroy');
+            
         });
     });
 });

@@ -1,10 +1,11 @@
 @extends('admin.layouts.admin-layout')
 
-@section('title', 'Kelola Anggota')
-@section('page-title', 'Kelola Anggota')
+@section('title', 'Daftar Anggota')
+@section('page-title', 'Daftar Anggota')
 
 @php
-    $activeMenu = 'anggota';
+    $activeMenu = 'list-anggota';
+    $admin = auth()->guard('admin')->user();
 @endphp
 
 @push('styles')
@@ -15,11 +16,52 @@
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             margin-bottom: 2rem;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-row {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: start;
-            gap: 15px;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.875rem;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #0a2540;
+            box-shadow: 0 0 0 3px rgba(10, 37, 64, 0.1);
         }
 
         .stats-grid {
@@ -196,6 +238,7 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
+            text-decoration: none;
         }
 
         .btn-icon:hover {
@@ -230,19 +273,58 @@
             margin: 0 auto 1rem;
             stroke: #d1d5db;
         }
+
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #dbeafe;
+            border: 1px solid #60a5fa;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: #1e40af;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
     </style>
 @endpush
 
 @section('content')
     <div class="page-header">
-        <h1>Kelola Anggota</h1>
-        <p>Kelola dan verifikasi pendaftaran anggota baru HIPMI Jawa Barat</p>
+        <h1>Daftar Anggota</h1>
+        <p>Lihat data anggota HIPMI Jawa Barat</p>
+        <div class="info-badge">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="16" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            Halaman ini hanya untuk melihat data. Untuk verifikasi anggota, gunakan menu Anggota di Dashboard.
+        </div>
     </div>
 
-    {{-- Success Message --}}
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+    {{-- Filter Domisili (Hanya untuk BPD) --}}
+    @if($admin->category === 'bpd' && $domisiliList)
+        <div class="filter-section">
+            <form method="GET" action="{{ route('admin.anggota.list') }}" id="filterForm">
+                <input type="hidden" name="status" value="{{ $status }}">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">Filter Domisili</label>
+                        <select name="domisili" class="filter-select" onchange="document.getElementById('filterForm').submit()">
+                            <option value="all" {{ $domisili === 'all' ? 'selected' : '' }}>
+                                Semua Domisili
+                            </option>
+                            @foreach($domisiliList as $dom)
+                                <option value="{{ $dom }}" {{ $domisili === $dom ? 'selected' : '' }}>
+                                    {{ $dom }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </form>
         </div>
     @endif
 
@@ -250,7 +332,7 @@
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-header">
-                <span class="stat-title">Total Pendaftar</span>
+                <span class="stat-title">Total Anggota</span>
                 <div class="stat-icon total">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -306,19 +388,19 @@
 
     {{-- Filter Tabs --}}
     <div class="filter-tabs">
-        <a href="{{ route('admin.anggota.index', ['status' => 'all']) }}"
+        <a href="{{ route('admin.anggota.list', ['status' => 'all', 'domisili' => $domisili ?? 'all']) }}"
             class="filter-tab {{ $status === 'all' ? 'active' : '' }}">
             Semua ({{ $stats['total'] }})
         </a>
-        <a href="{{ route('admin.anggota.index', ['status' => 'pending']) }}"
+        <a href="{{ route('admin.anggota.list', ['status' => 'pending', 'domisili' => $domisili ?? 'all']) }}"
             class="filter-tab {{ $status === 'pending' ? 'active' : '' }}">
             Pending ({{ $stats['pending'] }})
         </a>
-        <a href="{{ route('admin.anggota.index', ['status' => 'approved']) }}"
+        <a href="{{ route('admin.anggota.list', ['status' => 'approved', 'domisili' => $domisili ?? 'all']) }}"
             class="filter-tab {{ $status === 'approved' ? 'active' : '' }}">
             Disetujui ({{ $stats['approved'] }})
         </a>
-        <a href="{{ route('admin.anggota.index', ['status' => 'rejected']) }}"
+        <a href="{{ route('admin.anggota.list', ['status' => 'rejected', 'domisili' => $domisili ?? 'all']) }}"
             class="filter-tab {{ $status === 'rejected' ? 'active' : '' }}">
             Ditolak ({{ $stats['rejected'] }})
         </a>
@@ -373,7 +455,9 @@
                             <td>{{ $item->created_at->format('d M Y') }}</td>
                             <td>
                                 <div class="action-buttons">
-                                    <a href="{{ route('admin.anggota.show', $item) }}" class="btn-icon" title="Lihat Detail">
+                                    <a href="{{ route('admin.anggota.show-readonly', $item) }}" 
+                                       class="btn-icon" 
+                                       title="Lihat Detail">
                                         <svg viewBox="0 0 24 24">
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                             <circle cx="12" cy="12" r="3" />
@@ -399,8 +483,8 @@
                     <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
                 <h3>Tidak ada data</h3>
-                <p>Belum ada pendaftar untuk kategori ini.</p>
+                <p>Belum ada anggota untuk kategori ini.</p>
             </div>
         @endif
     </div>
-@endsection
+@endsections

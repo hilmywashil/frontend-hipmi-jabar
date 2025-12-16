@@ -9,13 +9,89 @@ use Illuminate\Support\Facades\Validator;
 
 class AnggotaController extends Controller
 {
+    public function index(Request $request)
+    {
+        $admin = auth()->guard('admin')->user();
+        $status = $request->get('status', 'all');
+        $domisili = $request->get('domisili', 'all');
+        
+        // Query base
+        $query = Anggota::query();
+        
+        // Filter berdasarkan kategori admin
+        if ($admin->category === 'bpc') {
+            // BPC hanya bisa lihat anggota di domisilinya
+            $query->where('domisili', $admin->domisili);
+            
+            // Stats untuk BPC
+            $stats = [
+                'total' => Anggota::where('domisili', $admin->domisili)->count(),
+                'pending' => Anggota::where('domisili', $admin->domisili)->where('status', 'pending')->count(),
+                'approved' => Anggota::where('domisili', $admin->domisili)->where('status', 'approved')->count(),
+                'rejected' => Anggota::where('domisili', $admin->domisili)->where('status', 'rejected')->count(),
+            ];
+            
+            $domisiliList = null;
+            
+        } elseif ($admin->category === 'bpd') {
+            // BPD bisa lihat semua anggota
+            if ($domisili !== 'all') {
+                $query->where('domisili', $domisili);
+            }
+            
+            // Stats untuk BPD
+            if ($domisili === 'all') {
+                $stats = [
+                    'total' => Anggota::count(),
+                    'pending' => Anggota::where('status', 'pending')->count(),
+                    'approved' => Anggota::where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('status', 'rejected')->count(),
+                ];
+            } else {
+                $stats = [
+                    'total' => Anggota::where('domisili', $domisili)->count(),
+                    'pending' => Anggota::where('domisili', $domisili)->where('status', 'pending')->count(),
+                    'approved' => Anggota::where('domisili', $domisili)->where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('domisili', $domisili)->where('status', 'rejected')->count(),
+                ];
+            }
+            
+            // List domisili untuk dropdown
+            $domisiliList = \App\Models\Admin::where('category', 'bpc')
+                ->whereNotNull('domisili')
+                ->orderBy('domisili')
+                ->pluck('domisili')
+                ->unique()
+                ->values();
+        }
+        
+        // Filter berdasarkan status
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
+        
+        // Get data dengan pagination
+        $anggota = $query->latest()->paginate(15)->appends([
+            'status' => $status,
+            'domisili' => $domisili
+        ]);
+        
+        return view('admin.anggota.index', compact(
+            'anggota',
+            'stats',
+            'status',
+            'domisili',
+            'domisiliList'
+        ));
+    }
+
     public function store(Request $request)
     {
         // Validasi
         $validator = Validator::make($request->all(), [
             // Data Pribadi
             'nama_usaha' => 'required|string|max:255',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan', // DIPERBAIKI: huruf kapital
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'required|string|max:255',
             'tanggal_lahir' => 'required|date',
             'agama' => 'required|string|max:255',
@@ -48,7 +124,7 @@ class AnggotaController extends Controller
             'sfc_hipmi' => 'required|string|max:255',
             'referensi_hipmi' => 'required|in:Ya,Tidak',
             'organisasi_lain' => 'required|in:Ya,Tidak',
-            'pernyataan' => 'required|accepted', // DIPERBAIKI: gunakan accepted
+            'pernyataan' => 'required|accepted',
         ], [
             'required' => ':attribute wajib diisi.',
             'email' => 'Format email tidak valid.',
