@@ -5,6 +5,7 @@
 
 @php
     $activeMenu = 'anggota';
+    $admin = auth()->guard('admin')->user();
 @endphp
 
 @push('styles')
@@ -322,7 +323,7 @@
                         Kembali
                     </a>
 
-                    @if($anggota->status === 'pending')
+                    @if($admin->category === 'bpc' && $anggota->status === 'pending')
                         <button onclick="showApproveModal()" class="btn btn-approve">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <polyline points="20 6 9 17 4 12" />
