@@ -25,7 +25,7 @@
     <section class="main-info">
         <div class="info-card">
             <img src="{{ asset('images/icons/users.png') }}" alt="Anggota" class="icon">
-            <h2><span class="counter" data-target="23">0</span></h2>
+            <h2><span class="counter" data-target="{{ $totalAnggota }}">0</span></h2>
             <h3>Anggota</h3>
         </div>
         <div class="info-card">
@@ -101,16 +101,28 @@
         <h2>Buku Informasi Anggota HIPMI Jabar</h2>
         <div class="buku-informasi-home-content">
             <div class="owl-carousel anggota-carousel">
-                {{-- LOOP MAX 10 AJA ZAK --}}
-                <a href="{{ route('detail-buku') }}">
-                    <div class="buku-card">
-                        <img src="{{ asset('images/photo.jpg') }}">
-                        <div class="container">
-                            <h4><b>Nama Anggota</b></h4>
-                            <p>Jabatan Anggota</p>
+                @forelse($anggotaList as $anggota)
+                    <a href="{{ route('detail-buku', $anggota->id) }}">
+                        <div class="buku-card">
+                            <img src="{{ $anggota->foto_diri_url ?? asset('images/default-avatar.png') }}" 
+                                 alt="{{ $anggota->nama_usaha }}">
+                            <div class="container">
+                                <h4><b>{{ $anggota->nama_usaha }}</b></h4>
+                                <p>{{ Str::limit($anggota->nama_usaha_perusahaan, 30, '...') }}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                @empty
+                    <a href="{{ route('buku-anggota') }}">
+                        <div class="buku-card">
+                            <img src="{{ asset('images/hipmi-logo.png') }}" alt="HIPMI Logo">
+                            <div class="container">
+                                <h4><b>Belum Ada Anggota</b></h4>
+                                <p>Klik untuk lihat daftar</p>
+                            </div>
+                        </div>
+                    </a>
+                @endforelse
             </div>
 
             <div style="text-align:center; margin-top:25px;">

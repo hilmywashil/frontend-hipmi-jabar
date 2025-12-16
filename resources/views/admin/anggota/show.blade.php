@@ -299,6 +299,65 @@
             justify-content: flex-end;
             margin-top: 1.5rem;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .detail-header {
+                padding: 1.5rem;
+            }
+
+            .detail-header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .detail-info h2 {
+                font-size: 1.25rem;
+            }
+
+            .detail-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .detail-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-card {
+                padding: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .detail-header {
+                padding: 1rem;
+            }
+
+            .detail-info h2 {
+                font-size: 1.125rem;
+            }
+
+            .detail-card {
+                padding: 1rem;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
     </style>
 @endpush
 
@@ -594,4 +653,4 @@
             });
         });
     </script>
-@endpush
+@endpush    

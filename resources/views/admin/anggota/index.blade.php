@@ -263,11 +263,58 @@
             cursor: not-allowed;
         }
 
-        .pagination {
+        /* Pagination Style */
+        .pagination-wrapper {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #e5e7eb;
             display: flex;
-            justify-content: center;
-            padding: 1.5rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pagination-info {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .pagination-buttons {
+            display: flex;
             gap: 0.5rem;
+            align-items: center;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            transition: all 0.2s;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+        }
+
+        .pagination-btn:hover:not(.disabled) {
+            background: #f3f4f6;
+        }
+
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .pagination-btn.active {
+            background: #0a2540;
+            color: white;
+            border-color: #0a2540;
         }
 
         .empty-state {
@@ -294,6 +341,33 @@
             font-size: 0.875rem;
             color: #d97706;
             font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .pagination-wrapper {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.25rem 1rem;
+                align-items: flex-start;
+            }
+
+            .pagination-info {
+                font-size: 0.8125rem;
+                width: 100%;
+            }
+
+            .pagination-buttons {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .pagination-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8125rem;
+                min-width: 36px;
+            }
         }
     </style>
 @endpush
@@ -497,8 +571,37 @@
             </table>
 
             {{-- Pagination --}}
-            <div class="pagination">
-                {{ $anggota->links() }}
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Menampilkan {{ $anggota->firstItem() }} - {{ $anggota->lastItem() }} dari {{ $anggota->total() }} anggota
+                </div>
+                <div class="pagination-buttons">
+                    @if ($anggota->onFirstPage())
+                        <span class="pagination-btn disabled">Previous</span>
+                    @else
+                        <a href="{{ $anggota->appends(['status' => $status, 'domisili' => $domisili ?? 'all'])->previousPageUrl() }}" class="pagination-btn">
+                            Previous
+                        </a>
+                    @endif
+                    
+                    @foreach($anggota->getUrlRange(1, $anggota->lastPage()) as $page => $url)
+                        @if ($page == $anggota->currentPage())
+                            <span class="pagination-btn active">{{ $page }}</span>
+                        @else
+                            <a href="{{ $anggota->appends(['status' => $status, 'domisili' => $domisili ?? 'all'])->url($page) }}" class="pagination-btn">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+                    
+                    @if ($anggota->hasMorePages())
+                        <a href="{{ $anggota->appends(['status' => $status, 'domisili' => $domisili ?? 'all'])->nextPageUrl() }}" class="pagination-btn">
+                            Next
+                        </a>
+                    @else
+                        <span class="pagination-btn disabled">Next</span>
+                    @endif
+                </div>
             </div>
         @else
             <div class="empty-state">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Katalog;
 use App\Models\Misi;
+use App\Models\Anggota;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,7 +26,16 @@ class HomeController extends Controller
         // Ambil data misi yang aktif dan diurutkan
         $misi = Misi::active()->ordered()->get();
 
+        // Hitung jumlah anggota yang sudah di-approve
+        $totalAnggota = Anggota::approved()->count();
+
+        // Ambil data anggota yang sudah di-approve (maksimal 10 untuk carousel)
+        $anggotaList = Anggota::approved()
+            ->orderBy('approved_at', 'desc')
+            ->take(10)
+            ->get();
+
         // Return view dengan data
-        return view('pages.home', compact('katalogs', 'totalKatalog', 'misi'));
+        return view('pages.home', compact('katalogs', 'totalKatalog', 'misi', 'totalAnggota', 'anggotaList'));
     }
 }
