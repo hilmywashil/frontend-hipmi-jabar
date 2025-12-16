@@ -57,12 +57,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Anggota Management
         Route::prefix('anggota')->name('anggota.')->group(function () {
+            // Routes untuk Verifikasi (Menu Dashboard - hanya BPC yang bisa approve/reject)
             Route::get('/', [AnggotaManagementController::class, 'index'])->name('index');
             Route::get('/{anggota}', [AnggotaManagementController::class, 'show'])->name('show');
             Route::post('/{anggota}/approve', [AnggotaManagementController::class, 'approve'])->name('approve');
             Route::post('/{anggota}/reject', [AnggotaManagementController::class, 'reject'])->name('reject');
             Route::delete('/{anggota}', [AnggotaManagementController::class, 'destroy'])->name('destroy');
             
+            // Routes baru untuk List Anggota (Read-Only - BPC & BPD bisa akses)
+            Route::get('/list/all', [AnggotaManagementController::class, 'listAll'])->name('list');
+            Route::get('/list/{anggota}/detail', [AnggotaManagementController::class, 'showReadOnly'])->name('show-readonly');
         });
     });
 });

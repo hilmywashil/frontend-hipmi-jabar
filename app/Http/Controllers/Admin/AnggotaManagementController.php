@@ -5,127 +5,230 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Anggota;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AnggotaManagementController extends Controller
 {
-    // Tampilkan semua anggota
+    // Method yang sudah ada untuk verifikasi (hanya untuk menu Dashboard)
     public function index(Request $request)
     {
-        $admin = Auth::guard('admin')->user();
+        $admin = auth()->guard('admin')->user();
+        $status = $request->get('status', 'pending');
+        $domisili = $request->get('domisili', 'all');
         
-        // Cek akses: hanya BPC yang bisa akses
-        if ($admin->category !== 'bpc') {
-            abort(403, 'Anda tidak memiliki akses ke halaman ini. Hanya BPC yang dapat mengelola anggota.');
+        $query = Anggota::query();
+        
+        if ($admin->category === 'bpc') {
+            $query->where('domisili', $admin->domisili);
+            
+            $stats = [
+                'total' => Anggota::where('domisili', $admin->domisili)->count(),
+                'pending' => Anggota::where('domisili', $admin->domisili)->where('status', 'pending')->count(),
+                'approved' => Anggota::where('domisili', $admin->domisili)->where('status', 'approved')->count(),
+                'rejected' => Anggota::where('domisili', $admin->domisili)->where('status', 'rejected')->count(),
+            ];
+            
+            $domisiliList = null;
+            
+        } elseif ($admin->category === 'bpd') {
+            if ($domisili !== 'all') {
+                $query->where('domisili', $domisili);
+            }
+            
+            if ($domisili === 'all') {
+                $stats = [
+                    'total' => Anggota::count(),
+                    'pending' => Anggota::where('status', 'pending')->count(),
+                    'approved' => Anggota::where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('status', 'rejected')->count(),
+                ];
+            } else {
+                $stats = [
+                    'total' => Anggota::where('domisili', $domisili)->count(),
+                    'pending' => Anggota::where('domisili', $domisili)->where('status', 'pending')->count(),
+                    'approved' => Anggota::where('domisili', $domisili)->where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('domisili', $domisili)->where('status', 'rejected')->count(),
+                ];
+            }
+            
+            $domisiliList = \App\Models\Admin::where('category', 'bpc')
+                ->whereNotNull('domisili')
+                ->orderBy('domisili')
+                ->pluck('domisili')
+                ->unique()
+                ->values();
         }
-        
-        $status = $request->get('status', 'all');
-        
-        // Query anggota berdasarkan domisili admin BPC
-        $query = Anggota::query()->where('domisili', $admin->domisili);
         
         if ($status !== 'all') {
             $query->where('status', $status);
         }
         
-        $anggota = $query->with('approvedBy')->latest()->paginate(15);
+        $anggota = $query->latest()->paginate(15)->appends([
+            'status' => $status,
+            'domisili' => $domisili
+        ]);
         
-        // Statistics berdasarkan domisili
-        $stats = [
-            'total' => Anggota::where('domisili', $admin->domisili)->count(),
-            'pending' => Anggota::where('domisili', $admin->domisili)->where('status', 'pending')->count(),
-            'approved' => Anggota::where('domisili', $admin->domisili)->where('status', 'approved')->count(),
-            'rejected' => Anggota::where('domisili', $admin->domisili)->where('status', 'rejected')->count(),
-        ];
-        
-        return view('admin.anggota.index', compact('anggota', 'stats', 'status'));
+        return view('admin.anggota.index', compact(
+            'anggota',
+            'stats',
+            'status',
+            'domisili',
+            'domisiliList'
+        ));
     }
 
-    // Detail anggota
-    public function show(Anggota $anggota)
+    // Method baru untuk list semua anggota (read-only)
+    public function listAll(Request $request)
     {
-        $admin = Auth::guard('admin')->user();
+        $admin = auth()->guard('admin')->user();
+        $status = $request->get('status', 'all');
+        $domisili = $request->get('domisili', 'all');
         
-        // Cek akses
-        if ($admin->category !== 'bpc') {
-            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        $query = Anggota::query();
+        
+        // Filter berdasarkan kategori admin
+        if ($admin->category === 'bpc') {
+            // BPC hanya bisa lihat anggota di domisilinya
+            $query->where('domisili', $admin->domisili);
+            
+            $stats = [
+                'total' => Anggota::where('domisili', $admin->domisili)->count(),
+                'pending' => Anggota::where('domisili', $admin->domisili)->where('status', 'pending')->count(),
+                'approved' => Anggota::where('domisili', $admin->domisili)->where('status', 'approved')->count(),
+                'rejected' => Anggota::where('domisili', $admin->domisili)->where('status', 'rejected')->count(),
+            ];
+            
+            $domisiliList = null;
+            
+        } elseif ($admin->category === 'bpd') {
+            // BPD bisa lihat semua anggota dengan filter domisili
+            if ($domisili !== 'all') {
+                $query->where('domisili', $domisili);
+            }
+            
+            if ($domisili === 'all') {
+                $stats = [
+                    'total' => Anggota::count(),
+                    'pending' => Anggota::where('status', 'pending')->count(),
+                    'approved' => Anggota::where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('status', 'rejected')->count(),
+                ];
+            } else {
+                $stats = [
+                    'total' => Anggota::where('domisili', $domisili)->count(),
+                    'pending' => Anggota::where('domisili', $domisili)->where('status', 'pending')->count(),
+                    'approved' => Anggota::where('domisili', $domisili)->where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('domisili', $domisili)->where('status', 'rejected')->count(),
+                ];
+            }
+            
+            // List domisili untuk dropdown
+            $domisiliList = \App\Models\Admin::where('category', 'bpc')
+                ->whereNotNull('domisili')
+                ->orderBy('domisili')
+                ->pluck('domisili')
+                ->unique()
+                ->values();
         }
         
-        // Cek apakah anggota sesuai domisili
-        if ($admin->domisili !== $anggota->domisili) {
-            abort(403, 'Anda tidak memiliki akses untuk melihat anggota dari domisili ini.');
+        // Filter berdasarkan status
+        if ($status !== 'all') {
+            $query->where('status', $status);
         }
         
-        $anggota->load('approvedBy');
+        // Get data dengan pagination
+        $anggota = $query->latest()->paginate(15)->appends([
+            'status' => $status,
+            'domisili' => $domisili
+        ]);
+        
+        return view('admin.anggota.list', compact(
+            'anggota',
+            'stats',
+            'status',
+            'domisili',
+            'domisiliList'
+        ));
+    }
+
+    // Method untuk show detail read-only (DIPERBAIKI - pakai view yang sama)
+    public function showReadOnly(Anggota $anggota)
+    {
+        $admin = auth()->guard('admin')->user();
+        
+        // BPC hanya bisa lihat anggota di domisilinya
+        if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
+            abort(403, 'Anda tidak memiliki akses ke data anggota ini.');
+        }
+        
+        // FIXED: Pakai view yang sama dengan show()
         return view('admin.anggota.show', compact('anggota'));
     }
 
-    // Approve anggota
-    public function approve(Anggota $anggota)
+    // Method yang sudah ada (untuk verifikasi)
+    public function show(Anggota $anggota)
     {
-        $admin = Auth::guard('admin')->user();
+        $admin = auth()->guard('admin')->user();
         
-        // Validasi akses
-        if ($admin->category !== 'bpc') {
-            return back()->with('error', 'Anda tidak memiliki akses untuk approve anggota.');
+        if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
+            abort(403, 'Anda tidak memiliki akses ke data anggota ini.');
         }
         
-        if ($admin->domisili !== $anggota->domisili) {
-            return back()->with('error', 'Anda hanya dapat approve anggota dari domisili ' . $admin->domisili);
-        }
-        
-        $anggota->approve($admin->id);
-        
-        return redirect()->back()->with('success', 'Anggota berhasil disetujui.');
+        return view('admin.anggota.show', compact('anggota'));
     }
 
-    // Reject anggota
-    public function reject(Request $request, Anggota $anggota)
+    public function approve(Anggota $anggota)
     {
-        $admin = Auth::guard('admin')->user();
+        $admin = auth()->guard('admin')->user();
         
-        // Validasi akses
-        if ($admin->category !== 'bpc') {
-            return back()->with('error', 'Anda tidak memiliki akses untuk reject anggota.');
+        if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
+            abort(403, 'Anda tidak memiliki akses untuk verifikasi anggota ini.');
         }
         
-        if ($admin->domisili !== $anggota->domisili) {
-            return back()->with('error', 'Anda hanya dapat reject anggota dari domisili ' . $admin->domisili);
+        $anggota->update(['status' => 'approved']);
+        
+        return redirect()->route('admin.anggota.index')
+            ->with('success', 'Anggota berhasil disetujui!');
+    }
+
+    public function reject(Request $request, Anggota $anggota)
+    {
+        $admin = auth()->guard('admin')->user();
+        
+        if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
+            abort(403, 'Anda tidak memiliki akses untuk verifikasi anggota ini.');
         }
         
         $request->validate([
-            'rejection_reason' => 'required|string|max:500',
+            'alasan_penolakan' => 'required|string|max:500'
         ]);
         
-        $anggota->reject($request->rejection_reason, $admin->id);
+        $anggota->update([
+            'status' => 'rejected',
+            'alasan_penolakan' => $request->alasan_penolakan
+        ]);
         
-        return redirect()->back()->with('success', 'Anggota berhasil ditolak.');
+        return redirect()->route('admin.anggota.index')
+            ->with('success', 'Anggota berhasil ditolak!');
     }
 
-    // Delete anggota
     public function destroy(Anggota $anggota)
     {
-        $admin = Auth::guard('admin')->user();
+        $admin = auth()->guard('admin')->user();
         
-        // Validasi akses
-        if ($admin->category !== 'bpc') {
-            return back()->with('error', 'Anda tidak memiliki akses untuk menghapus anggota.');
-        }
-        
-        if ($admin->domisili !== $anggota->domisili) {
-            return back()->with('error', 'Anda hanya dapat menghapus anggota dari domisili ' . $admin->domisili);
+        if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
+            abort(403, 'Anda tidak memiliki akses untuk menghapus anggota ini.');
         }
         
         // Hapus file-file terkait
-        \Storage::disk('public')->delete([
-            $anggota->foto_ktp,
-            $anggota->foto_diri,
-            $anggota->profile_perusahaan,
-            $anggota->logo_perusahaan,
-        ]);
+        if ($anggota->foto_ktp) Storage::disk('public')->delete($anggota->foto_ktp);
+        if ($anggota->foto_diri) Storage::disk('public')->delete($anggota->foto_diri);
+        if ($anggota->profile_perusahaan) Storage::disk('public')->delete($anggota->profile_perusahaan);
+        if ($anggota->logo_perusahaan) Storage::disk('public')->delete($anggota->logo_perusahaan);
         
         $anggota->delete();
         
-        return redirect()->route('admin.anggota.index')->with('success', 'Data anggota berhasil dihapus.');
+        return redirect()->route('admin.anggota.index')
+            ->with('success', 'Data anggota berhasil dihapus!');
     }
 }

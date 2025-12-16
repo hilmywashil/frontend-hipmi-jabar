@@ -1,10 +1,10 @@
 @extends('admin.layouts.admin-layout')
 
-@section('title', 'Kelola Anggota')
-@section('page-title', 'Kelola Anggota')
+@section('title', 'Daftar Anggota')
+@section('page-title', 'Daftar Anggota')
 
 @php
-    $activeMenu = 'anggota';
+    $activeMenu = 'list-anggota';
     $admin = auth()->guard('admin')->user();
 @endphp
 
@@ -12,15 +12,20 @@
     <style>
         .page-header {
             background: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: start;
-            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            font-size: 0.875rem;
         }
 
         .filter-section {
@@ -71,15 +76,15 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-card {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.25rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             border: 1px solid #e5e7eb;
         }
@@ -92,23 +97,24 @@
         }
 
         .stat-title {
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: #6b7280;
             font-weight: 500;
         }
 
         .stat-icon {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .stat-icon svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             stroke-width: 2;
         }
 
@@ -133,7 +139,7 @@
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: #0a2540;
         }
@@ -143,6 +149,8 @@
             gap: 0.5rem;
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
         }
 
         .filter-tab {
@@ -155,6 +163,8 @@
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
+            white-space: nowrap;
+            font-size: 0.875rem;
         }
 
         .filter-tab:hover {
@@ -175,9 +185,14 @@
             overflow: hidden;
         }
 
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
         .table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 800px;
         }
 
         .table thead {
@@ -191,11 +206,13 @@
             font-size: 0.875rem;
             font-weight: 600;
             color: #374151;
+            white-space: nowrap;
         }
 
         .table td {
             padding: 1rem;
             border-bottom: 1px solid #f3f4f6;
+            font-size: 0.875rem;
         }
 
         .table tbody tr:hover {
@@ -210,6 +227,7 @@
             border-radius: 9999px;
             font-size: 0.75rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .status-badge.pending {
@@ -243,6 +261,8 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
+            text-decoration: none;
+            flex-shrink: 0;
         }
 
         .btn-icon:hover {
@@ -258,16 +278,12 @@
             stroke-width: 2;
         }
 
-        .btn-icon.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
         .pagination {
             display: flex;
             justify-content: center;
             padding: 1.5rem;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .empty-state {
@@ -283,57 +299,102 @@
             stroke: #d1d5db;
         }
 
-        .readonly-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #fef3c7;
-            border: 1px solid #fbbf24;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            color: #d97706;
-            font-weight: 500;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.25rem;
+            }
+
+            .filter-section {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-title {
+                font-size: 0.75rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .stat-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .stat-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .filter-tabs {
+                gap: 0.375rem;
+            }
+
+            .filter-tab {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8125rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.8125rem;
+            }
+
+            .empty-state {
+                padding: 3rem 1rem;
+            }
+
+            .empty-state svg {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 0.875rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.125rem;
+            }
+
+            .filter-group {
+                min-width: 100%;
+            }
         }
     </style>
 @endpush
 
 @section('content')
     <div class="page-header">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <div>
-                <h1>Kelola Anggota</h1>
-                <p>
-                    @if($admin->category === 'bpd')
-                        Lihat semua anggota HIPMI Jawa Barat (Read-Only)
-                    @else
-                        Kelola dan verifikasi pendaftaran anggota {{ $admin->domisili }}
-                    @endif
-                </p>
-            </div>
-            @if($admin->category === 'bpd')
-                <span class="readonly-badge">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle cx="12" cy="12" r="3" />
-                    </svg>
-                    View Only
-                </span>
-            @endif
-        </div>
+        <h1>Daftar Anggota</h1>
+        <p>Lihat data anggota HIPMI Jawa Barat</p>
     </div>
-
-    {{-- Success Message --}}
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
 
     {{-- Filter Domisili (Hanya untuk BPD) --}}
     @if($admin->category === 'bpd' && $domisiliList)
         <div class="filter-section">
-            <form method="GET" action="{{ route('admin.anggota.index') }}" id="filterForm">
+            <form method="GET" action="{{ route('admin.anggota.list') }}" id="filterForm">
                 <input type="hidden" name="status" value="{{ $status }}">
                 <div class="filter-row">
                     <div class="filter-group">
@@ -358,7 +419,7 @@
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-header">
-                <span class="stat-title">Total Pendaftar</span>
+                <span class="stat-title">Total Anggota</span>
                 <div class="stat-icon total">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -414,19 +475,19 @@
 
     {{-- Filter Tabs --}}
     <div class="filter-tabs">
-        <a href="{{ route('admin.anggota.index', ['status' => 'all', 'domisili' => $domisili ?? 'all']) }}"
+        <a href="{{ route('admin.anggota.list', ['status' => 'all', 'domisili' => $domisili ?? 'all']) }}"
             class="filter-tab {{ $status === 'all' ? 'active' : '' }}">
             Semua ({{ $stats['total'] }})
         </a>
-        <a href="{{ route('admin.anggota.index', ['status' => 'pending', 'domisili' => $domisili ?? 'all']) }}"
+        <a href="{{ route('admin.anggota.list', ['status' => 'pending', 'domisili' => $domisili ?? 'all']) }}"
             class="filter-tab {{ $status === 'pending' ? 'active' : '' }}">
             Pending ({{ $stats['pending'] }})
         </a>
-        <a href="{{ route('admin.anggota.index', ['status' => 'approved', 'domisili' => $domisili ?? 'all']) }}"
+        <a href="{{ route('admin.anggota.list', ['status' => 'approved', 'domisili' => $domisili ?? 'all']) }}"
             class="filter-tab {{ $status === 'approved' ? 'active' : '' }}">
             Disetujui ({{ $stats['approved'] }})
         </a>
-        <a href="{{ route('admin.anggota.index', ['status' => 'rejected', 'domisili' => $domisili ?? 'all']) }}"
+        <a href="{{ route('admin.anggota.list', ['status' => 'rejected', 'domisili' => $domisili ?? 'all']) }}"
             class="filter-tab {{ $status === 'rejected' ? 'active' : '' }}">
             Ditolak ({{ $stats['rejected'] }})
         </a>
@@ -435,66 +496,68 @@
     {{-- Table --}}
     <div class="table-container">
         @if($anggota->count() > 0)
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Perusahaan</th>
-                        <th>Domisili</th>
-                        <th>Status</th>
-                        <th>Tanggal Daftar</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($anggota as $index => $item)
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>{{ $anggota->firstItem() + $index }}</td>
-                            <td>
-                                <strong>{{ $item->nama_usaha }}</strong>
-                            </td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ $item->nama_usaha_perusahaan }}</td>
-                            <td>{{ $item->domisili }}</td>
-                            <td>
-                                <span class="status-badge {{ $item->status }}">
-                                    @if($item->status === 'pending')
-                                        <svg viewBox="0 0 8 8" width="8" height="8" fill="currentColor">
-                                            <circle cx="4" cy="4" r="3" />
-                                        </svg>
-                                        Menunggu
-                                    @elseif($item->status === 'approved')
-                                        <svg viewBox="0 0 8 8" width="8" height="8" fill="currentColor">
-                                            <circle cx="4" cy="4" r="3" />
-                                        </svg>
-                                        Disetujui
-                                    @else
-                                        <svg viewBox="0 0 8 8" width="8" height="8" fill="currentColor">
-                                            <circle cx="4" cy="4" r="3" />
-                                        </svg>
-                                        Ditolak
-                                    @endif
-                                </span>
-                            </td>
-                            <td>{{ $item->created_at->format('d M Y') }}</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="{{ route('admin.anggota.show', $item) }}" 
-                                       class="btn-icon" 
-                                       title="Lihat Detail">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                            <circle cx="12" cy="12" r="3" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            </td>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Perusahaan</th>
+                            <th>Domisili</th>
+                            <th>Status</th>
+                            <th>Tanggal Daftar</th>
+                            <th>Aksi</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($anggota as $index => $item)
+                            <tr>
+                                <td>{{ $anggota->firstItem() + $index }}</td>
+                                <td>
+                                    <strong>{{ $item->nama_usaha }}</strong>
+                                </td>
+                                <td>{{ $item->email }}</td>
+                                <td>{{ $item->nama_usaha_perusahaan }}</td>
+                                <td>{{ $item->domisili }}</td>
+                                <td>
+                                    <span class="status-badge {{ $item->status }}">
+                                        @if($item->status === 'pending')
+                                            <svg viewBox="0 0 8 8" width="8" height="8" fill="currentColor">
+                                                <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            Menunggu
+                                        @elseif($item->status === 'approved')
+                                            <svg viewBox="0 0 8 8" width="8" height="8" fill="currentColor">
+                                                <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            Disetujui
+                                        @else
+                                            <svg viewBox="0 0 8 8" width="8" height="8" fill="currentColor">
+                                                <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            Ditolak
+                                        @endif
+                                    </span>
+                                </td>
+                                <td>{{ $item->created_at->format('d M Y') }}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="{{ route('admin.anggota.show-readonly', $item) }}" 
+                                           class="btn-icon" 
+                                           title="Lihat Detail">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             {{-- Pagination --}}
             <div class="pagination">
@@ -509,7 +572,7 @@
                     <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
                 <h3>Tidak ada data</h3>
-                <p>Belum ada pendaftar untuk kategori ini.</p>
+                <p>Belum ada anggota untuk kategori ini.</p>
             </div>
         @endif
     </div>
