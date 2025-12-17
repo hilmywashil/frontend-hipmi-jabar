@@ -73,7 +73,7 @@ class BeritaController extends Controller
         // Not used
     }
 
-    public function edit(Berita $berita)
+    public function edit($id)
     {
         $admin = auth()->guard('admin')->user();
         
@@ -81,16 +81,20 @@ class BeritaController extends Controller
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
+        $berita = Berita::findOrFail($id);
+
         return view('admin.berita.edit', compact('admin', 'berita'));
     }
 
-    public function update(Request $request, Berita $berita)
+    public function update(Request $request, $id)
     {
         $admin = auth()->guard('admin')->user();
         
         if ($admin->category !== 'bpd') {
             abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
         }
+
+        $berita = Berita::findOrFail($id);
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -122,13 +126,15 @@ class BeritaController extends Controller
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil diupdate!');
     }
 
-    public function destroy(Berita $berita)
+    public function destroy($id)
     {
         $admin = auth()->guard('admin')->user();
         
         if ($admin->category !== 'bpd') {
             abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
         }
+
+        $berita = Berita::findOrFail($id);
 
         // Hapus gambar
         if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {

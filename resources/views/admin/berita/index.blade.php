@@ -261,8 +261,8 @@ $activeMenu = 'berita';
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="{{ route('admin.berita.edit', $berita) }}" class="btn-edit">Edit</a>
-                        <form action="{{ route('admin.berita.destroy', $berita) }}" method="POST" style="display: inline;"
+                        <a href="{{ route('admin.berita.edit', $berita->id) }}" class="btn-edit">Edit</a>
+                        <form action="{{ route('admin.berita.destroy', $berita->id) }}" method="POST" style="display: inline;"
                             onsubmit="return confirm('Yakin ingin menghapus berita ini?')">
                             @csrf
                             @method('DELETE')

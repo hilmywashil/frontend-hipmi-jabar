@@ -195,4 +195,27 @@
         flex-direction: column;
     }
 
+
+    /* Fix text overflow untuk berita */
+.berita-item-content h3,
+.berita-item-content p,
+.berita-right-item-content h3,
+.berita-right-item-content p,
+.berita-detail-right-item-content h3,
+.berita-detail-right-item-content p,
+.detail-berita-content p,
+.page-banner h1 {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Batasi lebar konten */
+.berita-item-content,
+.berita-right-item-content,
+.berita-detail-right-item-content {
+    max-width: 100%;
+    overflow: hidden;
+}
 }

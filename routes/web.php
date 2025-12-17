@@ -58,8 +58,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Misi CRUD (BPD only)
         Route::resource('misi', MisiController::class);
 
-        // Berita CRUD (BPD only) - TAMBAH INI
-        Route::resource('berita', AdminBeritaController::class);
+        // Berita CRUD (BPD only) - GANTI DENGAN ROUTE MANUAL
+        Route::get('berita', [AdminBeritaController::class, 'index'])->name('berita.index');
+        Route::get('berita/create', [AdminBeritaController::class, 'create'])->name('berita.create');
+        Route::post('berita', [AdminBeritaController::class, 'store'])->name('berita.store');
+        Route::get('berita/{id}/edit', [AdminBeritaController::class, 'edit'])->name('berita.edit');
+        Route::put('berita/{id}', [AdminBeritaController::class, 'update'])->name('berita.update');
+        Route::delete('berita/{id}', [AdminBeritaController::class, 'destroy'])->name('berita.destroy');
 
         // Anggota Management
         Route::prefix('anggota')->name('anggota.')->group(function () {
@@ -88,7 +93,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/e-katalog', [KatalogController::class, 'index'])->name('e-katalog');
 Route::get('/e-katalog/{katalog}', [KatalogController::class, 'show'])->name('e-katalog.detail');
 
-// Berita Public Routes - UBAH INI
+// Berita Public Routes - PENTING: Taruh SETELAH semua route admin
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
 Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita-detail');
 

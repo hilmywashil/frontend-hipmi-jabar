@@ -2,11 +2,33 @@
 
 @section('title', 'Berita - HIPMI Jawa Barat')
 
+@push('styles')
+<style>
+    /* Fix text overflow */
+    .berita-item-content h3,
+    .berita-item-content p,
+    .berita-right-item-content h3,
+    .berita-right-item-content p {
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+    
+    .berita-item-content,
+    .berita-right-item-content {
+        max-width: 100%;
+        overflow: hidden;
+    }
+</style>
+@endpush
+
 @section('content')
     <section class="page-banner">
         <h1>Berita & Dokumentasi</h1>
         <p>Berita & Kegiatan seputar HIPMI Jawa Barat</p>
     </section>
+    
     <section class="search-katalog">
         <form action="{{ route('berita') }}" method="GET" class="search-box">
             <input type="text" name="search" placeholder="Cari berita ..." value="{{ $search ?? '' }}">
@@ -18,7 +40,7 @@
     <section class="berita">
         <div class="berita-left">
             {{-- Berita Utama --}}
-            @if($beritaUtama)
+            @if(isset($beritaUtama) && $beritaUtama)
             <div class="berita-item">
                 <a href="{{ route('berita-detail', $beritaUtama->slug) }}" class="berita-item-image">
                     <img src="{{ $beritaUtama->gambar_url }}" alt="{{ $beritaUtama->judul }}">
@@ -27,7 +49,6 @@
                     <div>
                         <h3>{{ $beritaUtama->judul }}</h3>
                         <p class="berita-home-date">{{ $beritaUtama->tanggal_format }}</p>
-
                         <p>{{ Str::limit(strip_tags($beritaUtama->konten), 150, '...') }}</p>
                     </div>
                     <a href="{{ route('berita-detail', $beritaUtama->slug) }}" class="berita-home-others-btn-more">Baca Selengkapnya</a>
@@ -45,19 +66,18 @@
                     <div>
                         <h3>{{ $berita->judul }}</h3>
                         <p class="berita-home-date">{{ $berita->tanggal_format }}</p>
-
                         <p>{{ Str::limit(strip_tags($berita->konten), 150, '...') }}</p>
                     </div>
                     <a href="{{ route('berita-detail', $berita->slug) }}" class="berita-home-others-btn-more">Baca Selengkapnya</a>
                 </div>
             </div>
             @empty
-            @if(!$beritaUtama)
-            <div style="text-align: center; padding: 3rem; color: #9ca3af;">
-                <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">Belum Ada Berita</p>
-                <p>Berita akan segera ditampilkan di sini</p>
-            </div>
-            @endif
+                @if(!isset($beritaUtama) || !$beritaUtama)
+                <div style="text-align: center; padding: 3rem; color: #9ca3af;">
+                    <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">Belum Ada Berita</p>
+                    <p>Berita akan segera ditampilkan di sini</p>
+                </div>
+                @endif
             @endforelse
 
             {{-- Pagination --}}
@@ -80,7 +100,6 @@
                     <div>
                         <h3>{{ $populer->judul }}</h3>
                         <p class="berita-home-date">{{ $populer->tanggal_format }}</p>
-
                         <p>{{ Str::limit(strip_tags($populer->konten), 100, '...') }}</p>
                     </div>
                 </div>
@@ -100,7 +119,6 @@
                     <div>
                         <h3>{{ $terbaru->judul }}</h3>
                         <p class="berita-home-date">{{ $terbaru->tanggal_format }}</p>
-
                         <p>{{ Str::limit(strip_tags($terbaru->konten), 100, '...') }}</p>
                     </div>
                 </div>

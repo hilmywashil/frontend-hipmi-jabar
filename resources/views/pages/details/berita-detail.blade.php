@@ -2,6 +2,27 @@
 
 @section('title', $berita->judul . ' - Berita HIPMI Jawa Barat')
 
+@push('styles')
+<style>
+    /* Fix text overflow */
+    .detail-berita-content p,
+    .page-banner h1,
+    .berita-detail-right-item-content h3,
+    .berita-detail-right-item-content p {
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+    
+    .detail-berita-content,
+    .berita-detail-right-item-content {
+        max-width: 100%;
+        overflow: hidden;
+    }
+</style>
+@endpush
+
 @section('content')
 
     <section class="page-banner">
@@ -27,7 +48,6 @@
                     <div>
                         <h3>{{ $populer->judul }}</h3>
                         <p class="berita-home-date">{{ $populer->tanggal_format }}</p>
-
                         <p>{{ Str::limit(strip_tags($populer->konten), 100, '...') }}</p>
                     </div>
                 </div>
@@ -47,7 +67,6 @@
                     <div>
                         <h3>{{ $terbaru->judul }}</h3>
                         <p class="berita-home-date">{{ $terbaru->tanggal_format }}</p>
-
                         <p>{{ Str::limit(strip_tags($terbaru->konten), 100, '...') }}</p>
                     </div>
                 </div>

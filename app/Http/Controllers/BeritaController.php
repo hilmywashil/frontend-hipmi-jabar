@@ -11,17 +11,17 @@ class BeritaController extends Controller
     {
         $search = $request->get('search');
 
-        $query = Berita::active()->latestPublish();
-
+        // Berita utama (paling baru)
+        $beritaUtamaQuery = Berita::active()->latestPublish();
+        
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $beritaUtamaQuery->where(function($q) use ($search) {
                 $q->where('judul', 'like', '%' . $search . '%')
                   ->orWhere('konten', 'like', '%' . $search . '%');
             });
         }
-
-        // Berita utama (paling baru)
-        $beritaUtama = $query->first();
+        
+        $beritaUtama = $beritaUtamaQuery->first();
 
         // Berita lainnya (skip berita utama)
         $beritas = Berita::active()
