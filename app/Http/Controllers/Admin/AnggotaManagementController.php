@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Anggota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Admin;
 
 class AnggotaManagementController extends Controller
 {
@@ -288,5 +290,68 @@ class AnggotaManagementController extends Controller
         
         return redirect()->route('admin.anggota.index')
             ->with('success', 'Data anggota berhasil dihapus!');
+    }
+    // NEW METHOD: Promote anggota menjadi admin (hanya Super Admin)
+    public function promoteToAdmin(Anggota $anggota)
+    {
+        $admin = auth()->guard('admin')->user();
+        
+        // Hanya Super Admin yang bisa promote
+        if (!$admin->isSuperAdmin()) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+        
+        // Anggota harus sudah approved
+        if ($anggota->status !== 'approved') {
+            return redirect()->back()->with('error', 'Hanya anggota yang sudah disetujui yang bisa dipromosikan menjadi admin.');
+        }
+        
+        // List domisili untuk dropdown
+        $domisiliList = Admin::where('category', 'bpc')
+            ->whereNotNull('domisili')
+            ->orderBy('domisili')
+            ->pluck('domisili')
+            ->unique()
+            ->values();
+        
+        return view('admin.anggota.promote', compact('anggota', 'domisiliList'));
+    }
+
+    // NEW METHOD: Store promoted admin
+    public function storePromotedAdmin(Request $request, Anggota $anggota)
+    {
+        $admin = auth()->guard('admin')->user();
+        
+        // Hanya Super Admin yang bisa promote
+        if (!$admin->isSuperAdmin()) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+        
+        // Anggota harus sudah approved
+        if ($anggota->status !== 'approved') {
+            return redirect()->back()->with('error', 'Hanya anggota yang sudah disetujui yang bisa dipromosikan menjadi admin.');
+        }
+        
+        $validated = $request->validate([
+            'username' => 'required|string|max:255|unique:admins',
+            'password' => 'required|string|min:8|confirmed',
+            'category' => 'required|in:bpc,bpd',
+            'domisili' => 'required_if:category,bpc|nullable|string|max:255',
+        ], [
+            'domisili.required_if' => 'Domisili wajib diisi untuk BPC.',
+        ]);
+
+        // Create admin dari data anggota
+        Admin::create([
+            'name' => $anggota->nama_usaha,
+            'username' => $validated['username'],
+            'email' => $anggota->email,
+            'password' => Hash::make($validated['password']),
+            'category' => $validated['category'],
+            'domisili' => $validated['category'] === 'bpc' ? $validated['domisili'] : null,
+        ]);
+
+        return redirect()->route('admin.anggota.list')
+            ->with('success', "Anggota {$anggota->nama_usaha} berhasil dipromosikan menjadi admin!");
     }
 }

@@ -70,16 +70,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('berita/{id}', [AdminBeritaController::class, 'destroy'])->name('berita.destroy');
 
         // Anggota Management
-        Route::prefix('anggota')->name('anggota.')->group(function () {
-            Route::get('/', [AnggotaManagementController::class, 'index'])->name('index');
-            Route::get('/{anggota}', [AnggotaManagementController::class, 'show'])->name('show');
-            Route::post('/{anggota}/approve', [AnggotaManagementController::class, 'approve'])->name('approve');
-            Route::post('/{anggota}/reject', [AnggotaManagementController::class, 'reject'])->name('reject');
-            Route::delete('/{anggota}', [AnggotaManagementController::class, 'destroy'])->name('anggota.destroy');
-            Route::get('/list/all', [AnggotaManagementController::class, 'listAll'])->name('list');
-            Route::get('/list/{anggota}/detail', [AnggotaManagementController::class, 'showReadOnly'])->name('show-readonly');
-        });
-
+Route::prefix('anggota')->name('anggota.')->group(function () {
+    Route::get('/', [AnggotaManagementController::class, 'index'])->name('index');
+    Route::get('/list', [AnggotaManagementController::class, 'listAll'])->name('list');
+    Route::get('/{anggota}', [AnggotaManagementController::class, 'show'])->name('show');
+    Route::get('/{anggota}/readonly', [AnggotaManagementController::class, 'showReadOnly'])->name('show-readonly');
+    Route::post('/{anggota}/approve', [AnggotaManagementController::class, 'approve'])->name('approve');
+    Route::post('/{anggota}/reject', [AnggotaManagementController::class, 'reject'])->name('reject');
+    Route::delete('/{anggota}', [AnggotaManagementController::class, 'destroy'])->name('destroy');
+    
+    // ✨ NEW: Routes untuk promote (hanya Super Admin) - FIXED
+    Route::get('/{anggota}/promote', [AnggotaManagementController::class, 'promoteToAdmin'])->name('promote');
+    Route::post('/{anggota}/promote', [AnggotaManagementController::class, 'storePromotedAdmin'])->name('promote.store');
+});
         // UMKM Management
         Route::prefix('umkm-management')->name('umkm.')->group(function () {
             Route::get('/', [UmkmManagementController::class, 'index'])->name('index');

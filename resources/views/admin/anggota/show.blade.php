@@ -114,6 +114,15 @@
             background: #059669;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
+        .btn-promote {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-promote:hover {
+    background: #1e40af;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
 
         .btn-reject {
             background: #ef4444;
@@ -488,29 +497,56 @@
                     </div>
                 </div>
                 <div class="detail-actions">
-                    <a href="{{ route('admin.anggota.index') }}" class="btn btn-back">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M19 12H5M12 19l-7-7 7-7" />
-                        </svg>
-                        Kembali
-                    </a>
+    <a href="{{ route('admin.anggota.index') }}" class="btn btn-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Kembali
+    </a>
 
-                    @if($admin->category === 'bpc' && $anggota->status === 'pending')
-                        <button onclick="showApproveModal()" class="btn btn-approve">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Setujui
-                        </button>
-                        <button onclick="showRejectModal()" class="btn btn-reject">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <line x1="18" y1="6" x2="6" y2="18" />
-                                <line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                            Tolak
-                        </button>
-                    @endif
-                </div>
+    @if($admin->isSuperAdmin() && $anggota->status === 'approved')
+        <a href="{{ route('admin.anggota.promote', $anggota) }}" class="btn btn-promote">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="8.5" cy="7" r="4" />
+                <polyline points="17 11 19 13 23 9" />
+            </svg>
+            Promosikan ke Admin
+        </a>
+    @endif
+
+    @if($admin->category === 'bpc' && $anggota->status === 'pending')
+        <button onclick="showApproveModal()" class="btn btn-approve">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Setujui
+        </button>
+        <button onclick="showRejectModal()" class="btn btn-reject">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Tolak
+        </button>
+    @endif
+
+    @if($admin->isSuperAdmin() && $anggota->status === 'pending')
+        <button onclick="showApproveModal()" class="btn btn-approve">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Setujui
+        </button>
+        <button onclick="showRejectModal()" class="btn btn-reject">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Tolak
+        </button>
+    @endif
+</div>
             </div>
         </div>
 

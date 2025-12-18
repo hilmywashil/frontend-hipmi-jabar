@@ -277,6 +277,18 @@
             fill: none;
             stroke-width: 2;
         }
+        .btn-icon-promote {
+    border-color: #2563eb;
+}
+
+.btn-icon-promote:hover {
+    background: #eff6ff;
+    border-color: #1e40af;
+}
+
+.btn-icon-promote svg {
+    stroke: #2563eb;
+}
 
         /* Pagination Style */
        /* Pagination Style - GANTI SEMUA */
@@ -629,17 +641,29 @@
                                 </td>
                                 <td>{{ $item->created_at->format('d M Y') }}</td>
                                 <td>
-                                    <div class="action-buttons">
-                                        <a href="{{ route('admin.anggota.show-readonly', $item) }}" 
-                                           class="btn-icon" 
-                                           title="Lihat Detail">
-                                            <svg viewBox="0 0 24 24">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </td>
+    <div class="action-buttons">
+        <a href="{{ route('admin.anggota.show-readonly', $item) }}" 
+           class="btn-icon" 
+           title="Lihat Detail">
+            <svg viewBox="0 0 24 24">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+        </a>
+        
+        @if($admin->isSuperAdmin() && $item->status === 'approved')
+            <a href="{{ route('admin.anggota.promote', $item) }}" 
+               class="btn-icon btn-icon-promote" 
+               title="Promosikan ke Admin">
+                <svg viewBox="0 0 24 24">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="8.5" cy="7" r="4" />
+                    <polyline points="17 11 19 13 23 9" />
+                </svg>
+            </a>
+        @endif
+    </div>
+</td>
                             </tr>
                         @endforeach
                     </tbody>

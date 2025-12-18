@@ -101,12 +101,25 @@
     .profile-category {
         display: inline-block;
         padding: 0.375rem 1rem;
-        background: #fef3c7;
-        color: #92400e;
         border-radius: 20px;
         font-size: 0.875rem;
         font-weight: 600;
         margin-top: 0.5rem;
+    }
+
+    .profile-category.super-admin {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
+    }
+
+    .profile-category.bpc {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .profile-category.bpd {
+        background: #dbeafe;
+        color: #1e40af;
     }
 
     .profile-photo-actions {
@@ -354,7 +367,6 @@
         flex-shrink: 0;
     }
 
-    /* Photo Upload Modal */
     .photo-modal {
         display: none;
         position: fixed;
@@ -473,7 +485,15 @@
                     </label>
                 </div>
                 <h2 class="profile-name">{{ $admin->name }}</h2>
-                <span class="profile-category">{{ $admin->isBPC() ? 'BPC' : 'BPD' }}</span>
+                <span class="profile-category {{ $admin->category }}">
+                    @if($admin->isSuperAdmin())
+                        Super Admin
+                    @elseif($admin->isBPC())
+                        BPC
+                    @else
+                        BPD
+                    @endif
+                </span>
 
                 @if($admin->photo)
                 <div class="profile-photo-actions">
@@ -511,6 +531,19 @@
                         <div class="profile-info-value">{{ $admin->email }}</div>
                     </div>
                 </div>
+
+                @if($admin->domisili)
+                <div class="profile-info-item">
+                    <svg class="profile-info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <div class="profile-info-content">
+                        <div class="profile-info-label">Domisili</div>
+                        <div class="profile-info-value">{{ $admin->domisili }}</div>
+                    </div>
+                </div>
+                @endif
 
                 <div class="profile-info-item">
                     <svg class="profile-info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -565,9 +598,22 @@
                         @enderror
                     </div>
 
+                    @if($admin->isBPC())
+                    <div class="form-group">
+                        <label class="form-label form-label-required">Domisili</label>
+                        <input type="text" name="domisili" class="form-input" value="{{ old('domisili', $admin->domisili) }}" required>
+                        <small style="color: #6b7280; font-size: 0.8125rem; margin-top: 0.25rem; display: block;">Wilayah kerja BPC Anda</small>
+                        @error('domisili')
+                            <div class="form-error">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    @endif
+
                     <div class="form-group">
                         <label class="form-label">Kategori</label>
-                        <input type="text" class="form-input" value="{{ $admin->isBPC() ? 'BPC (Badan Pengurus Cabang)' : 'BPD (Badan Pengurus Daerah)' }}" disabled>
+                        <input type="text" class="form-input" 
+                               value="{{ $admin->isSuperAdmin() ? 'Super Admin' : ($admin->isBPC() ? 'BPC (Badan Pengurus Cabang)' : 'BPD (Badan Pengurus Daerah)') }}" 
+                               disabled>
                     </div>
 
                     <div class="form-actions">
@@ -662,7 +708,6 @@
     photoInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
-            // Validate file type
             const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
             if (!allowedTypes.includes(file.type)) {
                 alert('Format foto harus jpeg, png, atau jpg.');
@@ -670,7 +715,6 @@
                 return;
             }
 
-            // Validate file size (2MB)
             if (file.size > 2048000) {
                 alert('Ukuran foto maksimal 2MB.');
                 photoInput.value = '';
@@ -697,21 +741,18 @@
         uploadBtn.disabled = true;
     }
 
-    // Close modal when clicking outside
     photoModal.addEventListener('click', function(e) {
         if (e.target === photoModal) {
             closePhotoModal();
         }
     });
 
-    // Close modal with ESC key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && photoModal.classList.contains('active')) {
             closePhotoModal();
         }
     });
 
-    // Show errors if exists
     @error('photo')
         photoModal.classList.add('active');
     @enderror
