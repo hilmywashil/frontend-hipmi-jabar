@@ -73,7 +73,7 @@
                         value="{{ request('search') }}">
                 </div>
 
-                <select name="status" class="filter-select" onchange="this.form.submit()">
+                <select name="status" class="filter-select">
                     <option value="">Semua Status</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
                     <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Disetujui</option>
@@ -106,14 +106,14 @@
         <div class="card-header">
             <h3>Daftar UMKM</h3>
             <div class="card-actions">
-                <button class="btn-secondary">
+                <a href="{{ route('admin.umkm.export', request()->query()) }}" class="btn-secondary">
                     <svg viewBox="0 0 24 24">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                         <polyline points="7 10 12 15 17 10" />
                         <line x1="12" y1="15" x2="12" y2="3" />
                     </svg>
                     Export Data
-                </button>
+                </a>
             </div>
         </div>
 
@@ -122,41 +122,40 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th width="50">No</th>
                         <th>Nama Usaha</th>
                         <th>Pemilik</th>
                         <th>Bidang Usaha</th>
                         <th>Kontak</th>
-                        <th>Tanggal Daftar</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <th width="120">Tanggal Daftar</th>
+                        <th width="100">Status</th>
+                        <th width="150">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($umkms as $index => $umkm)
                     <tr>
-                        <td>{{ $umkms->firstItem() + $index }}</td>
+                        <td class="text-center">{{ $umkms->firstItem() + $index }}</td>
                         <td>
-                            <div class="table-user">
-                                <div class="table-user-avatar" style="background: #3B82F6;">
-                                    {{ strtoupper(substr($umkm->nama_usaha, 0, 2)) }}
-                                </div>
-                                <div>
-                                    <div class="table-user-name">{{ $umkm->nama_usaha }}</div>
-                                    <div class="table-user-email">{{ $umkm->tahun_berdiri }}</div>
-                                </div>
+                            <div class="business-info">
+                                <div class="business-name">{{ $umkm->nama_usaha }}</div>
+                                <div class="business-year">Sejak {{ $umkm->tahun_berdiri }}</div>
                             </div>
                         </td>
                         <td>
-                            <div>{{ $umkm->nama_lengkap }}</div>
-                            <div class="text-muted">{{ $umkm->jenis_kelamin }}</div>
+                            <div class="owner-info">
+                                <div class="owner-name">{{ $umkm->nama_lengkap }}</div>
+                                <div class="owner-gender">{{ $umkm->jenis_kelamin }}</div>
+                            </div>
                         </td>
                         <td>
                             <span class="badge badge-info">{{ $umkm->bidang_usaha }}</span>
                         </td>
                         <td>
-                            <div class="text-sm">{{ $umkm->nomor_hp }}</div>
-                            <div class="text-muted text-xs">{{ $umkm->email }}</div>
+                            <div class="contact-info">
+                                <div class="contact-phone">{{ $umkm->nomor_hp }}</div>
+                                <div class="contact-email">{{ $umkm->email }}</div>
+                            </div>
                         </td>
                         <td>{{ $umkm->created_at->format('d M Y') }}</td>
                         <td>
@@ -170,8 +169,7 @@
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="{{ route('admin.umkm.show', $umkm->id) }}" class="btn-icon"
-                                    title="Lihat Detail">
+                                <a href="{{ route('admin.umkm.show', $umkm->id) }}" class="btn-icon btn-view" title="Lihat Detail">
                                     <svg viewBox="0 0 24 24">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                         <circle cx="12" cy="12" r="3" />
@@ -179,10 +177,9 @@
                                 </a>
 
                                 @if($umkm->status === 'pending')
-                                <form action="{{ route('admin.umkm.approve', $umkm->id) }}" method="POST"
-                                    style="display: inline;">
+                                <form action="{{ route('admin.umkm.approve', $umkm->id) }}" method="POST" style="display: inline;">
                                     @csrf
-                                    <button type="submit" class="btn-icon btn-success" title="Setujui"
+                                    <button type="submit" class="btn-icon btn-approve" title="Setujui"
                                         onclick="return confirm('Setujui UMKM ini?')">
                                         <svg viewBox="0 0 24 24">
                                             <polyline points="20 6 9 17 4 12" />
@@ -190,7 +187,7 @@
                                     </button>
                                 </form>
 
-                                <button type="button" class="btn-icon btn-danger" title="Tolak"
+                                <button type="button" class="btn-icon btn-reject" title="Tolak"
                                     onclick="showRejectModal({{ $umkm->id }})">
                                     <svg viewBox="0 0 24 24">
                                         <line x1="18" y1="6" x2="6" y2="18" />
@@ -199,16 +196,14 @@
                                 </button>
                                 @endif
 
-                                <form action="{{ route('admin.umkm.destroy', $umkm->id) }}" method="POST"
-                                    style="display: inline;">
+                                <form action="{{ route('admin.umkm.destroy', $umkm->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-icon btn-danger" title="Hapus"
+                                    <button type="submit" class="btn-icon btn-delete" title="Hapus"
                                         onclick="return confirm('Yakin ingin menghapus data UMKM ini?')">
                                         <svg viewBox="0 0 24 24">
                                             <polyline points="3 6 5 6 21 6" />
-                                            <path
-                                                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                                         </svg>
                                     </button>
                                 </form>
@@ -271,6 +266,7 @@
         padding: 2rem;
     }
 
+    /* Stats Grid */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -295,6 +291,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
 
     .stat-icon svg {
@@ -315,6 +312,7 @@
         color: #6b7280;
     }
 
+    /* Content Card */
     .content-card {
         background: white;
         border-radius: 12px;
@@ -338,6 +336,7 @@
         color: #0a2540;
     }
 
+    /* Filter */
     .filter-form {
         display: flex;
         gap: 1rem;
@@ -384,6 +383,7 @@
         min-width: 180px;
     }
 
+    /* Buttons */
     .btn-primary,
     .btn-secondary,
     .btn-danger {
@@ -397,6 +397,7 @@
         border: none;
         cursor: pointer;
         transition: all 0.2s;
+        text-decoration: none;
     }
 
     .btn-primary {
@@ -414,6 +415,18 @@
         color: white;
     }
 
+    .btn-primary:hover {
+        background: #051628;
+    }
+
+    .btn-secondary:hover {
+        background: #e5e7eb;
+    }
+
+    .btn-danger:hover {
+        background: #dc2626;
+    }
+
     .btn-primary svg,
     .btn-secondary svg,
     .btn-danger svg {
@@ -424,6 +437,7 @@
         stroke-width: 2;
     }
 
+    /* Table */
     .table-responsive {
         overflow-x: auto;
     }
@@ -442,48 +456,79 @@
         text-transform: uppercase;
         color: #6b7280;
         border-bottom: 2px solid #e5e7eb;
+        white-space: nowrap;
     }
 
     .data-table td {
         padding: 1rem;
         border-bottom: 1px solid #e5e7eb;
+        vertical-align: top;
     }
 
-    .table-user {
+    .data-table tr:hover {
+        background: #f9fafb;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    /* Business Info - Clean & Simple */
+    .business-info {
         display: flex;
-        align-items: center;
-        gap: 0.75rem;
+        flex-direction: column;
+        gap: 0.25rem;
     }
 
-    .table-user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 0.875rem;
-        flex-shrink: 0;
-    }
-
-    .table-user-name {
+    .business-name {
         font-weight: 600;
         color: #0a2540;
+        font-size: 0.9375rem;
     }
 
-    .table-user-email {
+    .business-year {
         font-size: 0.75rem;
         color: #6b7280;
     }
 
+    /* Owner Info */
+    .owner-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .owner-name {
+        font-weight: 500;
+        color: #0a2540;
+    }
+
+    .owner-gender {
+        font-size: 0.75rem;
+        color: #6b7280;
+    }
+
+    /* Contact Info */
+    .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .contact-phone,
+    .contact-email {
+        font-size: 0.8125rem;
+        color: #374151;
+    }
+
+    /* Badge */
     .badge {
         display: inline-block;
-        padding: 0.25rem 0.75rem;
+        padding: 0.375rem 0.875rem;
         border-radius: 9999px;
         font-size: 0.75rem;
         font-weight: 600;
+        white-space: nowrap;
     }
 
     .badge-warning {
@@ -506,14 +551,16 @@
         color: #1e40af;
     }
 
+    /* Action Buttons */
     .action-buttons {
         display: flex;
         gap: 0.5rem;
+        flex-wrap: nowrap;
     }
 
     .btn-icon {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -521,37 +568,65 @@
         border: none;
         cursor: pointer;
         transition: all 0.2s;
-        background: #f3f4f6;
+        flex-shrink: 0;
     }
 
     .btn-icon svg {
-        width: 18px;
-        height: 18px;
-        stroke: #374151;
-        fill: none;
+        width: 16px;
+        height: 16px;
         stroke-width: 2;
+        fill: none;
     }
 
-    .btn-icon:hover {
-        background: #e5e7eb;
+    .btn-view {
+        background: #e0e7ff;
     }
 
-    .btn-icon.btn-success {
+    .btn-view svg {
+        stroke: #4f46e5;
+    }
+
+    .btn-view:hover {
+        background: #c7d2fe;
+    }
+
+    .btn-approve {
         background: #d1fae5;
     }
 
-    .btn-icon.btn-success svg {
+    .btn-approve svg {
         stroke: #10b981;
     }
 
-    .btn-icon.btn-danger {
+    .btn-approve:hover {
+        background: #a7f3d0;
+    }
+
+    .btn-reject {
+        background: #fef3c7;
+    }
+
+    .btn-reject svg {
+        stroke: #f59e0b;
+    }
+
+    .btn-reject:hover {
+        background: #fde68a;
+    }
+
+    .btn-delete {
         background: #fee2e2;
     }
 
-    .btn-icon.btn-danger svg {
+    .btn-delete svg {
         stroke: #ef4444;
     }
 
+    .btn-delete:hover {
+        background: #fecaca;
+    }
+
+    /* Empty State */
     .empty-state {
         text-align: center;
         padding: 4rem 2rem;
@@ -577,6 +652,7 @@
         color: #6b7280;
     }
 
+    /* Modal */
     .modal {
         display: none;
         position: fixed;
@@ -673,17 +749,11 @@
         color: #ef4444;
     }
 
-    .text-muted {
-        color: #6b7280;
-        font-size: 0.875rem;
-    }
-
-    .text-sm {
-        font-size: 0.875rem;
-    }
-
-    .text-xs {
-        font-size: 0.75rem;
+    /* Pagination */
+    .pagination-wrapper {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: center;
     }
 </style>
 @endpush

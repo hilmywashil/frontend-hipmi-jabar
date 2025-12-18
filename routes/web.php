@@ -82,6 +82,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // UMKM Management
         Route::prefix('umkm-management')->name('umkm.')->group(function () {
             Route::get('/', [UmkmManagementController::class, 'index'])->name('index');
+            Route::get('/export', [UmkmManagementController::class, 'export'])->name('export'); // ← TAMBAHKAN INI
             Route::get('/{umkm}', [UmkmManagementController::class, 'show'])->name('show');
             Route::post('/{umkm}/approve', [UmkmManagementController::class, 'approve'])->name('approve');
             Route::post('/{umkm}/reject', [UmkmManagementController::class, 'reject'])->name('reject');

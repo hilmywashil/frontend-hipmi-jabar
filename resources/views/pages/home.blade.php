@@ -35,7 +35,7 @@
     </div>
     <div class="info-card">
         <img src="{{ asset('images/icons/folder.png') }}" alt="Klasifikasi Usaha" class="icon">
-        <h2><span class="counter" data-target="1">0</span></h2>
+        <h2><span class="counter" data-target="{{ $totalUmkm }}">0</span></h2>
         <h3>Klasifikasi Usaha</h3>
     </div>
 </section>

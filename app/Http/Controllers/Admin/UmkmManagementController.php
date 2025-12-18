@@ -103,11 +103,106 @@ class UmkmManagementController extends Controller
     }
 
     /**
-     * Export UMKM data to Excel/CSV
+     * Export UMKM data to CSV
      */
     public function export(Request $request)
     {
-        // Implementation for export functionality
-        // You can use Laravel Excel package for this
+        $query = Umkm::query();
+
+        // Apply same filters as index page
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_usaha', 'like', "%{$search}%")
+                  ->orWhere('nama_lengkap', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('nomor_hp', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $umkms = $query->orderBy('created_at', 'desc')->get();
+
+        // Set filename dengan timestamp
+        $filename = 'umkm_export_' . date('Y-m-d_His') . '.csv';
+        
+        // Headers untuk CSV download
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ];
+
+        $callback = function() use ($umkms) {
+            $file = fopen('php://output', 'w');
+            
+            // Add BOM untuk proper UTF-8 encoding di Excel
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // CSV Headers
+            fputcsv($file, [
+                'No',
+                'Nama Usaha',
+                'Bidang Usaha',
+                'Status Legalitas',
+                'Jenis Legalitas',
+                'Tahun Berdiri',
+                'Nama Lengkap Pemilik',
+                'Jenis Kelamin',
+                'Tanggal Lahir',
+                'Nomor HP',
+                'Email',
+                'Alamat Domisili',
+                'Platform Digital',
+                'Platform',
+                'Pendapatan',
+                'Pembiayaan',
+                'Sumber Pembiayaan',
+                'Tujuan',
+                'Pelatihan',
+                'Status Verifikasi',
+                'Alasan Penolakan',
+                'Tanggal Daftar',
+                'Tanggal Verifikasi'
+            ]);
+
+            // CSV Data
+            foreach ($umkms as $index => $umkm) {
+                fputcsv($file, [
+                    $index + 1,
+                    $umkm->nama_usaha,
+                    $umkm->bidang_usaha,
+                    $umkm->status_legalitas ?? '-',
+                    $umkm->jenis_legalitas ?? '-',
+                    $umkm->tahun_berdiri,
+                    $umkm->nama_lengkap,
+                    $umkm->jenis_kelamin,
+                    $umkm->tanggal_lahir ? date('d-m-Y', strtotime($umkm->tanggal_lahir)) : '-',
+                    $umkm->nomor_hp,
+                    $umkm->email,
+                    $umkm->alamat_domisili,
+                    $umkm->platform_digital ?? '-',
+                    is_array($umkm->platform) ? implode(', ', $umkm->platform) : $umkm->platform,
+                    $umkm->pendapatan ?? '-',
+                    $umkm->pembiayaan ?? '-',
+                    $umkm->sumber_pembiayaan ?? '-',
+                    $umkm->tujuan ?? '-',
+                    $umkm->pelatihan ?? '-',
+                    ucfirst($umkm->status),
+                    $umkm->rejection_reason ?? '-',
+                    $umkm->created_at->format('d-m-Y H:i:s'),
+                    $umkm->verified_at ? $umkm->verified_at->format('d-m-Y H:i:s') : '-'
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

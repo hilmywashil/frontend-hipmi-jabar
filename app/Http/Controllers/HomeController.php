@@ -6,6 +6,7 @@ use App\Models\Katalog;
 use App\Models\Misi;
 use App\Models\Anggota;
 use App\Models\Berita;
+use App\Models\Umkm;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -36,6 +37,9 @@ class HomeController extends Controller
             ->take(10)
             ->get();
 
+        // Hitung jumlah UMKM yang sudah di-approve
+        $totalUmkm = Umkm::where('status', 'approved')->count();
+
         // Ambil berita untuk section "Informasi Kegiatan BPD" (5 berita terbaru)
         $kegiatanBerita = Berita::active()
             ->latestPublish()
@@ -56,6 +60,7 @@ class HomeController extends Controller
             'misi', 
             'totalAnggota', 
             'anggotaList',
+            'totalUmkm',
             'kegiatanBerita',
             'dokumentasiBerita'
         ));
