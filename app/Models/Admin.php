@@ -33,6 +33,11 @@ class Admin extends Authenticatable
         ];
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->category === 'super_admin';
+    }
+
     public function isBPC(): bool
     {
         return $this->category === 'bpc';
@@ -43,16 +48,24 @@ class Admin extends Authenticatable
         return $this->category === 'bpd';
     }
 
-    
+    public function canManageAdmins(): bool
+    {
+        return $this->isSuperAdmin();
+    }
+
+    public function canManageContent(): bool
+    {
+        return $this->isSuperAdmin() || $this->isBPD();
+    }
+
     public function canApproveAnggota(): bool
     {
         return $this->category === 'bpc';
     }
 
-    
     public function canApproveAnggotaByDomisili($domisili): bool
     {
-        if ($this->category === 'bpd') {
+        if ($this->category === 'bpd' || $this->category === 'super_admin') {
             return false; 
         }
         
@@ -73,7 +86,6 @@ class Admin extends Authenticatable
         return strtoupper(substr($this->name, 0, 2));
     }
 
-    
     public function approvedAnggotas()
     {
         return $this->hasMany(Anggota::class, 'approved_by');

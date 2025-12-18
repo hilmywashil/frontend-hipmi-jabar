@@ -41,17 +41,18 @@ class AdminDashboardController extends Controller
             ));
         }
         
-        // Dashboard untuk BPD (kelola seluruh web)
+        // Dashboard untuk BPD & Super Admin (kelola seluruh web)
         $totalAdmins = Admin::count();
         $adminsBPC = Admin::where('category', 'bpc')->count();
         $adminsBPD = Admin::where('category', 'bpd')->count();
+        $adminsSuperAdmin = Admin::where('category', 'super_admin')->count();
         $recentAdmins = Admin::latest()->take(5)->get();
         
         $totalKatalog = Katalog::where('is_active', true)->count();
         $totalKatalogInactive = Katalog::where('is_active', false)->count();
         $recentKatalogs = Katalog::where('is_active', true)->latest()->take(5)->get();
         
-        // Statistik Anggota untuk BPD (dari semua domisili)
+        // Statistik Anggota untuk BPD/Super Admin (dari semua domisili)
         $totalAnggotaApproved = Anggota::where('status', 'approved')->count();
         $totalAnggotaPending = Anggota::where('status', 'pending')->count();
         $totalAnggotaRejected = Anggota::where('status', 'rejected')->count();
@@ -60,7 +61,7 @@ class AdminDashboardController extends Controller
         // 5 Anggota terbaru dari SEMUA domisili
         $recentAnggota = Anggota::latest()->take(5)->get();
         
-        // Struktur Organisasi HIPMI (tetap pakai model Organisasi)
+        // Struktur Organisasi HIPMI
         $totalOrganisasi = Organisasi::where('aktif', true)->count();
         $organisasiByKategori = [
             'ketua_umum' => Organisasi::aktif()->kategori('ketua_umum')->count(),
@@ -89,6 +90,7 @@ class AdminDashboardController extends Controller
             'totalAdmins',
             'adminsBPC',
             'adminsBPD',
+            'adminsSuperAdmin',
             'recentAdmins',
             'totalKatalog',
             'totalKatalogInactive',
@@ -117,7 +119,8 @@ class AdminDashboardController extends Controller
     {
         $admin = Auth::guard('admin')->user();
         
-        if ($admin->category !== 'bpd') {
+        // Hanya Super Admin yang bisa akses
+        if (!$admin->canManageAdmins()) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         
@@ -130,7 +133,8 @@ class AdminDashboardController extends Controller
     {
         $admin = Auth::guard('admin')->user();
         
-        if ($admin->category !== 'bpd') {
+        // Hanya Super Admin yang bisa akses
+        if (!$admin->canManageAdmins()) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         
@@ -172,7 +176,8 @@ class AdminDashboardController extends Controller
     {
         $admin = Auth::guard('admin')->user();
         
-        if ($admin->category !== 'bpd') {
+        // Hanya Super Admin yang bisa akses
+        if (!$admin->canManageAdmins()) {
             abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
         }
         
@@ -181,7 +186,7 @@ class AdminDashboardController extends Controller
             'username' => 'required|string|max:255|unique:admins',
             'email' => 'required|string|email|max:255|unique:admins',
             'password' => 'required|string|min:8|confirmed',
-            'category' => 'required|in:bpc,bpd',
+            'category' => 'required|in:bpc,bpd,super_admin',
             'domisili' => 'required_if:category,bpc|nullable|string|max:255',
         ], [
             'domisili.required_if' => 'Domisili wajib diisi untuk BPC.',
@@ -203,7 +208,8 @@ class AdminDashboardController extends Controller
     {
         $currentAdmin = Auth::guard('admin')->user();
         
-        if ($currentAdmin->category !== 'bpd') {
+        // Hanya Super Admin yang bisa akses
+        if (!$currentAdmin->canManageAdmins()) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         
@@ -244,7 +250,8 @@ class AdminDashboardController extends Controller
     {
         $currentAdmin = Auth::guard('admin')->user();
         
-        if ($currentAdmin->category !== 'bpd') {
+        // Hanya Super Admin yang bisa akses
+        if (!$currentAdmin->canManageAdmins()) {
             abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
         }
         
@@ -253,7 +260,7 @@ class AdminDashboardController extends Controller
             'username' => 'required|string|max:255|unique:admins,username,' . $admin->id,
             'email' => 'required|string|email|max:255|unique:admins,email,' . $admin->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'category' => 'required|in:bpc,bpd',
+            'category' => 'required|in:bpc,bpd,super_admin',
             'domisili' => 'required_if:category,bpc|nullable|string|max:255',
         ], [
             'domisili.required_if' => 'Domisili wajib diisi untuk BPC.',
@@ -278,8 +285,14 @@ class AdminDashboardController extends Controller
     {
         $currentAdmin = Auth::guard('admin')->user();
         
-        if ($currentAdmin->category !== 'bpd') {
+        // Hanya Super Admin yang bisa akses
+        if (!$currentAdmin->canManageAdmins()) {
             abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+        
+        // Prevent deleting self
+        if ($admin->id === $currentAdmin->id) {
+            return redirect()->route('admin.info-admin')->with('error', 'Anda tidak bisa menghapus akun Anda sendiri!');
         }
         
         $admin->delete();

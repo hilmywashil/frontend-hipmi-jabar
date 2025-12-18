@@ -18,7 +18,37 @@ class AnggotaManagementController extends Controller
         
         $query = Anggota::query();
         
-        if ($admin->category === 'bpc') {
+        // TAMBAHKAN HANDLER UNTUK SUPER_ADMIN
+        if ($admin->category === 'super_admin') {
+            // Super Admin bisa lihat semua anggota dengan filter domisili
+            if ($domisili !== 'all') {
+                $query->where('domisili', $domisili);
+            }
+            
+            if ($domisili === 'all') {
+                $stats = [
+                    'total' => Anggota::count(),
+                    'pending' => Anggota::where('status', 'pending')->count(),
+                    'approved' => Anggota::where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('status', 'rejected')->count(),
+                ];
+            } else {
+                $stats = [
+                    'total' => Anggota::where('domisili', $domisili)->count(),
+                    'pending' => Anggota::where('domisili', $domisili)->where('status', 'pending')->count(),
+                    'approved' => Anggota::where('domisili', $domisili)->where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('domisili', $domisili)->where('status', 'rejected')->count(),
+                ];
+            }
+            
+            $domisiliList = \App\Models\Admin::where('category', 'bpc')
+                ->whereNotNull('domisili')
+                ->orderBy('domisili')
+                ->pluck('domisili')
+                ->unique()
+                ->values();
+                
+        } elseif ($admin->category === 'bpc') {
             $query->where('domisili', $admin->domisili);
             
             $stats = [
@@ -87,7 +117,37 @@ class AnggotaManagementController extends Controller
         $query = Anggota::query();
         
         // Filter berdasarkan kategori admin
-        if ($admin->category === 'bpc') {
+        if ($admin->category === 'super_admin') {
+            // Super Admin bisa lihat semua anggota dengan filter domisili
+            if ($domisili !== 'all') {
+                $query->where('domisili', $domisili);
+            }
+            
+            if ($domisili === 'all') {
+                $stats = [
+                    'total' => Anggota::count(),
+                    'pending' => Anggota::where('status', 'pending')->count(),
+                    'approved' => Anggota::where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('status', 'rejected')->count(),
+                ];
+            } else {
+                $stats = [
+                    'total' => Anggota::where('domisili', $domisili)->count(),
+                    'pending' => Anggota::where('domisili', $domisili)->where('status', 'pending')->count(),
+                    'approved' => Anggota::where('domisili', $domisili)->where('status', 'approved')->count(),
+                    'rejected' => Anggota::where('domisili', $domisili)->where('status', 'rejected')->count(),
+                ];
+            }
+            
+            // List domisili untuk dropdown
+            $domisiliList = \App\Models\Admin::where('category', 'bpc')
+                ->whereNotNull('domisili')
+                ->orderBy('domisili')
+                ->pluck('domisili')
+                ->unique()
+                ->values();
+                
+        } elseif ($admin->category === 'bpc') {
             // BPC hanya bisa lihat anggota di domisilinya
             $query->where('domisili', $admin->domisili);
             
@@ -151,7 +211,7 @@ class AnggotaManagementController extends Controller
         ));
     }
 
-    // Method untuk show detail read-only (DIPERBAIKI - pakai view yang sama)
+    // Method untuk show detail read-only
     public function showReadOnly(Anggota $anggota)
     {
         $admin = auth()->guard('admin')->user();
@@ -161,7 +221,6 @@ class AnggotaManagementController extends Controller
             abort(403, 'Anda tidak memiliki akses ke data anggota ini.');
         }
         
-        // FIXED: Pakai view yang sama dengan show()
         return view('admin.anggota.show', compact('anggota'));
     }
 
@@ -178,38 +237,38 @@ class AnggotaManagementController extends Controller
     }
 
     public function approve(Anggota $anggota)
-{
-    $admin = auth()->guard('admin')->user();
-    
-    if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
-        abort(403, 'Anda tidak memiliki akses untuk verifikasi anggota ini.');
+    {
+        $admin = auth()->guard('admin')->user();
+        
+        if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
+            abort(403, 'Anda tidak memiliki akses untuk verifikasi anggota ini.');
+        }
+        
+        // Gunakan method approve() dari Model
+        $anggota->approve($admin->id);
+        
+        return redirect()->route('admin.anggota.index')
+            ->with('success', 'Anggota berhasil disetujui!');
     }
-    
-    // Gunakan method approve() dari Model
-    $anggota->approve($admin->id);
-    
-    return redirect()->route('admin.anggota.index')
-        ->with('success', 'Anggota berhasil disetujui!');
-}
 
-public function reject(Request $request, Anggota $anggota)
-{
-    $admin = auth()->guard('admin')->user();
-    
-    if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
-        abort(403, 'Anda tidak memiliki akses untuk verifikasi anggota ini.');
+    public function reject(Request $request, Anggota $anggota)
+    {
+        $admin = auth()->guard('admin')->user();
+        
+        if ($admin->category === 'bpc' && $anggota->domisili !== $admin->domisili) {
+            abort(403, 'Anda tidak memiliki akses untuk verifikasi anggota ini.');
+        }
+        
+        $request->validate([
+            'alasan_penolakan' => 'required|string|max:500'
+        ]);
+        
+        // Gunakan method reject() dari Model
+        $anggota->reject($request->alasan_penolakan, $admin->id);
+        
+        return redirect()->route('admin.anggota.index')
+            ->with('success', 'Anggota berhasil ditolak!');
     }
-    
-    $request->validate([
-        'alasan_penolakan' => 'required|string|max:500'
-    ]);
-    
-    // Gunakan method reject() dari Model
-    $anggota->reject($request->alasan_penolakan, $admin->id);
-    
-    return redirect()->route('admin.anggota.index')
-        ->with('success', 'Anggota berhasil ditolak!');
-}
 
     public function destroy(Anggota $anggota)
     {

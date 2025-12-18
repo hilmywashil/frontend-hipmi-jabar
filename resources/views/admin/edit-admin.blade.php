@@ -211,7 +211,7 @@
 
     .category-options {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
     }
 
@@ -232,6 +232,7 @@
         border-radius: 8px;
         cursor: pointer;
         transition: all 0.2s;
+        height: 100%;
     }
 
     .category-radio:checked + .category-label {
@@ -332,6 +333,12 @@
             justify-content: center;
         }
     }
+
+    @media (max-width: 768px) {
+        .category-options {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 @endpush
 
@@ -421,17 +428,17 @@
                             <div class="category-option">
                                 <input 
                                     type="radio" 
-                                    id="category-bpc" 
+                                    id="category-super-admin" 
                                     name="category" 
-                                    value="bpc" 
+                                    value="super_admin" 
                                     class="category-radio" 
-                                    {{ old('category', $admin->category) == 'bpc' ? 'checked' : '' }}
+                                    {{ old('category', $admin->category) == 'super_admin' ? 'checked' : '' }}
                                     onchange="toggleDomisili()"
                                     required
                                 >
-                                <label for="category-bpc" class="category-label">
-                                    <span class="category-name">BPC</span>
-                                    <span class="category-desc">Badan Pengurus Cabang</span>
+                                <label for="category-super-admin" class="category-label">
+                                    <span class="category-name">Super Admin</span>
+                                    <span class="category-desc">Admin Pusat (Akses Penuh)</span>
                                 </label>
                             </div>
                             <div class="category-option">
@@ -447,6 +454,21 @@
                                 <label for="category-bpd" class="category-label">
                                     <span class="category-name">BPD</span>
                                     <span class="category-desc">Badan Pengurus Daerah</span>
+                                </label>
+                            </div>
+                            <div class="category-option">
+                                <input 
+                                    type="radio" 
+                                    id="category-bpc" 
+                                    name="category" 
+                                    value="bpc" 
+                                    class="category-radio" 
+                                    {{ old('category', $admin->category) == 'bpc' ? 'checked' : '' }}
+                                    onchange="toggleDomisili()"
+                                >
+                                <label for="category-bpc" class="category-label">
+                                    <span class="category-name">BPC</span>
+                                    <span class="category-desc">Badan Pengurus Cabang</span>
                                 </label>
                             </div>
                         </div>
@@ -581,7 +603,7 @@
         const categoryBPC = document.getElementById('category-bpc');
         const domisiliField = document.getElementById('domisiliField');
         
-        if (categoryBPC.checked) {
+        if (categoryBPC && categoryBPC.checked) {
             domisiliField.style.display = 'flex';
             domisiliField.querySelector('select').required = true;
         } else {

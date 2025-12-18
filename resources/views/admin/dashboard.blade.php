@@ -562,12 +562,17 @@ $activeMenu = 'dashboard';
         .tab-content {
             padding: 1.5rem;
         }
+        .badge-super_admin {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    color: white;
+}
     }
 
     @media (max-width: 640px) {
         .stats-wrapper {
             grid-template-columns: 1fr;
         }
+        
     }
 </style>
 @endpush
@@ -592,6 +597,14 @@ $activeMenu = 'dashboard';
         </div>
     </div>
 </div>
+
+@if($admin->category === 'super_admin')
+    
+@endif
+    
+@if($admin->category === 'bpd')
+    {{-- Stats untuk BPD (existing code) --}}
+@endif
 
 {{-- Statistics Cards dengan Grid Layout --}}
 <div class="stats-grid">
@@ -678,6 +691,7 @@ $activeMenu = 'dashboard';
         </div>
     @endif
 </div>
+
 
 @if($admin->category === 'bpc')
     {{-- Content untuk BPC - Tampilkan Anggota Terbaru --}}

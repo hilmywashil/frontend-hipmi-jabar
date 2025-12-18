@@ -199,6 +199,15 @@
         color: white;
     }
 
+    .badge-super_admin {
+    background: linear-gradient(135deg, #0a2540 0%, #1a3a5a 100%);
+    color: #ffd700;
+    border: 2px solid #ffd700;
+    font-weight: 800;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
     .domisili-text {
         font-size: 0.875rem;
         color: #6b7280;
@@ -566,7 +575,15 @@
                 <td>{{ $adminItem->username }}</td>
                 <td>
                     <span class="badge badge-{{ $adminItem->category }}">
-                        {{ strtoupper($adminItem->category) }}
+                        @php
+                            $categoryDisplay = match($adminItem->category) {
+                                'super_admin' => 'SA',
+                                'bpd' => 'BPD',
+                                'bpc' => 'BPC',
+                                default => strtoupper($adminItem->category)
+                            };
+                        @endphp
+                        {{ $categoryDisplay }}
                     </span>
                 </td>
                 <td>
