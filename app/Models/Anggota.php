@@ -76,6 +76,11 @@ class Anggota extends Authenticatable
     {
         return $this->belongsTo(Admin::class, 'approved_by');
     }
+    // Di App\Models\Anggota.php
+public function admin()
+{
+    return $this->hasOne(Admin::class, 'email', 'email');
+}
 
     /**
      * Relasi ke UMKM (One to Many)

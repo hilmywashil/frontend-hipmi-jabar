@@ -163,6 +163,9 @@ Route::middleware('auth:anggota')->group(function () {
     Route::post('/profile-anggota/update-company', [AnggotaController::class, 'updateCompany'])->name('profile-anggota.update-company');
     Route::post('/profile-anggota/upload-detail-images', [AnggotaController::class, 'uploadDetailImages'])->name('profile-anggota.upload-detail-images');
     Route::post('/profile-anggota/delete-detail-image', [AnggotaController::class, 'deleteDetailImage'])->name('profile-anggota.delete-detail-image');
+// Di dalam group middleware anggota
+Route::post('/profile-anggota/change-admin-password', [AnggotaController::class, 'changeAdminPassword'])
+    ->name('profile-anggota.change-admin-password');
 });
 
 // Other Routes

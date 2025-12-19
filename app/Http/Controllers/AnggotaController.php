@@ -157,17 +157,21 @@ class AnggotaController extends Controller
     }
 
     // Profile anggota
-    public function profile()
-    {
-        $anggota = Auth::guard('anggota')->user();
-        
-        if (!$anggota) {
-            return redirect()->route('anggota.login')
-                ->with('error', 'Anda harus login terlebih dahulu.');
-        }
-
-        return view('pages.profile-anggota', compact('anggota'));
+   // Profile anggota
+public function profile()
+{
+    $anggota = Auth::guard('anggota')->user();
+    
+    if (!$anggota) {
+        return redirect()->route('anggota.login')
+            ->with('error', 'Anda harus login terlebih dahulu.');
     }
+
+    // Load relasi admin
+    $anggota->load('admin');
+
+    return view('pages.profile-anggota', compact('anggota'));
+}
 
     // Change password
     public function changePassword(Request $request)
@@ -369,4 +373,59 @@ class AnggotaController extends Controller
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+    // Ganti password admin
+public function changeAdminPassword(Request $request)
+{
+    $anggota = Auth::guard('anggota')->user();
+    
+    // Pastikan anggota punya admin account
+    if (!$anggota->admin) {
+        return back()->with('error', 'Anda tidak memiliki akun admin.');
+    }
+
+    $admin = $anggota->admin;
+
+    // Jika ini pertama kali ganti password (masih ada initial_password)
+    if ($admin->initial_password) {
+        $request->validate([
+            'new_admin_password' => 'required|min:8|confirmed',
+        ], [
+            'new_admin_password.required' => 'Password baru wajib diisi.',
+            'new_admin_password.min' => 'Password baru minimal 8 karakter.',
+            'new_admin_password.confirmed' => 'Konfirmasi password tidak cocok.',
+        ]);
+
+        // Update password dan hapus initial_password
+        $admin->update([
+            'password' => Hash::make($request->new_admin_password),
+            'initial_password' => null, // Hapus initial password setelah diubah
+        ]);
+
+        return back()->with('success', 'Password admin berhasil diubah! Initial password telah dihapus untuk keamanan.');
+    } 
+    // Jika sudah pernah ganti password, perlu password lama
+    else {
+        $request->validate([
+            'current_admin_password' => 'required',
+            'new_admin_password' => 'required|min:8|confirmed',
+        ], [
+            'current_admin_password.required' => 'Password lama wajib diisi.',
+            'new_admin_password.required' => 'Password baru wajib diisi.',
+            'new_admin_password.min' => 'Password baru minimal 8 karakter.',
+            'new_admin_password.confirmed' => 'Konfirmasi password tidak cocok.',
+        ]);
+
+        // Cek password lama
+        if (!Hash::check($request->current_admin_password, $admin->password)) {
+            return back()->with('error', 'Password admin lama tidak sesuai.');
+        }
+
+        // Update password
+        $admin->update([
+            'password' => Hash::make($request->new_admin_password)
+        ]);
+
+        return back()->with('success', 'Password admin berhasil diubah!');
+    }
+}
 }
