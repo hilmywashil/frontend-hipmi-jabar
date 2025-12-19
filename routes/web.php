@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\MisiController;
 use App\Http\Controllers\Admin\AnggotaManagementController;
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
 use App\Http\Controllers\Admin\UmkmManagementController;
+use App\Http\Controllers\Admin\StrategicPlanController as AdminStrategicPlanController; // ✅ Alias untuk Admin
+use App\Http\Controllers\StrategicPlanController as PublicStrategicPlanController; // ✅ Alias untuk Public
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AnggotaController;
@@ -41,6 +43,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('edit-admin/{admin}', [AdminDashboardController::class, 'editAdmin'])->name('edit-admin');
         Route::put('update-admin/{admin}', [AdminDashboardController::class, 'updateAdmin'])->name('update-admin');
         Route::delete('delete-admin/{admin}', [AdminDashboardController::class, 'deleteAdmin'])->name('delete-admin');
+        
+        // ✅ Strategic Plan CRUD (Admin)
+        Route::resource('strategic-plan', AdminStrategicPlanController::class);
 
         // Logout
         Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
@@ -70,19 +75,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('berita/{id}', [AdminBeritaController::class, 'destroy'])->name('berita.destroy');
 
         // Anggota Management
-Route::prefix('anggota')->name('anggota.')->group(function () {
-    Route::get('/', [AnggotaManagementController::class, 'index'])->name('index');
-    Route::get('/list', [AnggotaManagementController::class, 'listAll'])->name('list');
-    Route::get('/{anggota}', [AnggotaManagementController::class, 'show'])->name('show');
-    Route::get('/{anggota}/readonly', [AnggotaManagementController::class, 'showReadOnly'])->name('show-readonly');
-    Route::post('/{anggota}/approve', [AnggotaManagementController::class, 'approve'])->name('approve');
-    Route::post('/{anggota}/reject', [AnggotaManagementController::class, 'reject'])->name('reject');
-    Route::delete('/{anggota}', [AnggotaManagementController::class, 'destroy'])->name('destroy');
-    
-    // ✨ NEW: Routes untuk promote (hanya Super Admin) - FIXED
-    Route::get('/{anggota}/promote', [AnggotaManagementController::class, 'promoteToAdmin'])->name('promote');
-    Route::post('/{anggota}/promote', [AnggotaManagementController::class, 'storePromotedAdmin'])->name('promote.store');
-});
+        Route::prefix('anggota')->name('anggota.')->group(function () {
+            Route::get('/', [AnggotaManagementController::class, 'index'])->name('index');
+            Route::get('/list', [AnggotaManagementController::class, 'listAll'])->name('list');
+            Route::get('/{anggota}', [AnggotaManagementController::class, 'show'])->name('show');
+            Route::get('/{anggota}/readonly', [AnggotaManagementController::class, 'showReadOnly'])->name('show-readonly');
+            Route::post('/{anggota}/approve', [AnggotaManagementController::class, 'approve'])->name('approve');
+            Route::post('/{anggota}/reject', [AnggotaManagementController::class, 'reject'])->name('reject');
+            Route::delete('/{anggota}', [AnggotaManagementController::class, 'destroy'])->name('destroy');
+            Route::get('/{anggota}/promote', [AnggotaManagementController::class, 'promoteToAdmin'])->name('promote');
+            Route::post('/{anggota}/promote', [AnggotaManagementController::class, 'storePromotedAdmin'])->name('promote.store');
+        });
+
         // UMKM Management
         Route::prefix('umkm-management')->name('umkm.')->group(function () {
             Route::get('/', [UmkmManagementController::class, 'index'])->name('index');
@@ -99,13 +103,11 @@ Route::prefix('anggota')->name('anggota.')->group(function () {
 // ANGGOTA AUTH ROUTES
 // =====================================================
 Route::prefix('anggota')->name('anggota.')->group(function () {
-    // Login routes (guest only)
     Route::middleware('guest:anggota')->group(function () {
         Route::get('login', [AnggotaAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [AnggotaAuthController::class, 'login'])->name('login.post');
     });
 
-    // Protected routes (must be logged in)
     Route::middleware('auth:anggota')->group(function () {
         Route::post('logout', [AnggotaAuthController::class, 'logout'])->name('logout');
     });
@@ -118,6 +120,9 @@ Route::prefix('anggota')->name('anggota.')->group(function () {
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// ✅ Strategic Plan Public Routes
+Route::get('/strategic-plan/{id}', [PublicStrategicPlanController::class, 'show'])->name('strategic-plan.detail');
+
 // E-Katalog Public Routes
 Route::get('/e-katalog', [KatalogController::class, 'index'])->name('e-katalog');
 Route::get('/e-katalog/{katalog}', [KatalogController::class, 'show'])->name('e-katalog.detail');
@@ -129,15 +134,12 @@ Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita-de
 // Other Public Pages
 Route::view('/organisasi', 'pages.organisasi')->name('organisasi');
 
-// ✨ UMKM Registration - PROTECTED (Harus Login) ✨
+// UMKM Registration
+Route::get('/umkm', [UmkmController::class, 'create'])->name('umkm');
+Route::post('/umkm', [UmkmController::class, 'store'])->name('umkm.store');
 
-    Route::get('/umkm', [UmkmController::class, 'create'])->name('umkm');
-    Route::post('/umkm', [UmkmController::class, 'store'])->name('umkm.store');
-
-
-// Jadi Anggota (Public - Registration)
+// Jadi Anggota
 Route::get('/jadi-anggota', function () {
-    // Redirect jika sudah login
     if (Auth::guard('anggota')->check()) {
         return redirect()->route('profile-anggota');
     }
@@ -145,7 +147,7 @@ Route::get('/jadi-anggota', function () {
 })->name('jadi-anggota');
 Route::post('/jadi-anggota', [AnggotaController::class, 'store'])->name('jadi-anggota.store');
 
-// Registration Success Page (Protected)
+// Registration Success Page
 Route::get('/registration-success', function () {
     if (!session()->has('generated_password')) {
         return redirect()->route('home');
@@ -153,12 +155,10 @@ Route::get('/registration-success', function () {
     return view('pages.registration-success');
 })->middleware('auth:anggota')->name('registration-success');
 
-// Profile Anggota Routes (Protected)
+// Profile Anggota Routes
 Route::middleware('auth:anggota')->group(function () {
     Route::get('/profile-anggota', [AnggotaController::class, 'profile'])->name('profile-anggota');
     Route::post('/profile-anggota/change-password', [AnggotaController::class, 'changePassword'])->name('profile-anggota.change-password');
-    
-    // CRUD Profile Routes
     Route::post('/profile-anggota/update-profile', [AnggotaController::class, 'updateProfile'])->name('profile-anggota.update-profile');
     Route::post('/profile-anggota/update-company', [AnggotaController::class, 'updateCompany'])->name('profile-anggota.update-company');
     Route::post('/profile-anggota/upload-detail-images', [AnggotaController::class, 'uploadDetailImages'])->name('profile-anggota.upload-detail-images');

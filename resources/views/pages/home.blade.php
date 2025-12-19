@@ -284,80 +284,52 @@
             font-size: 12px;
         }
     }
-</style>
-
-<section class="strategic-plan">
-    <div class="strategic-plan-content">
-        <div class="strategic-plan-image">
-            <img src="{{ asset('images/strategic-plan1.png') }}" alt="Misi Image">
-        </div>
-        <div class="strategic-plan-wrapper">
-            <div class="green-accent" style="background-color: red; !important"></div>
-            <h1>Strategic Plan HIPMI JABAR</h1>
-            <div href="#" class="strategic-plan-cards">
-                <!-- Looping satu disini -->
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <!-- Looping sampe sini -->
+    </style>
+    <section class="strategic-plan">
+        <div class="strategic-plan-content">
+            <div class="strategic-plan-image">
+                <img src="{{ asset('images/strategic-plan1.png') }}" alt="Strategic Plan Image">
+            </div>
+            <div class="strategic-plan-wrapper">
+                <div class="green-accent"></div>
+                <h1>Strategic Plan HIPMI JABAR</h1>
+                <div class="strategic-plan-cards">
+                    @forelse($tataKelola as $plan)
+                        <a href="{{ route('strategic-plan.detail', $plan->id) }}" class="strategic-plan-card">
+                            <h2>{{ $plan->title }}</h2><i class="fa fa-arrow-right"></i>
+                        </a>
+                    @empty
+                        <!-- Jika belum ada data, tampilkan placeholder -->
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
+                            <p>Belum ada data Strategic Plan</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
-    </div>
-    <div class="strategic-plan-content-reverse">
-        <div class="strategic-plan-image-reverse">
-            <img src="{{ asset('images/strategic-plan2.png') }}" alt="Misi Image">
-        </div>
-        <div class="strategic-plan-wrapper">
-            <div class="green-accent"></div>
-            <h1>Program dan Layanan</h1>
-
-            <div href="#" class="strategic-plan-cards">
-                <!-- Looping satu disini -->
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <!-- Looping sampe sini -->
-
-                <!-- Dummy -->
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <a href="#" class="strategic-plan-card">
-                    <h2>Tata Kelola organisasi</h2><i class="fa fa-arrow-right"></i>
-                </a>
-                <!-- Dummy -->
+        
+        <div class="strategic-plan-content-reverse">
+            <div class="strategic-plan-image-reverse">
+                <img src="{{ asset('images/strategic-plan2.png') }}" alt="Program dan Layanan Image">
+            </div>
+            <div class="strategic-plan-wrapper">
+                <div class="green-accent"></div>
+                <h1>Program dan Layanan</h1>
+                <div class="strategic-plan-cards">
+                    @forelse($programLayanan as $plan)
+                        <a href="{{ route('strategic-plan.detail', $plan->id) }}" class="strategic-plan-card">
+                            <h2>{{ $plan->title }}</h2><i class="fa fa-arrow-right"></i>
+                        </a>
+                    @empty
+                        <!-- Jika belum ada data, tampilkan placeholder -->
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
+                            <p>Belum ada data Program dan Layanan</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
 {{-- SECTION INFORMASI KEGIATAN BPD --}}
 <section class="events">
     <div class="green-accent" style="align-self: center;"></div>

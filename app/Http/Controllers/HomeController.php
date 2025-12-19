@@ -7,13 +7,11 @@ use App\Models\Misi;
 use App\Models\Anggota;
 use App\Models\Berita;
 use App\Models\Umkm;
+use App\Models\StrategicPlan;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Display the home page
-     */
     public function index()
     {
         // Ambil data katalog aktif (maksimal 10)
@@ -47,10 +45,23 @@ class HomeController extends Controller
             ->get();
 
         // Ambil berita untuk section "Berita & Dokumentasi" (7 berita terbaru)
-        // 1 untuk featured (terbesar), 2 untuk others (tengah), 3 untuk more (bawah)
         $dokumentasiBerita = Berita::active()
             ->latestPublish()
             ->take(7)
+            ->get();
+
+        // ✨ Ambil data Strategic Plan - HANYA untuk di-klik (maksimal 8)
+        $tataKelola = StrategicPlan::active()
+            ->tataKelola()
+            ->ordered()
+            ->take(6)
+            ->get();
+
+        // ✨ Ambil data Program Layanan - HANYA untuk di-klik (maksimal 8)
+        $programLayanan = StrategicPlan::active()
+            ->programLayanan()
+            ->ordered()
+            ->take(8)
             ->get();
 
         // Return view dengan data
@@ -62,7 +73,9 @@ class HomeController extends Controller
             'anggotaList',
             'totalUmkm',
             'kegiatanBerita',
-            'dokumentasiBerita'
+            'dokumentasiBerita',
+            'tataKelola',
+            'programLayanan'
         ));
     }
 }

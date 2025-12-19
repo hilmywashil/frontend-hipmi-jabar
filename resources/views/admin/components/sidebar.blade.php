@@ -93,15 +93,6 @@
                     @endif
                 </div>
             </div>
-
-            <a href="#" class="menu-item {{ $activeMenu === 'pengaturan' ? 'active' : '' }}">
-                <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="3" />
-                    <path d="M12 1v6m0 6v6m-9-9h6m6 0h6" />
-                    <path d="M19.07 4.93l-3.53 3.53m-7.08 7.08l-3.53 3.53m15.14 0l-3.53-3.53m-7.08-7.08L4.93 4.93" />
-                </svg>
-                <span>Pengaturan</span>
-            </a>
         </div>
 
         <div class="menu-section">
