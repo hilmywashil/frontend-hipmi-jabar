@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\MisiController;
 use App\Http\Controllers\Admin\AnggotaManagementController;
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
 use App\Http\Controllers\Admin\UmkmManagementController;
-use App\Http\Controllers\Admin\StrategicPlanController; // ✅ Tanpa alias
+use App\Http\Controllers\Admin\StrategicPlanController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AnggotaController;
@@ -18,6 +18,9 @@ use App\Http\Controllers\AnggotaAuthController;
 use App\Http\Controllers\BukuAnggotaController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\UmkmController;
+use App\Http\Controllers\KegiatanController; // ✅ Public Kegiatan Controller
+use App\Http\Controllers\Admin\KegiatanController as AdminKegiatanController; // ✅ Admin Kegiatan Controller
+
 
 // =====================================================
 // ADMIN ROUTES
@@ -42,6 +45,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('edit-admin/{admin}', [AdminDashboardController::class, 'editAdmin'])->name('edit-admin');
         Route::put('update-admin/{admin}', [AdminDashboardController::class, 'updateAdmin'])->name('update-admin');
         Route::delete('delete-admin/{admin}', [AdminDashboardController::class, 'deleteAdmin'])->name('delete-admin');
+        
+        // ✅ Kegiatan CRUD (Admin)
+        Route::resource('kegiatan', AdminKegiatanController::class);
         
         // ✅ Strategic Plan CRUD (Admin)
         Route::resource('strategic-plan', StrategicPlanController::class);
@@ -119,9 +125,13 @@ Route::prefix('anggota')->name('anggota.')->group(function () {
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// ✅ Strategic Plan Public Route (menggunakan controller yang sama)
+// ✅ Strategic Plan Public Route
 Route::get('/strategic-plan/{strategicPlan}', [StrategicPlanController::class, 'show'])
     ->name('strategic-plan.detail');
+
+// ✅ Kegiatan Public Routes (DITAMBAHKAN)
+Route::get('/informasi-kegiatan', [KegiatanController::class, 'index'])->name('informasi-kegiatan');
+Route::get('/informasi-kegiatan/{slug}', [KegiatanController::class, 'show'])->name('detail-kegiatan');
 
 // E-Katalog Public Routes
 Route::get('/e-katalog', [KatalogController::class, 'index'])->name('e-katalog');
@@ -163,14 +173,9 @@ Route::middleware('auth:anggota')->group(function () {
     Route::post('/profile-anggota/update-company', [AnggotaController::class, 'updateCompany'])->name('profile-anggota.update-company');
     Route::post('/profile-anggota/upload-detail-images', [AnggotaController::class, 'uploadDetailImages'])->name('profile-anggota.upload-detail-images');
     Route::post('/profile-anggota/delete-detail-image', [AnggotaController::class, 'deleteDetailImage'])->name('profile-anggota.delete-detail-image');
-// Di dalam group middleware anggota
-Route::post('/profile-anggota/change-admin-password', [AnggotaController::class, 'changeAdminPassword'])
-    ->name('profile-anggota.change-admin-password');
+    Route::post('/profile-anggota/change-admin-password', [AnggotaController::class, 'changeAdminPassword'])
+        ->name('profile-anggota.change-admin-password');
 });
-
-// Other Routes
-Route::view('/informasi-kegiatan', 'pages.informasi-kegiatan')->name('informasi-kegiatan');
-Route::view('/detail-kegiatan', 'pages.details.kegiatan-detail')->name('detail-kegiatan');
 
 // Buku Anggota Routes
 Route::get('/buku-informasi-anggota', [BukuAnggotaController::class, 'index'])->name('buku-anggota');

@@ -1093,5 +1093,36 @@
     .buku-card p {
         font-size: 14px;
     }
+        /* Indicator Dots */
+        .kegiatan-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid #04293B;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
+        .kegiatan-indicator.active {
+            background: #04293B;
+            transform: scale(1.2);
+        }
+
+        .kegiatan-indicator:hover {
+            background: rgba(4, 41, 59, 0.7);
+        }
+
+        /* Fade Animation */
+        .events-content {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .events-content.fade-out {
+            opacity: 0;
+        }
+
+        .events-content.fade-in {
+            opacity: 1;
+        }
 }
